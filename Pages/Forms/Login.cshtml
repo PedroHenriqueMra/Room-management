@@ -1,0 +1,41 @@
+@page "/login"
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+
+<div class="form-container">
+    <h1>Login</h1>
+
+    <form method="post">
+        <div class="mb-3">
+            <label asp-for="Input.Email" for="idemail" class="form-label">Email</label>
+            <input asp-for="Input.Email" type="email" class="form-control" id="idemail" placeholder="Digite seu email" name="email">
+            <span class="text-danger" asp-validation-for="Input.Email"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Input.Password" for="idpassword" class="form-label">Password</label>
+            <input asp-for="Input.Password" type="password" class="form-control" id="idpassword" placeholder="Digite sua senha" name="password">
+            <span class="text-danger" asp-validation-for="Input.Password"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Input.ConfirmPassword" for="idconfirmp" class="form-label">Confirm password</label>
+            <input asp-for="Input.ConfirmPassword" type="password" class="form-control" id="idconfirmp" placeholder="Confirme sua senha" name="confirmpassword">
+            @if (ViewData["FailConfirm"] != null)
+            {
+                <span class="text-danger">Erro. Confirme a senha corretamente!</span>
+            }
+        </div>
+        <div class="mb-3 form-check">
+            <input asp-for="Input.Remember" type="checkbox" class="form-check-input" id="idcheck" name="remember">
+            <label asp-for="Input.Remember" class="form-check-label" for="exampleCheck1">Remember-me</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Confirmar</button>
+    </form>
+</div>
+
+@section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+}

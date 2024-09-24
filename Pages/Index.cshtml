@@ -1,0 +1,14 @@
+@page 
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <h2>Olá, @User.Identity?.Name</h2>
+}

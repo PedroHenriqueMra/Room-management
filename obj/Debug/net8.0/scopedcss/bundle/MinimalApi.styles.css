@@ -1,0 +1,61 @@
+/* _content/MinimalApi/pages/shared/_Layout.cshtml.rz.scp.css */
+*[b-amb08n466j] {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body[b-amb08n466j] {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header[b-amb08n466j] {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 0;
+}
+
+header nav[b-amb08n466j] {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+header nav a[b-amb08n466j] {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
+}
+
+header nav a:hover[b-amb08n466j] {
+    background-color: #0056b3;
+    border-radius: 5px;
+}
+
+main[b-amb08n466j] {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 1200px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+footer[b-amb08n466j] {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+footer p[b-amb08n466j] {
+    margin: 0;
+}

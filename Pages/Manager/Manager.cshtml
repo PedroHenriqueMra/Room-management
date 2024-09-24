@@ -1,0 +1,41 @@
+@page "/manager/{email}"
+@model ManagerModel
+@{
+    ViewData["Title"] = @User.Identity?.Name;
+
+    var rooms = Model.User.RoomsNames?.ToList();
+}
+<link rel="stylesheet" href="~/css/manager.css">
+
+<h1><span class="name">@Model.User.Name</span></h1>
+
+<div class="info">
+    <ul>
+        <li class="field">
+            <span>Name</span>
+            <div>@Model.User.Name <a href="#"></a></div>
+        </li>
+        <li class="field">
+            <span>Email</span>
+            <div>@Model.User.Email <a href="#"></a></div>
+        </li>
+        <li class="field">
+            <span>Password</span>
+            <div><a href="#">would you like to change your password?</a></div>
+        </li>
+        <li>
+            <span>Rooms you participate in</span>
+            <div>@if (rooms.Count != 0)
+                {
+                    foreach (var r in rooms)
+                    {
+                        <span class="room">@r</span>
+                    }
+                }
+                else
+                {
+                    <span class="null"><a href="~/rooms">you are not in any rooms yet!</a></span>
+                }
+        </li>
+    </ul>
+</div>

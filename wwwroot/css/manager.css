@@ -1,0 +1,44 @@
+/* page /manager/... */
+
+.info {
+    padding: 0px 5px;
+    border-radius: 5px;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.13);
+
+    list-style: none;
+}
+
+.name {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.field {
+    
+}
+
+.field > span {
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 20px;
+}
+
+.field > div {
+    font-size: 18px;
+}
+
+.room {
+
+}
+
+.null {
+    font-style: italic;
+}
+.null > a {
+    color: black;
+    text-decoration: none;
+}
+.null > a:hover {
+    text-decoration: underline;
+    color: rgba(97, 94, 94, 0.678);
+}
