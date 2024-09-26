@@ -1,0 +1,15 @@
+.panel-rooms {
+    height: 60px;
+
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 30px;
+
+    margin-bottom: 10px;
+}
+
+.panel-rooms > a {
+    display: flex;
+    align-items: center;
+}

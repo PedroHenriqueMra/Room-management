@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\css\\manager.css"
     },
     {
+      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\css\\room.css",
+      "PackagePath": "staticwebassets\\css\\room.css"
+    },
+    {
       "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },

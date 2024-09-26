@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "MOdBgJoiEsK2q3HqO+FgfMycqMeAAD9Vli2b7hK0n3s=",
+  "Hash": "uUOBqDWVc9stzbbNjEmahzZOix5Dn6lVSM+UFS7psl8=",
   "Source": "MinimalApi",
   "BasePath": "_content/MinimalApi",
   "Mode": "Default",
@@ -1174,6 +1174,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\manager.css"
+    },
+    {
+      "Identity": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\css\\room.css",
+      "SourceId": "MinimalApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\",
+      "BasePath": "_content/MinimalApi",
+      "RelativePath": "css/room.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\room.css"
     },
     {
       "Identity": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\css\\site.css",

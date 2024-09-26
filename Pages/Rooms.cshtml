@@ -1,4 +1,36 @@
 @page "/rooms"
 @model RoomModel
+@{
+    ViewData["Title"] = "Rooms";
+}
+<link rel="stylesheet" href="~/css/room.css">
+
+<div class="panel-rooms">
+    <a class="btn btn-success" href="#">
+        Create a room
+    </a>
+    <div class="search-rooms">
+        <input type="text" placeholder="do your search">
+    </div>
+</div>
+
+<hr>
 
 <h1>Rooms:</h1>
+
+<ul>
+    @foreach(var r in Model.Rooms)
+    {
+        <li>
+            <div class="room">
+                <h1>Sala de: @r.Adm.Name</h1>
+                <div class="info-room">
+                    <p>Room contains: @r.Users.Count() Users</p>
+                </div>
+                <form method="post">
+                    <input type="submit" value="Enter the room">
+                </form>
+            </div>
+        </li>
+    }
+</ul>
