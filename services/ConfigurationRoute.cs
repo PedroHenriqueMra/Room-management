@@ -29,7 +29,7 @@ public static class ConfigurationRoute
         });
 
         // inserir dados do novo registro (usuario)
-        app.MapPost("/new", [AllowAnonymous] async (DbContextModel context, User user) =>
+        app.MapPost("/new", async (DbContextModel context, User user) =>
         {
             var queryEmail = await context.User.FirstOrDefaultAsync(q => q.Email == user.Email);
             var queryName = await context.User.FirstOrDefaultAsync(q => q.Name == user.Name);
@@ -122,6 +122,8 @@ public static class ConfigurationRoute
             await context.SaveChangesAsync();
 
             // return true;
+            Console.BackgroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("Passoooooooou");
             return Results.Ok("Sala criada com êxito!!");
         });
 

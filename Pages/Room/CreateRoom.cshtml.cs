@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.IsisMtt.X509;
 using static LoginModel;
 
+[Authorize]
 public class CreateRoomModel : PageModel
 {
     private readonly ILogger<RegisterModel> _logger;

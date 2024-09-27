@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="~/css/room.css">
 
 <div class="panel-rooms">
-    <a class="btn btn-success" href="#">
+    <a class="btn btn-success" href="/rooms/create">
         Create a room
     </a>
     <div class="search-rooms">
@@ -18,44 +18,44 @@
 <h1>Rooms:</h1>
 
 <ul>
-    @foreach(var r in Model.Rooms)
+    @foreach (var r in Model.Rooms)
     {
         if (Model.Owner.Id == r.Adm.Id)
         {
             <li>
                 <div class="room">
-                <h1>@r.Name <span class="who">(Sua sala)</span></h1>
-                <div class="info-room">
-                    <p>Room contains: @r.Users.Count() Users</p>
+                    <h1>@r.Name <span class="who">(Sua sala)</span></h1>
+                    <div class="info-room">
+                        <p>Room contains: @r.Users.Count() Users</p>
+                    </div>
+                    <div class="enter">
+                        <a class="btn btn-success" href="#">Enter room</a>
+                    </div>
                 </div>
-                <div class="enter">
-                    <a class="btn btn-success" href="#">Enter room</a>
-                </div>
-            </div>
-            </li>    
+            </li>
         }
         else
         {
-        <li>
-            <div class="room">
-                <h1>@r.Name <span class="who">(Sala de @r.Adm.Name)</span></h1>
-                <div class="info-room">
-                    <p>Room contains: @r.Users.Count() Users</p>
+            <li>
+                <div class="room">
+                    <h1>@r.Name <span class="who">(Sala de @r.Adm.Name)</span></h1>
+                    <div class="info-room">
+                        <p>Room contains: @r.Users.Count() Users</p>
+                    </div>
+                    @if (r.UsersNames.Contains(Model.Owner.Name))
+                    {
+                        <p>You are part of this room!!</p>
+                        <a class="btn btn-success" href="#">To enter</a>
+                    }
+                    else
+                    {
+                        <p>do you want to be part of this room?</p>
+                        <form method="post" asp-page="#">
+                            <input class="btn btn-success" type="submit" value="Join the room">
+                        </form>
+                    }
                 </div>
-                @if (r.UsersNames.Contains(Model.Owner.Name))
-                {
-                    <p>You are part of this room!!</p>
-                    <a class="btn btn-success" href="#">To enter</a>
-                }
-                else
-                {
-                    <p>do you want to be part of this room?</p>
-                    <form method="post" asp-page="#">
-                        <input class="btn btn-success" type="submit" value="Join the room">
-                    </form>
-                }
-            </div>
-        </li>
+            </li>
         }
     }
 </ul>
