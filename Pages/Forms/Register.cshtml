@@ -6,24 +6,22 @@
 
 <div class="form-container">
     <h1>Registre-se</h1>
-    
+
     <form method="post">
         <div class="mb-3">
             <label asp-for="Input.Name" for="idname" class="form-label">Name</label>
-            <input asp-for="Input.Name" type="text" class="form-control" id="idname" placeholder="Digite seu nome"
-                name="Name">
+            <input asp-for="Input.Name" type="text" class="form-control" id="idname" placeholder="Digite seu nome">
             <span class="text-danger" asp-validation-for="Input.Name"></span>
         </div>
         <div class="mb-3">
             <label asp-for="Input.Email" for="idemail">Email</label>
-            <input asp-for="Input.Email" type="email" class="form-control" id="idemail" placeholder="Digite seu email"
-                name="Email">
+            <input asp-for="Input.Email" type="email" class="form-control" id="idemail" placeholder="Digite seu email">
             <span class="text-danger" asp-validation-for="Input.Email"></span>
         </div>
         <div class="mb-3">
             <label asp-for="Input.Password" for="idpassword" class="form-label">Password</label>
             <input asp-for="Input.Password" type="password" class="form-control" id="idpassword"
-                placeholder="Digite sua senha" name="Password">
+                placeholder="Digite sua senha">
             <span class="text-danger" asp-validation-for="Input.Password"></span>
         </div>
         <button type="submit" class="btn btn-success">Registrar</button>
@@ -31,5 +29,5 @@
 </div>
 
 @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }

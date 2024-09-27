@@ -16,6 +16,8 @@ public class Room
     public User Adm { get; set; }
     [Required]
     public int AdmId { get; set; }
+    [StringLength(150)]
+    public string Description { get; set; }
 
     // um para muitos:
     public ICollection<Message>? Messages { get; set; } = new List<Message>();
@@ -30,4 +32,5 @@ public class RoomRequest
 {
     public int IdUser { get; set; }
     public string Name { get; set; }
+    public string Description { get; set; }
 }

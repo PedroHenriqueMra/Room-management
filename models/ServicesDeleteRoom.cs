@@ -1,6 +1,6 @@
 using ModelTables;
 
-public class ServicesRoom : IServicesDeleteRoom
+public class ServicesRoomDeleteRoom : IServicesRoomExit
 {
     public async Task DeleteRoom(DbContextModel context, User adm, Room room)
     {

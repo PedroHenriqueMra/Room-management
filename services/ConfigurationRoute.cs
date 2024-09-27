@@ -104,11 +104,12 @@ public static class ConfigurationRoute
             if (existingRoom  != null)
             {
                 // return false;
-                return Results.BadRequest("Já existeuma sala com este nome!!");
+                return Results.BadRequest("Já existe uma sala com este nome!!");
             }
 
             var newRoom = new Room(){
                 Name = roomData.Name,
+                Description = roomData.Description,
                 Adm = adm,
                 AdmId = adm.Id
             };
@@ -158,7 +159,7 @@ public static class ConfigurationRoute
                 return Results.BadRequest("O usuário não contem as permissões necessárias para esta ação!!");
             }
 
-            var servicesRoom = new ServicesRoom();
+            var servicesRoom = new ServicesRoomDeleteRoom();
             servicesRoom.DeleteRoom(context, adm, room);
 
             // return true;

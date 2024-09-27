@@ -1,0 +1,23 @@
+@page "/rooms/create"
+@model CreateRoomModel
+@{
+    ViewData["Title"] = "Create a room";
+}
+
+<form method="post">
+    @if(ViewData["NameFail"] != null)
+    {
+        <span class="text-danger">This name is already being used</span>
+    }
+    <div class="mb-3">
+        <label asp-for="Input.Name" for="idname" class="form-label">Room name</label>
+        <input asp-for="Input.Name" type="text" class="form-control" id="idname" placeholder="Name of your room">
+        <span class="text-danger" asp-validation-for="Input.Name"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Input.Description" for="iddescription" class="form-label">Room name</label>
+        <input asp-for="Input.Description" type="text" class="form-control" id="iddescription" placeholder="type the description">
+    using System.Data;
+        <span class="text-danger" asp-validation-for="Input.Description"></span>
+    </div>
+</form>

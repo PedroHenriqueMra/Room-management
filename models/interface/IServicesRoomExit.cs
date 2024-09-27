@@ -1,6 +1,6 @@
 using ModelTables;
 
-public interface IServicesDeleteRoom
+public interface IServicesRoomExit
 {
     Task DeleteRoom(DbContextModel context, User adm, Room room);
 

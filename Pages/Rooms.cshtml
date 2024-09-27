@@ -10,10 +10,9 @@
         Create a room
     </a>
     <div class="search-rooms">
-        <input type="text" placeholder="do your search">
+        <input type="text" placeholder="Search rooms">
     </div>
 </div>
-
 <hr>
 
 <h1>Rooms:</h1>
@@ -21,16 +20,42 @@
 <ul>
     @foreach(var r in Model.Rooms)
     {
-        <li>
-            <div class="room">
-                <h1>Sala de: @r.Adm.Name</h1>
+        if (Model.Owner.Id == r.Adm.Id)
+        {
+            <li>
+                <div class="room">
+                <h1>@r.Name <span class="who">(Sua sala)</span></h1>
                 <div class="info-room">
                     <p>Room contains: @r.Users.Count() Users</p>
                 </div>
-                <form method="post">
-                    <input type="submit" value="Enter the room">
-                </form>
+                <div class="enter">
+                    <a class="btn btn-success" href="#">Enter room</a>
+                </div>
+            </div>
+            </li>    
+        }
+        else
+        {
+        <li>
+            <div class="room">
+                <h1>@r.Name <span class="who">(Sala de @r.Adm.Name)</span></h1>
+                <div class="info-room">
+                    <p>Room contains: @r.Users.Count() Users</p>
+                </div>
+                @if (r.UsersNames.Contains(Model.Owner.Name))
+                {
+                    <p>You are part of this room!!</p>
+                    <a class="btn btn-success" href="#">To enter</a>
+                }
+                else
+                {
+                    <p>do you want to be part of this room?</p>
+                    <form method="post" asp-page="#">
+                        <input class="btn btn-success" type="submit" value="Join the room">
+                    </form>
+                }
             </div>
         </li>
+        }
     }
 </ul>
