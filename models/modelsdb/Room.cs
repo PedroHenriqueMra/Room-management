@@ -18,6 +18,7 @@ public class Room
     public int AdmId { get; set; }
     [StringLength(150)]
     public string Description { get; set; }
+    public DateTime CreateDate { get; set; } = DateTime.Now;
 
     // um para muitos:
     public ICollection<Message>? Messages { get; set; } = new List<Message>();

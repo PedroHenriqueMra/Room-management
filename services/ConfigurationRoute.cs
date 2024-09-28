@@ -40,7 +40,8 @@ public static class ConfigurationRoute
                 // return Results.BadRequest("Email ou nome já existente!!");
             }
             var hashPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            var newUser = new User(){
+            var newUser = new User()
+            {
                 Name = user.Name,
                 Email = user.Email,
                 Password = hashPassword
@@ -55,7 +56,7 @@ public static class ConfigurationRoute
         app.MapPut("/edit/{id:int}", [Authorize] async (DbContextModel context, int id, User updateData) =>
         {
             var user = await context.User.FindAsync(id);
-            
+
             if (user == null)
             {
                 return Results.NotFound("Usuário não encontrado!!");
@@ -63,10 +64,23 @@ public static class ConfigurationRoute
 
             var hashPassword = BCrypt.Net.BCrypt.HashPassword(updateData.Password);
 
+            // mudar o nome do usuario em todas as salas:
+            var rooms = await context.Room.Where(r => r.UsersNames.Contains(user.Name)).ToListAsync();
+            for (var l = 0;l < rooms.Count; l++)
+            {
+                var index = rooms[l].UsersNames.IndexOf(user.Name);
+                if(index != -1)
+                {
+                    rooms[l].UsersNames[index] = updateData.Name;
+                    context.Entry(rooms[l]).State = EntityState.Modified;
+                }
+            }
+            
             user.Name = updateData.Name;
             user.Email = updateData.Email;
             user.Password = hashPassword;
             context.Entry(user).State = EntityState.Modified;
+
             await context.SaveChangesAsync();
 
             // return true;
@@ -91,7 +105,7 @@ public static class ConfigurationRoute
         });
 
         // criar uma nova sala
-        app.MapPost("/new/room", [Authorize] async (DbContextModel context, RoomRequest roomData) =>
+        app.MapPost("/new/room", async (DbContextModel context, RoomRequest roomData) =>
         {
             var adm = await context.User.FindAsync(roomData.IdUser);
             if (adm == null)
@@ -100,17 +114,19 @@ public static class ConfigurationRoute
                 return Results.NotFound("Usuário não encontrado!");
             }
 
-            var existingRoom  = await context.Room.FirstOrDefaultAsync(r => r.Name == roomData.Name);
-            if (existingRoom  != null)
+            var existingRoom = await context.Room.FirstOrDefaultAsync(r => r.Name == roomData.Name);
+            if (existingRoom != null)
             {
+
                 // return false;
                 return Results.BadRequest("Já existe uma sala com este nome!!");
             }
 
-            var newRoom = new Room(){
+            var newRoom = new Room()
+            {
                 Name = roomData.Name,
-                Description = roomData.Description,
                 Adm = adm,
+                Description = roomData.Description,
                 AdmId = adm.Id
             };
             newRoom.Users.Add(adm);
@@ -122,8 +138,7 @@ public static class ConfigurationRoute
             await context.SaveChangesAsync();
 
             // return true;
-            Console.BackgroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine("Passoooooooou");
+
             return Results.Ok("Sala criada com êxito!!");
         });
 
@@ -140,7 +155,8 @@ public static class ConfigurationRoute
         });
 
         // deletar uma sala (apenas adm)
-        app.MapDelete("/room/delete/{uuid:guid}/{id:int}", [Authorize] async (DbContextModel context, Guid uuid, int id) => {
+        app.MapDelete("/room/delete/{uuid:guid}/{id:int}", [Authorize] async (DbContextModel context, Guid uuid, int id) =>
+        {
             var room = await context.Room.FindAsync(uuid);
             if (room == null)
             {
@@ -169,12 +185,14 @@ public static class ConfigurationRoute
         });
 
         // participar de uma sala
-        app.MapPost("/room/participate/{uuid:guid}", [Authorize] async (DbContextModel context, Guid uuid) => {
+        app.MapPost("/room/participate/{uuid:guid}", [Authorize] async (DbContextModel context, Guid uuid) =>
+        {
             // com autenticação
         });
 
         // sair de uma sala
-        app.MapPut("/room/exit/", async (DbContextModel context) => {
+        app.MapPut("/room/exit/", async (DbContextModel context) =>
+        {
             // com autenticação
         });
     }

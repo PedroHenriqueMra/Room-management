@@ -1,0 +1,60 @@
+@page "/rooms"
+@model RoomModel
+@{
+    ViewData["Title"] = "Rooms";
+}
+<link rel="stylesheet" href="~/css/room.css">
+
+<div class="panel-rooms">
+    <a class="btn btn-success" href="/rooms/create">
+        Create a room
+    </a>
+    <div class="search-rooms">
+        <input type="text" placeholder="Search rooms">
+    </div>
+</div>
+<hr>
+
+<h1>Rooms:</h1>
+
+<ul>
+    @if (Model.Rooms.Count != 0)
+    {
+        @foreach (var r in Model.Rooms)
+        {
+            <li>
+                <div class="room">
+                    <h1>@r.Name 
+                        @* Trocar msg do span por um icone de edição *@
+                        <span class="who">@(r.AdmId == Model.Owner.Id ? "sua sala" : $"sala de {r.Adm.Name}")</span>
+                    </h1>
+                    <div class="info-room">
+                        <p class="description">@r.Description</p>
+                        <div class="other-info">
+                            <p>Room contains: @r.UsersNames.Count() Users</p>
+                            <span class="date">@r.CreateDate</span>
+                        </div>
+                    </div>
+                    <div class="enter">
+                        @if(r.AdmId == Model.Owner.Id || r.UsersNames.Contains(Model.Owner.Name))
+                        {
+                            <a class="btn btn-success" href="#">Enter room</a>
+                        }
+                        else
+                        {
+                            <form method="post" asp-page="#">
+                                <input class="btn btn-success" type="submit" value="Join the room">
+                            </form>
+                        }
+                    </div>
+                </div>
+            </li>
+        }
+    }
+    else
+    {
+        <span class="text-danger">
+            there are no rooms here!!
+        </span>
+    }
+</ul>

@@ -16,17 +16,17 @@ public class RoomModel : PageModel
     }
 
     public List<Room> Rooms { get; set; } = new List<Room>();
-    public User Owner { get; set; } = new ModelTables.User();
+    public User Owner { get; set; } = new User();
 
     public async Task OnGetAsync()
     {
-        var adm = await _context.User.FirstOrDefaultAsync(u => u.Email == User.Identity.Name);
-        if (adm != null)
+        var user = await _context.User.FirstOrDefaultAsync(u => u.Email == User.Identity.Name);
+        if (user != null)
         {
-            Owner = adm;
+            Owner = user;
         }
 
-        var rooms = await _context.Room.ToListAsync();
+        var rooms = await _context.Room.Include(r => r.Adm).ToListAsync();
         if (rooms.Count != 0)
         {
             foreach(var r in rooms)

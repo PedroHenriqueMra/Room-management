@@ -180,6 +180,7 @@ namespace MinimalApi.Migrations
                     Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     AdmId = table.Column<int>(type: "INTEGER", nullable: false),
                     Description = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UsersNames = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>

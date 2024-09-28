@@ -7,7 +7,7 @@ using ServicesApp;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<DbContextModel>(
-    options => options.UseSqlite("Data Source=appteste.db"));
+    options => options.UseSqlite("Data Source=projectapi.db"));
 
 builder.Services.AddHttpClient();
 
