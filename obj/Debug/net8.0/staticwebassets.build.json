@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "uUOBqDWVc9stzbbNjEmahzZOix5Dn6lVSM+UFS7psl8=",
+  "Hash": "GRyA+qwzf+ekpsso4EW5Gf6kUDus/qEjVE9clYisSxg=",
   "Source": "MinimalApi",
   "BasePath": "_content/MinimalApi",
   "Mode": "Default",
@@ -10,7 +10,7 @@
     {
       "Name": "MinimalApi\\wwwroot",
       "Source": "MinimalApi",
-      "ContentRoot": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\",
       "BasePath": "_content/MinimalApi",
       "Pattern": "**"
     }
@@ -1157,10 +1157,29 @@
       "OriginalItemSpec": "C:\\Users\\pedro\\.nuget\\packages\\microsoft.aspnetcore.identity.ui\\8.0.8\\staticwebassets\\V5\\lib\\jquery\\LICENSE.txt"
     },
     {
-      "Identity": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\css\\manager.css",
+      "Identity": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\css\\listroom.css",
       "SourceId": "MinimalApi",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\",
+      "BasePath": "_content/MinimalApi",
+      "RelativePath": "css/listroom.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\listroom.css"
+    },
+    {
+      "Identity": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\css\\manager.css",
+      "SourceId": "MinimalApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\",
       "BasePath": "_content/MinimalApi",
       "RelativePath": "css/manager.css",
       "AssetKind": "All",
@@ -1176,10 +1195,10 @@
       "OriginalItemSpec": "wwwroot\\css\\manager.css"
     },
     {
-      "Identity": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\css\\room.css",
+      "Identity": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\css\\room.css",
       "SourceId": "MinimalApi",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\",
       "BasePath": "_content/MinimalApi",
       "RelativePath": "css/room.css",
       "AssetKind": "All",
@@ -1195,10 +1214,10 @@
       "OriginalItemSpec": "wwwroot\\css\\room.css"
     },
     {
-      "Identity": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\css\\site.css",
+      "Identity": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\css\\site.css",
       "SourceId": "MinimalApi",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\",
+      "ContentRoot": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\",
       "BasePath": "_content/MinimalApi",
       "RelativePath": "css/site.css",
       "AssetKind": "All",

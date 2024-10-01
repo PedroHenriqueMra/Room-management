@@ -1,27 +1,76 @@
-.panel-rooms {
-    height: 60px;
-
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    gap: 30px;
-
-    margin-bottom: 10px;
+* {
+    padding: 0px;
+    margin: 0px;
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
 }
 
-.panel-rooms > a {
+.input-chat {
+    width: 100vw;
     display: flex;
+    gap: 8px;
+    position: fixed;
+    bottom: 0px;
+    margin: 10px;
     align-items: center;
+}
+
+.input-chat > input[type="text"] {
+    width: 80%;
+    height: 50px;
+    margin: 10px;
+    border-radius: 10px;
+    text-indent: 10px;
+    box-shadow: 80px 10px 10px rgba(0, 0, 0, 0.219);
+}
+
+.input-chat > input[type="submit"] {
+    width: 13%;
+    height: 40px;
+    background-color: #cfcbcb;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.nonemessage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 130px;
+    width: 380px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.281);
+    color: rgb(177, 25, 25);
+    font-size: 22px;
+    border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 ul {
     list-style: none;
 }
 
-.room {
-    background-color: rgba(85, 82, 82, 0.329);
-    padding: 10px;
+.message-box {
+    width: 250px;
+    height: 200px;
+    background-color: cadetblue;
+    padding: 5px;
     border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.137);
-    margin-bottom: 10px;
+    margin: 15px;
+}
+
+.who {
+    background-color: rgba(0, 0, 0, 0.199);
+    border-radius: 5px;
+    color: rgba(0, 0, 0, 0.507);
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.content {
+    width: 100%;
+    height: 100%;
 }

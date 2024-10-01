@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using ModelTables;
 
 [Authorize]
-public class RoomModel : PageModel
+public class ListRoomModel : PageModel
 {
-    public ILogger<RoomModel> _logger;
+    public ILogger<ListRoomModel> _logger;
     public DbContextModel _context;
 
-    public RoomModel(ILogger<RoomModel> logger, DbContextModel context)
+    public ListRoomModel(ILogger<ListRoomModel> logger, DbContextModel context)
     {
         _context = context;
         _logger = logger;

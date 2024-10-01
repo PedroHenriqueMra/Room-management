@@ -1,6 +1,6 @@
 using ModelTables;
 
-public class ServicesRoomDeleteRoom : IServicesRoomExit
+public class ServicesRoomDelete : IServicesRoomExit
 {
     public async Task DeleteRoom(DbContextModel context, User adm, Room room)
     {
@@ -41,8 +41,6 @@ public class ServicesRoomDeleteRoom : IServicesRoomExit
 
         room.Users.Remove(user);
         room.UsersNames.Remove(user.Name);
-
-        await context.SaveChangesAsync();
 
         return Results.Ok("Você não faz mais parte da sala!!");
     }

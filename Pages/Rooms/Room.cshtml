@@ -1,0 +1,33 @@
+@page "/room/{url:Guid}"
+@model RoomModel
+
+<head>
+    <link rel="stylesheet" href="~/css/room.css">
+    @* <title>@Model.Room.Adm.Name room</title> *@
+</head>
+
+<ul>
+    @if (Model.Room.Messages.Count != 0)
+    {
+        @foreach (var m in Model.Messages)
+        {
+            <li>
+                <div class="message-box">
+                    <span class="who">@(m.User.Email == User.Identity.Name ? "Your Message" : m.User.Name)</span>
+                    <p class="content">@m</p>
+                </div>
+            </li>
+        }
+    }
+    else
+    {
+        <span class="nonemessage">None message were posted</span>
+    }
+</ul>
+
+<form method="post">
+    <div class="input-chat">
+        <input type="text" placeholder="Type your message" name="message">
+        <input type="submit" value="Submit">
+    </div>
+</form>

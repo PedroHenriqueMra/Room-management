@@ -1,0 +1,27 @@
+.panel-rooms {
+    height: 60px;
+
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 30px;
+
+    margin-bottom: 10px;
+}
+
+.panel-rooms > a {
+    display: flex;
+    align-items: center;
+}
+
+ul {
+    list-style: none;
+}
+
+.room {
+    background-color: rgba(85, 82, 82, 0.329);
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.137);
+    margin-bottom: 10px;
+}

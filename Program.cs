@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using ServicesApp;
+using MinimalApi.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 

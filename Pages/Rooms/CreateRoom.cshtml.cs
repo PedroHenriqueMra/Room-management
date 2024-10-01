@@ -79,7 +79,7 @@ public class CreateRoomModel : PageModel
         var roomUrl = await _context.Room.FirstOrDefaultAsync(r => r.Name == Input.Name);
         if (roomUrl != null)
         {
-            return RedirectToAction($"/rooms/{roomUrl.Id}");
+            return RedirectToAction($"/room/{roomUrl.Id}");
         }
 
         return Page();
