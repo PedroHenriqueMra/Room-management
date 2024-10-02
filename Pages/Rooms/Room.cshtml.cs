@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -13,8 +14,8 @@ public class RoomModel : PageModel
     private readonly ILogger<RoomModel> _logger;
     private readonly DbContextModel _context;
     public Room Room { get; set; }
-    public User Adm { get; set; }
-    public List<Message> Messages { get; set; } = new List<Message>();
+    public User Owner { get; set; }
+    public List<Message> Messages { get; set; }
 
     public RoomModel(ILogger<RoomModel> logger, DbContextModel context)
     {
@@ -24,11 +25,18 @@ public class RoomModel : PageModel
 
     public async Task<IActionResult> OnPostAsync(string message)
     {
+        if (message == null)
+        {
+            _logger.LogError("Null message");
+            return Page();
+        }
+
         var user = await _context.User.FirstOrDefaultAsync(u => u.Email == User.Identity.Name);
+        Owner = user ?? new User();
         if (user == null)
         {
             _logger.LogError("User not found!!");
-            return Page();
+            return RedirectToAction("/login");
         }
 
         if (message.Length < 1 || message.Length > 200)
@@ -45,6 +53,8 @@ public class RoomModel : PageModel
         }
 
         var room = await _context.Room.FindAsync(roomId);
+        Room = room ?? new Room();
+        Messages = room.Messages.ToList() ?? new List<Message>();
         if (room == null)
         {
             _logger.LogError("The room not found!");
@@ -55,7 +65,7 @@ public class RoomModel : PageModel
         {
             Content = message,
             IdRoom = roomId,
-            IdUser = user.Id
+            IdUser = user.Id,
         };
         var json = JsonConvert.SerializeObject(data);
         var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
@@ -65,7 +75,7 @@ public class RoomModel : PageModel
         using (var client = new HttpClient(handler))
         {
             try
-            {          
+            {    
                 var response = await client.PostAsync(GetUri("/new/message"), httpContent);
                 if (!response.IsSuccessStatusCode)
                 {
@@ -79,6 +89,7 @@ public class RoomModel : PageModel
                 return Page();
             }
 
+            _logger.LogInformation("Message sent");
             return Page();
         }
     }
@@ -114,7 +125,7 @@ public class RoomModel : PageModel
 
         Room = room;
         Messages = room.Messages.ToList();
-        Adm = room.Adm;
+        Owner = room.Adm;
 
         return Page();
     }

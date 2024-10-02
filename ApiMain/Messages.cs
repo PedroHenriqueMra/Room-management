@@ -1,24 +1,30 @@
+using Azure.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ModelTables;
 using Newtonsoft.Json;
+using NuGet.Protocol;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace MinimalApi.Endpoints.ConfigureMessages;
 public static class Messages
 {
     public static void EndpointsMessages(this WebApplication app)
     {
-        app.MapPost("/new/message", async (DbContextModel context, MessageRequest dataMessage) =>
+        app.MapPost("/new/message", async (HttpContext http, DbContextModel context, MessageRequest dataMessage) =>
         {
             if (dataMessage.IdRoom == Guid.Empty || dataMessage.IdUser == null)
             {
                 return Results.StatusCode(400);
             }
-
-            // var isAutenticate = context.UserClaims.First(c => c.ClaimType == "userId");
             
+            if(http.User.Identity?.IsAuthenticated ?? false)
+            {
+                return Results.BadRequest("unauthenticated user!!");
+            }
+
             var user = await context.User.FindAsync(dataMessage.IdUser);
             if (user == null)
             {
@@ -48,6 +54,9 @@ public static class Messages
             try
             {
                 await context.Message.AddAsync(message);
+                user.Messages.Add(message);
+                room.Messages.Add(message);
+
                 // await context.SaveChangesAsync();
             }
             catch (DbUpdateException ex)
@@ -59,8 +68,7 @@ public static class Messages
                 return Results.BadRequest($"An error occurred while sending the message!!: {ex}");
             }
 
-            // return Results.StatusCode(201);
-            return Results.Ok($"kokokokokoko");
+            return Results.StatusCode(201);
         });
     }
 }

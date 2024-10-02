@@ -1,19 +1,18 @@
 @page "/room/{url:Guid}"
 @model RoomModel
-
 <head>
     <link rel="stylesheet" href="~/css/room.css">
-    @* <title>@Model.Room.Adm.Name room</title> *@
+    <title>@Model.Room?.Adm?.Name room</title>
 </head>
 
 <ul>
-    @if (Model.Room.Messages.Count != 0)
+    @if (Model.Room?.Messages?.Count != 0)
     {
         @foreach (var m in Model.Messages)
         {
             <li>
                 <div class="message-box">
-                    <span class="who">@(m.User.Email == User.Identity.Name ? "Your Message" : m.User.Name)</span>
+                    <span class="who">@(m.User.Email == User?.Identity?.Name ? "Your Message" : m.User.Name)</span>
                     <p class="content">@m</p>
                 </div>
             </li>
@@ -31,3 +30,18 @@
         <input type="submit" value="Submit">
     </div>
 </form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        var header = document.querySelector("header");
+        var footer = document.querySelector("footer");
+
+        if (header) {
+            header.remove();
+        };
+
+        if (footer) {
+            footer.remove();
+        };
+    });
+</script>
