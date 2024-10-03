@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MinimalApi.Endpoints;
+// using MinimalApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,12 +32,17 @@ builder.Services.Configure<IdentityOptions>(opt => {
     opt.Lockout.AllowedForNewUsers = true;
 });
 
-builder.Services.ConfigureApplicationCookie(opt => {
-    opt.Cookie.HttpOnly = true;
+builder.Services.AddAuthentication(opt => {
+    opt.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    opt.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    opt.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+})
+.AddCookie(opt => {
+    opt.LoginPath = "/login";
+    opt.Cookie.Name = "auth_cookie";
     opt.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-
-    opt.LoginPath = new PathString("/login");
-    opt.AccessDeniedPath = new PathString("/");
+    opt.SlidingExpiration = true;
+    opt.Cookie.HttpOnly = true;
 });
 
 builder.Services.AddRazorPages(opt => {
@@ -54,6 +61,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+// app.UseMiddleware<MyMiddleware>();
 
 app.MapRazorPages();
 

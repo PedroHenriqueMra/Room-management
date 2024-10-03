@@ -24,9 +24,9 @@ public static class Registers
                 Password = hashPassword
             };
             await context.AddAsync(newUser);
-            await context.SaveChangesAsync();
+            // await context.SaveChangesAsync();
 
-            return Results.Ok("Usuário registrado com êxito!!");
+            return Results.Created($"{1}", 1);
         });
 
         // editar usuario pelo id

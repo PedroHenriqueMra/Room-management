@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Text;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using ModelTables;
+using MySqlX.XDevAPI;
 using Newtonsoft.Json;
 using static Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal.ExternalLoginModel;
 
@@ -54,47 +56,58 @@ public class RegisterModel : PageModel
         public string Password { get; set; }
     }
 
+    public string UserId { get; set; }
+
     public async Task<IActionResult> OnPostAsync()
     {
         if (!ModelState.IsValid)
         {
+            _logger.LogInformation("Imcomplete data or input error");
             return Page();
         }
 
-        // post request to create a new user:
-        var data = new
-        {
+        var DataRegister = new {
             Name = Input.Name,
             Email = Input.Email,
             Password = Input.Password
         };
-        var json = JsonConvert.SerializeObject(data);
+        var json = JsonConvert.SerializeObject(DataRegister);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var client = new HttpClient() { BaseAddress = new Uri("http://localhost:5229") };
-        var response = await client.PostAsync("/new", content);
-
-        if (!response.IsSuccessStatusCode)
+        using (var handler = new HttpClientHandler())
+        using (var client = new HttpClient(handler))
         {
-            return Content($"Requisição falha!!: {response.StatusCode}");
-        }
-
-        // creation of the entity
-        var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
-        var result = await _userManager.CreateAsync(user, Input.Password);
-
-        if (!result.Succeeded)
-        {
-            foreach (var error in result.Errors)
+            try
             {
-                ModelState.AddModelError(String.Empty, error.Description);
+                var response = await client.PostAsync("http://localhost:5229/new", content);
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError("Request to '/new' error");
+                    return (IActionResult)Results.BadRequest("Request Error");
+                }
+
+                var url = response.Headers.Location;
+                if (url == null)
+                {
+                    _logger.LogError("Id not received");
+                    return (IActionResult)Results.BadRequest();
+                }
+
+                UserId = url.ToString();
             }
-            return Page();
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error identified: {ex}");
+                return (IActionResult)Results.BadRequest("Excecption found");
+            }
+
+            _logger.LogInformation("User created");
         }
 
-        _logger.LogInformation("User created successfully");
-        await _signInManager.SignInAsync(user, isPersistent: false);
+        Claim claimEmail = new Claim(ClaimTypes.Email, Input.Email);
+        Claim claimIndentifier = new Claim(ClaimTypes.NameIdentifier, UserId);
+        ClaimsIdentity identity = new ClaimsIdentity();
 
-        return RedirectToPage("/index");
+        return Page();
     }
 }

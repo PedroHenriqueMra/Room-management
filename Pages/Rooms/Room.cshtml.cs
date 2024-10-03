@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
@@ -95,7 +96,7 @@ public class RoomModel : PageModel
     }
 
     public async Task<IActionResult> OnGetAsync(Guid url)
-    {
+    {       
         if (url == Guid.Empty)
         {
             return RedirectToAction("/rooms");
@@ -126,7 +127,7 @@ public class RoomModel : PageModel
         Room = room;
         Messages = room.Messages.ToList();
         Owner = room.Adm;
-
+        
         return Page();
     }
 }

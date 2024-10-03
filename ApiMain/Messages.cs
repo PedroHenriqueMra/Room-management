@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Azure.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -13,17 +14,21 @@ public static class Messages
 {
     public static void EndpointsMessages(this WebApplication app)
     {
-        app.MapPost("/new/message", async (HttpContext http, DbContextModel context, MessageRequest dataMessage) =>
+        app.MapPost("/new/message", async (ClaimsPrincipal claims,DbContextModel context, MessageRequest dataMessage) =>
         {
             if (dataMessage.IdRoom == Guid.Empty || dataMessage.IdUser == null)
             {
-                return Results.StatusCode(400);
+                return Results.BadRequest("Empty data");
             }
             
-            if(http.User.Identity?.IsAuthenticated ?? false)
+            Console.WriteLine($"isAuthenticate?: {claims.Identity.IsAuthenticated}");
+            if(!(claims.Identity?.IsAuthenticated ?? false))
             {
-                return Results.BadRequest("unauthenticated user!!");
+                Console.WriteLine("Erro de claims");
+                return Results.Unauthorized();
             }
+
+            
 
             var user = await context.User.FindAsync(dataMessage.IdUser);
             if (user == null)
@@ -39,8 +44,7 @@ public static class Messages
 
             if (dataMessage.Content.Length == 0 || dataMessage.Content.Length > 200)
             {
-                Console.WriteLine("tamanho do conteudo");
-                return Results.BadRequest($"Error in message length!!. Your message has length of {dataMessage.Content.Length} and is supported with length less than 200 and greater than 0");
+                return Results.BadRequest($"Message length must be between 1 and 200 characters. Current length: {dataMessage.Content.Length}");
             }
 
             var message = new Message
@@ -65,10 +69,11 @@ public static class Messages
             }
             catch (Exception ex)
             {
-                return Results.BadRequest($"An error occurred while sending the message!!: {ex}");
+                Console.WriteLine($"An error occurred while sending the message!!: {ex}");
+                return Results.BadRequest($"An unexpected error ocurred while sending the message.");
             }
 
-            return Results.StatusCode(201);
+            return Results.Created($"/message/{message.Id}", message);
         });
     }
 }
