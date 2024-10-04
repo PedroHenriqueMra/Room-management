@@ -11,4 +11,6 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <h2>Olá, @User.Identity?.Name</h2>
+    <hr />
+    <h2>Id: </h2>
 }

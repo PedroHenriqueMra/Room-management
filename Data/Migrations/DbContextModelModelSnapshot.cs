@@ -220,11 +220,8 @@ namespace MinimalApi.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(1000)
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsAdm")
-                        .HasColumnType("INTEGER");
 
                     b.Property<Guid>("RoomId")
                         .HasColumnType("TEXT");

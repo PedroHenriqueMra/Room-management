@@ -5,6 +5,8 @@ using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using Google.Protobuf.WellKnownTypes;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Components.RenderTree;
@@ -24,14 +26,13 @@ using static Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal.External
 public class RegisterModel : PageModel
 {
     private readonly ILogger<RegisterModel> _logger;
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly SignInManager<IdentityUser> _signInManager;
-    public RegisterModel(ILogger<RegisterModel> logger, UserManager<IdentityUser> userManager,
-    SignInManager<IdentityUser> signInManager)
+    private readonly HttpContext _context;
+    private readonly HttpClient _client;
+    public RegisterModel(ILogger<RegisterModel> logger, HttpContext context, HttpClient client)
     {
-        _userManager = userManager;
-        _signInManager = signInManager;
         _logger = logger;
+        _context = context;
+        _client = client;
     }
 
     [BindProperty]
@@ -56,7 +57,7 @@ public class RegisterModel : PageModel
         public string Password { get; set; }
     }
 
-    public string UserId { get; set; }
+    private string UserId { get; set; }
 
     public async Task<IActionResult> OnPostAsync()
     {
@@ -74,40 +75,41 @@ public class RegisterModel : PageModel
         var json = JsonConvert.SerializeObject(DataRegister);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        using (var handler = new HttpClientHandler())
-        using (var client = new HttpClient(handler))
+        try
         {
-            try
+            var response = await _client.PostAsync("http://localhost:5229/new", content);
+            if (!response.IsSuccessStatusCode)
             {
-                var response = await client.PostAsync("http://localhost:5229/new", content);
-                if (!response.IsSuccessStatusCode)
-                {
-                    _logger.LogError("Request to '/new' error");
-                    return (IActionResult)Results.BadRequest("Request Error");
-                }
-
-                var url = response.Headers.Location;
-                if (url == null)
-                {
-                    _logger.LogError("Id not received");
-                    return (IActionResult)Results.BadRequest();
-                }
-
-                UserId = url.ToString();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error identified: {ex}");
-                return (IActionResult)Results.BadRequest("Excecption found");
+                _logger.LogError("Request to '/new' error");
+                return (IActionResult)Results.BadRequest("Request Error");
             }
 
-            _logger.LogInformation("User created");
+            var url = response.Headers.Location;
+            if (url == null)
+            {
+                _logger.LogError("Id not received");
+                return (IActionResult)Results.BadRequest();
+            }
+
+            UserId = url.ToString();
         }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error identified: {ex}");
+            return (IActionResult)Results.BadRequest("Excecption found");
+        }
+        _logger.LogInformation("User created");
 
-        Claim claimEmail = new Claim(ClaimTypes.Email, Input.Email);
-        Claim claimIndentifier = new Claim(ClaimTypes.NameIdentifier, UserId);
-        ClaimsIdentity identity = new ClaimsIdentity();
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Email, Input.Email),
+            new Claim(ClaimTypes.NameIdentifier, UserId)
+        };
+        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
-        return Page();
+        await _context.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+ 
+        return RedirectToAction("~/rooms");
     }
 }

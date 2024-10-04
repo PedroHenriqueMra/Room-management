@@ -162,8 +162,7 @@ namespace MinimalApi.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Content = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: false),
-                    IsAdm = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Content = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
                     RoomId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },

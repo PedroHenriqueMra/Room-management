@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MinimalApi.Migrations
 {
     [DbContext(typeof(DbContextModel))]
-    [Migration("20240928022152_init")]
+    [Migration("20241003234234_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -223,11 +223,8 @@ namespace MinimalApi.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(1000)
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsAdm")
-                        .HasColumnType("INTEGER");
 
                     b.Property<Guid>("RoomId")
                         .HasColumnType("TEXT");

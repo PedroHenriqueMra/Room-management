@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,13 +11,13 @@ using static Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal.External
 public class LoginModel : PageModel
 {
     private readonly ILogger<LoginModel> _logger;
-    private readonly UserManager<IdentityUser> _userManager;
     private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly UserManager<IdentityUser> _userManager;
 
-    public LoginModel(ILogger<LoginModel> logger, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+    public LoginModel(ILogger<LoginModel> logger,SignInManager<IdentityUser> signInManager,UserManager<IdentityUser> userManager)
     {
-        _userManager = userManager;
         _signInManager = signInManager;
+        _userManager = userManager;
         _logger = logger;
     }
 
@@ -38,7 +40,7 @@ public class LoginModel : PageModel
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "Erro. Confirme a senha corretamente!")]
         public string ConfirmPassword { get; set; }
-        public string Remember { get; set; }
+        public bool Remember { get; set; }
     }
 
     public async Task<IActionResult> OnPostAsync()
@@ -54,25 +56,30 @@ public class LoginModel : PageModel
             return Page();
         }
 
-        bool remember = Input.Remember != null ? true : false;
-        var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, remember, lockoutOnFailure: true);
-        if (result.Succeeded)
+        var user = await _userManager.FindByEmailAsync(Input.Email);
+        if (user == null)
         {
-            _logger.LogInformation("User is logged in now");
-            return LocalRedirect("~/");
+            _logger.LogError("Claim not found");
+            return (IActionResult)Results.BadRequest("User not found!!");
         }
-        if (result.IsLockedOut)
+        var claims = new List<Claim>
         {
-            _logger.LogWarning("User account locked out");
-            return Redirect("~/");
-        }
-        if (result.IsNotAllowed)
-        {
-            _logger.LogError("Confirmation is required for this account");
-            // redirect para a pagina de confirmação
-            return Page();
-        }
+            new Claim(ClaimTypes.Email, Input.Email),
+            new Claim(ClaimTypes.NameIdentifier, user.Id)
+        };
 
-        return RedirectToAction("/");
+        try
+        {
+            await _signInManager.SignInWithClaimsAsync(user, Input.Remember, claims);
+
+            _logger.LogInformation("Authenticated user");
+            // depois fazer uma tela para sucesso de autenticação
+            return RedirectToAction("~/");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug($"Exeption error: {ex}");
+            return (IActionResult)Results.BadRequest("An error occurred during login.");
+        }
     }
 }

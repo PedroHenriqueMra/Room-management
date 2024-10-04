@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using ModelTables;
 
@@ -9,13 +10,15 @@ public static class Registers
     {
         app.MapPost("/new", async (DbContextModel context, User user) =>
         {
-            var queryEmail = await context.User.FirstOrDefaultAsync(q => q.Email == user.Email);
-            var queryName = await context.User.FirstOrDefaultAsync(q => q.Name == user.Name);
-            if (queryEmail != null || queryName != null)
+            var existingUser = await context.User
+            .Where(u => u.Email == user.Email || u.Name == user.Name)
+            .FirstOrDefaultAsync();
+            if (existingUser != null)
             {
                 // email ou nome ja existentes!
                 return Results.BadRequest("Email ou nome já existente!!");
             }
+
             var hashPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
             var newUser = new User()
             {
@@ -23,10 +26,18 @@ public static class Registers
                 Email = user.Email,
                 Password = hashPassword
             };
-            await context.AddAsync(newUser);
-            // await context.SaveChangesAsync();
+            try
+            {
+                await context.User.AddAsync(newUser);
+                await context.SaveChangesAsync(); 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exeption: {ex}");
+                return Results.BadRequest("An exeption occured");
+            }
 
-            return Results.Created($"{1}", 1);
+            return Results.Created($"{newUser.Id}", newUser.Id);
         });
 
         // editar usuario pelo id
