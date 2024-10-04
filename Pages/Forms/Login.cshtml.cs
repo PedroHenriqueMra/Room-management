@@ -1,24 +1,26 @@
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using static Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal.ExternalLoginModel;
 
 [AllowAnonymous]
 public class LoginModel : PageModel
 {
     private readonly ILogger<LoginModel> _logger;
-    private readonly SignInManager<IdentityUser> _signInManager;
-    private readonly UserManager<IdentityUser> _userManager;
-
-    public LoginModel(ILogger<LoginModel> logger,SignInManager<IdentityUser> signInManager,UserManager<IdentityUser> userManager)
+    private readonly DbContextModel _context;
+    private readonly IHttpContextAccessor _httpContext;
+    public LoginModel(ILogger<LoginModel> logger, DbContextModel context, IHttpContextAccessor httpContext)
     {
-        _signInManager = signInManager;
-        _userManager = userManager;
         _logger = logger;
+        _context = context;
+        _httpContext = httpContext;
     }
 
     [BindProperty]
@@ -49,32 +51,41 @@ public class LoginModel : PageModel
         {
             return Page();
         }
-
         if (Input.ConfirmPassword != Input.Password)
         {
             ViewData["FailConfirm"] = true;
             return Page();
         }
 
-        var user = await _userManager.FindByEmailAsync(Input.Email);
-        if (user == null)
+        var confereUser = await _context.User.FirstOrDefaultAsync(u => u.Email == Input.Email);
+        if (confereUser == null)
         {
-            _logger.LogError("Claim not found");
-            return (IActionResult)Results.BadRequest("User not found!!");
+            _logger.LogError("Error in email");
+            return Page();
+            // return (IActionResult)Results.BadRequest("Error in email");
         }
+        bool passwordMatch = BCrypt.Net.BCrypt.Verify(Input.Password, confereUser.Password);
+        if (!passwordMatch)
+        {
+            _logger.LogError("Error in password");
+            return Page();
+            // return (IActionResult)Results.BadRequest("Error in password");
+        }
+
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Email, Input.Email),
-            new Claim(ClaimTypes.NameIdentifier, user.Id)
+            new Claim(ClaimTypes.NameIdentifier, confereUser.Id.ToString())
         };
-
         try
         {
-            await _signInManager.SignInWithClaimsAsync(user, Input.Remember, claims);
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+            await _httpContext.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, new AuthenticationProperties { IsPersistent = Input.Remember });
 
             _logger.LogInformation("Authenticated user");
             // depois fazer uma tela para sucesso de autenticação
-            return RedirectToAction("~/");
+            return RedirectToAction("/");
         }
         catch (Exception ex)
         {

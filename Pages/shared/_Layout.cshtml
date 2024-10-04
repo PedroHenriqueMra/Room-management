@@ -1,5 +1,5 @@
 @{
-    var user = User.Identity?.Name;
+    var user = "";
 }
 
 <!DOCTYPE html>
@@ -34,7 +34,7 @@
                     </form>
                 </li>
                 <li>
-                    <a class="manager" href="/manager/@User.Identity?.Name">@User.Identity?.Name</a>
+                    <a class="manager" href="/manager/@User"></a>
                 </li>
             } else {
                 <li>

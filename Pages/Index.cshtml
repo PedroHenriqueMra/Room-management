@@ -1,16 +1,12 @@
-@page 
-@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
-@{
-    ViewData["Title"] = "Index";
-}
+@page
+@model IndexModel
+@{}
 
 <h1>Index</h1>
 
-@if (SignInManager.IsSignedIn(User))
+@if (User.Identity.IsAuthenticated)
 {
-    <h2>Olá, @User.Identity?.Name</h2>
+    <h2>Olá, @Model.Email</h2>
     <hr />
-    <h2>Id: </h2>
+    <h2>id: @Model.Id</h2>
 }

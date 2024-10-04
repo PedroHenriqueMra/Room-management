@@ -26,12 +26,12 @@ using static Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal.External
 public class RegisterModel : PageModel
 {
     private readonly ILogger<RegisterModel> _logger;
-    private readonly HttpContext _context;
+    private readonly IHttpContextAccessor _httpContext;
     private readonly HttpClient _client;
-    public RegisterModel(ILogger<RegisterModel> logger, HttpContext context, HttpClient client)
+    public RegisterModel(ILogger<RegisterModel> logger, IHttpContextAccessor httpContext, HttpClient client)
     {
         _logger = logger;
-        _context = context;
+        _httpContext = httpContext;
         _client = client;
     }
 
@@ -108,8 +108,8 @@ public class RegisterModel : PageModel
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
-        await _context.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+        await _httpContext.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, new AuthenticationProperties { IsPersistent = false });
  
-        return RedirectToAction("~/rooms");
+        return RedirectToAction("/");
     }
 }

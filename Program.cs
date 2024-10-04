@@ -9,10 +9,11 @@ using MinimalApi.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpClient();
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddDbContext<DbContextModel>(
     options => options.UseSqlite("Data Source=testeapi.db"));
-
-builder.Services.AddHttpClient();
 
 // identity:
 builder.Services.AddDefaultIdentity<IdentityUser>(opt => opt.SignIn.RequireConfirmedAccount = true)
