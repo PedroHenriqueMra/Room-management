@@ -1,5 +1,9 @@
 @page "/room/{url:Guid}"
+@using System.Security.Claims
 @model RoomModel
+@{
+    var userClaim = User.FindFirst(ClaimTypes.Email)?.Value;
+}
 <head>
     <link rel="stylesheet" href="~/css/room.css">
     <title>@Model.Room?.Adm?.Name room</title>
@@ -12,8 +16,8 @@
         {
             <li>
                 <div class="message-box">
-                    <span class="who">@(m.User.Email == User?.Identity?.Name ? "Your Message" : m.User.Name)</span>
-                    <p class="content">@m</p>
+                    <span class="who">@(m.User.Email == userClaim ? "Your Message" : m.User.Name)</span>
+                    <p class="content">@Html.Raw(m.Content)</p>
                 </div>
             </li>
         }
@@ -26,7 +30,7 @@
 
 <form method="post">
     <div class="input-chat">
-        <input type="text" placeholder="Type your message" name="message">
+        <input type="text" placeholder="Type your message" name="message" required>
         <input type="submit" value="Submit">
     </div>
 </form>

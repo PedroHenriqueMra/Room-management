@@ -1,5 +1,6 @@
-@{
-    var user = "";
+@using System.Security.Claims
+   @{
+       var manager = User.FindFirst(ClaimTypes.Email)?.Value ?? "";
 }
 
 <!DOCTYPE html>
@@ -34,7 +35,7 @@
                     </form>
                 </li>
                 <li>
-                    <a class="manager" href="/manager/@User"></a>
+                    <a class="manager" href="/manager/@manager">@manager</a>
                 </li>
             } else {
                 <li>

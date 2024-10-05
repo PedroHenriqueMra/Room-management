@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,18 +42,20 @@ public class CreateRoomModel : PageModel
             return Page();
         }
 
-        var roomsContext = await _context.Room.ToListAsync();
-        foreach(var r in roomsContext)
+        var roomsContext = _context.Room.FirstOrDefault(r => r.Name == Input.Name);
+        if (roomsContext != null)
         {
-            if (r.Name == Input.Name)
-            {
-                ViewData["NameFail"] = true;
-                return Page();
-            }
+            ViewData["NameFail"] = true;
+            return Page();
         }
 
+        if (!User.Identity.IsAuthenticated)
+        {
+            return NotFound("You aren'n authenticated!!");
+        }
+        var claimEmail = User.FindFirst(ClaimTypes.Email)?.Value;
         // create a new room
-        var adm = await _context.User.FirstOrDefaultAsync(u => u.Email == User.Identity.Name);
+        var adm = await _context.User.FirstOrDefaultAsync(u => u.Email == claimEmail);
         if (adm == null)
         {
             // usuario nao encontrado
@@ -69,7 +72,6 @@ public class CreateRoomModel : PageModel
 
         var client = new HttpClient() { BaseAddress = new Uri("http://localhost:5229") };
         var response = await client.PostAsync("/new/room", content);
-
         if (!response.IsSuccessStatusCode)
         {
             // erro!!!! (adicionar comunicação do erro com o cliente)

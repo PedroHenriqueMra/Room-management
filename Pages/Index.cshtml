@@ -1,12 +1,14 @@
 @page
 @model IndexModel
-@{}
+@{
+    ViewData["Title"] = $"Home for - {Model.Email}";
+}
 
 <h1>Index</h1>
 
 @if (User.Identity.IsAuthenticated)
 {
-    <h2>Olá, @Model.Email</h2>
+    <h1>Olá, @Model.Email!</h1>
     <hr />
     <h2>id: @Model.Id</h2>
 }

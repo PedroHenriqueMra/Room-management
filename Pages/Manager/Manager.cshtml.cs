@@ -24,8 +24,9 @@ public class ManagerModel : PageModel
         _logger = logger;
     }
 
-    public User User { get; set; }
+    public User UserManager { get; set; }
 
+    [Authorize]
     public async Task<IActionResult> OnGetAsync(string email)
     {
         if (String.IsNullOrEmpty(email))
@@ -33,19 +34,30 @@ public class ManagerModel : PageModel
             return RedirectToPage("/");
         }
 
-        var user = await _userManager.FindByEmailAsync(email);
-        if (user == null)
+        var user = User.FindFirst(ClaimTypes.Email)?.Value;
+        if (user != null)
         {
-            return NotFound($"Login with a valid user. Email: {email}");
+            if (user != email)
+            {
+                _logger.LogError("Error: Url doesn'n match the user");
+                return NotFound("You aren't logged into your account!!.");
+            }
+            _logger.LogInformation("You have entered the user manager page!!");
+        }
+        else
+        {
+            _logger.LogError("Error: claims email not found");
+            return NotFound("You aren't logged into your account!!.");
         }
 
-        var query = await _context.User.FirstOrDefaultAsync(u => u.Email == user.Email);
+        var query = await _context.User.FirstOrDefaultAsync(u => u.Email == user);
         if (query == null)
         {
-            return NotFound($"Imposible login for {email}");
+            _logger.LogError($"User for email: {email} not found in DbContext!!");
+            return NotFound($"Error: unable to find login for {email}.");
         }
 
-        User = query;
+        UserManager = query;
         return Page();
     }
 }

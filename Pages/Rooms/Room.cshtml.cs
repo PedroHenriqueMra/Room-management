@@ -14,26 +14,31 @@ public class RoomModel : PageModel
 {
     private readonly ILogger<RoomModel> _logger;
     private readonly DbContextModel _context;
+    private readonly HttpClient _httpClient;
     public Room Room { get; set; }
-    public User Owner { get; set; }
     public List<Message> Messages { get; set; }
 
-    public RoomModel(ILogger<RoomModel> logger, DbContextModel context)
+    public RoomModel(ILogger<RoomModel> logger, DbContextModel context, HttpClient httpClient)
     {
         _context = context;
         _logger = logger;
+        _httpClient = httpClient;
     }
 
     public async Task<IActionResult> OnPostAsync(string message)
     {
-        if (message == null)
+        if (string.IsNullOrWhiteSpace(message))
         {
-            _logger.LogError("Null message");
+            _logger.LogError("Null message or empty message");
             return Page();
         }
+        if (!User.Identity.IsAuthenticated)
+        {
+            return RedirectToAction("/login");
+        }
 
-        var user = await _context.User.FirstOrDefaultAsync(u => u.Email == User.Identity.Name);
-        Owner = user ?? new User();
+        var claimEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+        var user = await _context.User.FirstOrDefaultAsync(u => u.Email == claimEmail);
         if (user == null)
         {
             _logger.LogError("User not found!!");
@@ -53,9 +58,8 @@ public class RoomModel : PageModel
             return NotFound("Page not found!!");
         }
 
-        var room = await _context.Room.FindAsync(roomId);
+        var room = await _context.Room.Include(r => r.Messages).Include(r => r.Adm).FirstAsync(r => r.Id == roomId);
         Room = room ?? new Room();
-        Messages = room.Messages.ToList() ?? new List<Message>();
         if (room == null)
         {
             _logger.LogError("The room not found!");
@@ -72,62 +76,64 @@ public class RoomModel : PageModel
         var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
         Uri GetUri(string path) => new Uri("http://localhost:5229" + path);
-        using (var handler = new HttpClientHandler())
-        using (var client = new HttpClient(handler))
+        try
         {
-            try
-            {    
-                var response = await client.PostAsync(GetUri("/new/message"), httpContent);
-                if (!response.IsSuccessStatusCode)
-                {
-                    _logger.LogError("Error sending message!!");
-                    return Page();
-                }
-            }
-            catch (HttpRequestException ex)
+            var response = await _httpClient.PostAsync(GetUri("/new/message"), httpContent);
+            if (!response.IsSuccessStatusCode)
             {
-                _logger.LogError($"Error sending message: {ex.Message}");
+                Messages = room.Messages.ToList() ?? new List<Message>();
+                _logger.LogError("Error sending message!!");
                 return Page();
             }
-
-            _logger.LogInformation("Message sent");
+        }
+        catch (HttpRequestException ex)
+        {
+            _logger.LogError($"Error sending message: {ex.Message}");
             return Page();
         }
+
+        Messages = room.Messages.ToList() ?? new List<Message>();
+        _logger.LogInformation("Message sent");
+        return Page();
     }
 
     public async Task<IActionResult> OnGetAsync(Guid url)
-    {       
+    {
         if (url == Guid.Empty)
         {
             return RedirectToAction("/rooms");
         }
+        if (!User.Identity.IsAuthenticated)
+        {
+            return RedirectToAction("");
+        }
 
-        var room = await _context.Room.Include(r => r.Adm).FirstOrDefaultAsync(r => r.Id == url);
+        var room = await _context.Room.Include(r => r.Adm).Include(r => r.Messages).FirstOrDefaultAsync(r => r.Id == url);
         if (room == null)
         {
             _logger.LogWarning($"the room ({url}) was not found!");
             return RedirectToAction("/rooms");
         }
 
-        var owner = await _context.User.FirstOrDefaultAsync(u => u.Email == User.Identity.Name);
+        var claimEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+        var owner = await _context.User.FirstOrDefaultAsync(u => u.Email == claimEmail);
         if (owner != null)
         {
             if (!room.UsersNames.Contains(owner.Name))
             {
-                _logger.LogWarning($"The user ({owner.Name}) isn´t in the room!!");
+                _logger.LogWarning($"The user ({owner.Name}) isn't in the room!!");
                 return RedirectToAction("/rooms");
             }
         }
         else
         {
-            _logger.LogWarning($"the user ({User.Identity?.Name}) was not found!");
+            _logger.LogWarning($"the user ({claimEmail}) was not found!");
             return RedirectToAction("/rooms");
         }
 
         Room = room;
         Messages = room.Messages.ToList();
-        Owner = room.Adm;
-        
+
         return Page();
     }
 }

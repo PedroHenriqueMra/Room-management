@@ -14,21 +14,12 @@ public static class Messages
 {
     public static void EndpointsMessages(this WebApplication app)
     {
-        app.MapPost("/new/message", async (ClaimsPrincipal claims,DbContextModel context, MessageRequest dataMessage) =>
+        app.MapPost("/new/message", async (DbContextModel context, MessageRequest dataMessage) =>
         {
             if (dataMessage.IdRoom == Guid.Empty || dataMessage.IdUser == null)
             {
                 return Results.BadRequest("Empty data");
             }
-            
-            Console.WriteLine($"isAuthenticate?: {claims.Identity.IsAuthenticated}");
-            if(!(claims.Identity?.IsAuthenticated ?? false))
-            {
-                Console.WriteLine("Erro de claims");
-                return Results.Unauthorized();
-            }
-
-            
 
             var user = await context.User.FindAsync(dataMessage.IdUser);
             if (user == null)
@@ -61,7 +52,8 @@ public static class Messages
                 user.Messages.Add(message);
                 room.Messages.Add(message);
 
-                // await context.SaveChangesAsync();
+
+                await context.SaveChangesAsync();
             }
             catch (DbUpdateException ex)
             {
@@ -73,7 +65,7 @@ public static class Messages
                 return Results.BadRequest($"An unexpected error ocurred while sending the message.");
             }
 
-            return Results.Created($"/message/{message.Id}", message);
+            return Results.StatusCode(201);
         });
     }
 }

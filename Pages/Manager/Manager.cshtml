@@ -1,23 +1,23 @@
 @page "/manager/{email}"
 @model ManagerModel
 @{
-    ViewData["Title"] = @User.Identity?.Name;
+    ViewData["Title"] = Model.UserManager.Name;
 
-    var rooms = Model.User.RoomsNames.ToList();
+    var rooms = Model.UserManager.RoomsNames?.ToList();
 }
 <link rel="stylesheet" href="~/css/manager.css">
 
-<h1><span class="name">@Model.User.Name</span></h1>
+<h1><span class="name">@Model.UserManager.Name</span></h1>
 
 <div class="info">
     <ul>
         <li class="field">
             <span>Name</span>
-            <div>@Model.User.Name <a href="#"></a></div>
+            <div>@Model.UserManager.Name <a href="#"></a></div>
         </li>
         <li class="field">
             <span>Email</span>
-            <div>@Model.User.Email <a href="#"></a></div>
+            <div>@Model.UserManager.Email <a href="#"></a></div>
         </li>
         <li class="field">
             <span>Password</span>
