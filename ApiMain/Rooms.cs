@@ -8,7 +8,7 @@ public static class Rooms
     public static void EndpointsRooms(this WebApplication app)
     {
         // criar uma nova sala
-        app.MapPost("/new/room", async (DbContextModel context, RoomRequest roomData) =>
+        app.MapPost("/new/room", async (DbContextModel context, CreateRoomRequest roomData) =>
         {
             var adm = await context.User.FindAsync(roomData.IdUser);
             if (adm == null)
@@ -27,7 +27,8 @@ public static class Rooms
                 Name = roomData.Name,
                 Adm = adm,
                 Description = roomData.Description,
-                AdmId = adm.Id
+                AdmId = adm.Id,
+                IsPrivate = roomData.IsPrivate
             };
             newRoom.Users.Add(adm);
             newRoom.UsersNames.Add(adm.Name);
@@ -66,16 +67,24 @@ public static class Rooms
             return Results.Ok("Sala deletada com êxito!!");
         });
 
-        // participar de uma sala
-        app.MapPost("/room/participate/{uuid:guid}", [Authorize] async (DbContextModel context, Guid uuid) =>
+        // participar de uma sala (sala publica)
+        app.MapPost("/room/participate/{uuid:guid}", async (DbContextModel context, ParticipeRoomData roomData) =>
         {
-            // com autenticação
+            Console.WriteLine("testeee: sala publica");
+            return Results.StatusCode(200);
+        });
+
+        // solicitar entrada na sala (sala privada)
+        app.MapPost("/room/request/{uuid:guid}", async (DbContextModel context, ParticipeRoomData roomData) =>
+        {
+            Console.WriteLine("testeee: sala privada");
+            return Results.StatusCode(200);
         });
 
         // sair de uma sala
         app.MapPut("/room/exit/", async (DbContextModel context) =>
         {
-            // com autenticação
+           
         });
 
     }

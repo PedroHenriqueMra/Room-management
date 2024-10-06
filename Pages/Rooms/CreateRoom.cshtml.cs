@@ -33,6 +33,7 @@ public class CreateRoomModel : PageModel
         public string Name { get; set; }
         [StringLength(150)]
         public string Description { get; set; }
+        public bool IsPrivate { get; set; } = default;
     }
 
     public async Task<IActionResult> OnPostAsync()
@@ -65,7 +66,8 @@ public class CreateRoomModel : PageModel
         var data = new {
             IdUser = adm.Id,
             Name = Input.Name,
-            Description = Input.Description
+            Description = Input.Description,
+            IsPrivate = Input.IsPrivate
         };
         var json = JsonConvert.SerializeObject(data);
         var content = new StringContent(json, Encoding.UTF8, "application/json");

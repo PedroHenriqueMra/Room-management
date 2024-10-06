@@ -28,9 +28,8 @@
             }
         </div>
         <div class="mb-3 form-check">
-            <input asp-for="Input.Remember" type="checkbox" class="form-check-input" id="idcheck" value="true" name="IsChecked">
-            <input name="IsChecked" type="hidden" value="false">
-            <label asp-for="Input.Remember" class="form-check-label" for="exampleCheck1">Remember-me</label>
+            @Html.CheckBoxFor(c => c.Input.Remember)
+            <label asp-for="Input.Remember" class="form-check-label" >Remember-me</label>
         </div>
         <button type="submit" class="btn btn-primary">Confirmar</button>
     </form>

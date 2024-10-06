@@ -18,6 +18,7 @@ public class Room
     public int AdmId { get; set; }
     [StringLength(150)]
     public string Description { get; set; }
+    public bool IsPrivate { get; set; } = default;
     public DateTime CreateDate { get; set; } = DateTime.Now;
 
     // um para muitos:
@@ -29,9 +30,18 @@ public class Room
     public List<string>? UsersNames { get; set; } = new List<string>();
 }
 
-public class RoomRequest
+public class CreateRoomRequest
 {
     public int IdUser { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
+    public bool IsPrivate { get; set; } = default;
+}
+
+public class ParticipeRoomData
+{
+    [Required]
+    public User UserParticipe { get; set; }
+    [Required]
+    public Room Room { get; set; }
 }

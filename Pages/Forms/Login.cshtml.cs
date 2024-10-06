@@ -42,7 +42,7 @@ public class LoginModel : PageModel
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "Erro. Confirme a senha corretamente!")]
         public string ConfirmPassword { get; set; }
-        public bool Remember { get; set; }
+        public bool Remember { get; set; } = default;
     }
 
     public async Task<IActionResult> OnPostAsync()

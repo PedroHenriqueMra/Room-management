@@ -42,8 +42,10 @@
                         }
                         else
                         {
-                            <form method="post" asp-page="#">
-                                <input class="btn btn-success" type="submit" value="Join the room">
+                            <form method="post">
+                                <input class="@(r.IsPrivate ? "btn btn-warning" : "btn btn-success")" type="submit" value="@(r.IsPrivate ? "request entry" : "Join the room")">
+                                @Html.Hidden("isPrivate", r.IsPrivate)
+                                @Html.Hidden("uuid", r.Id)
                             </form>
                         }
                     </div>

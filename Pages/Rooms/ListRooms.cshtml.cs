@@ -1,24 +1,82 @@
 using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ModelTables;
+using Newtonsoft.Json;
+using Org.BouncyCastle.Crypto.Digests;
 
 [Authorize]
 public class ListRoomModel : PageModel
 {
     public ILogger<ListRoomModel> _logger;
     public DbContextModel _context;
+    public HttpClient _httpClient;
 
-    public ListRoomModel(ILogger<ListRoomModel> logger, DbContextModel context)
+    public ListRoomModel(ILogger<ListRoomModel> logger, DbContextModel context, HttpClient httpClient)
     {
         _context = context;
         _logger = logger;
+        _httpClient = httpClient;
     }
 
     public List<Room> Rooms { get; set; } = new List<Room>();
     public User Owner { get; set; } = new User();
+
+    public async Task<IActionResult> OnPostAsync([FromForm] bool isPrivate, [FromForm] Guid uuid)
+    {
+        if (!User.Identity.IsAuthenticated)
+        {
+            return RedirectToAction("");
+        }
+        var claimEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+
+        Owner = await _context.User.FirstOrDefaultAsync(u => u.Email == claimEmail);
+        if (Owner == null)
+        {
+            _logger.LogError("User not found");
+            return NotFound("User not found");
+        }
+
+        // dados par a requisição
+        var room = await _context.Room.FirstOrDefaultAsync(r => r.Id == uuid);
+        if (room == null)
+        {
+            _logger.LogError("Room not found");
+            return NotFound("Room not found");
+        }
+
+        var data = new {
+            UserParticipe = Owner,
+            Room = room
+        };
+        var json = JsonConvert.SerializeObject(data);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        // envio de dados para a api
+        try
+        {
+            UriBuilder url = new UriBuilder("http://localhost:5229/");
+            url.Path = room.IsPrivate ? $"/room/request/{uuid}" : $"/room/participate/{uuid}";
+            
+            var response = await _httpClient.PostAsync(url.ToString(), content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogError("Server error");
+                return RedirectToAction("");
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Code exception: {ex}");
+            return (IActionResult)Results.BadRequest();
+        }
+
+        return RedirectToAction($"");
+    }
 
     public async Task<IActionResult> OnGetAsync()
     {

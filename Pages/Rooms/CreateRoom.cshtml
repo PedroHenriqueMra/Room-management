@@ -19,6 +19,10 @@
         <input asp-for="Input.Description" type="text" class="form-control" id="iddescription" placeholder="type the description">
         <span class="text-danger" asp-validation-for="Input.Description"></span>
     </div>
+    <div class="mb-3">
+        @Html.CheckBoxFor(c => c.Input.IsPrivate)
+        <label asp-for="Input.IsPrivate">Deprive the room?</label>
+    </div>
     <div>
         <input class="btn btn-success" type="submit" value="Submit">
     </div>
