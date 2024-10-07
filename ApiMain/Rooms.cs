@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using ModelTables;
+using MinimalApi.DbSet.Models;
 
 namespace MinimalApi.Endpoints.ConfigureRooms;
 public static class Rooms
@@ -66,12 +66,25 @@ public static class Rooms
 
             return Results.Ok("Sala deletada com êxito!!");
         });
-
+        
         // participar de uma sala (sala publica)
         app.MapPost("/room/participate/{uuid:guid}", async (DbContextModel context, ParticipeRoomData roomData) =>
         {
-            Console.WriteLine("testeee: sala publica");
-            return Results.StatusCode(200);
+            bool dataEmpty = roomData.Room == null || roomData.UserParticipe == null ? true : false;
+
+            if (dataEmpty)
+            {
+                Console.WriteLine("Request with empty data!");
+                return Results.StatusCode(204); // empty data
+            }
+
+            var entityRoom = await context.Room.Include(r => r.Users).FirstAsync(r => r.Id == roomData.Room.Id);
+            var entityUser = await context.User.Include(u => u.Rooms).FirstAsync(u => u.Id == roomData.UserParticipe.Id);
+
+            var serviceRoom = new ServicesEnterRoom();
+            var resultService = await serviceRoom.IncludeUserAsync(context, entityUser, entityRoom);
+
+            return resultService;
         });
 
         // solicitar entrada na sala (sala privada)

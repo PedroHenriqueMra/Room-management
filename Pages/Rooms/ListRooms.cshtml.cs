@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using ModelTables;
+using MinimalApi.DbSet.Models;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Crypto.Digests;
 
@@ -27,16 +27,15 @@ public class ListRoomModel : PageModel
 
     public async Task<IActionResult> OnPostAsync([FromForm] bool isPrivate, [FromForm] Guid uuid)
     {
-        if (!User.Identity.IsAuthenticated)
+        if (User?.Identity?.IsAuthenticated != true)
         {
             return RedirectToAction("");
         }
-        var claimEmail = User.FindFirst(ClaimTypes.Email)?.Value;
 
-        Owner = await _context.User.FirstOrDefaultAsync(u => u.Email == claimEmail);
+        Owner = await GetAuthenticatedUserAsync();
         if (Owner == null)
         {
-            _logger.LogError("User not found");
+            _logger.LogError($"User {Owner} is null");
             return NotFound("User not found");
         }
 
@@ -44,11 +43,18 @@ public class ListRoomModel : PageModel
         var room = await _context.Room.FirstOrDefaultAsync(r => r.Id == uuid);
         if (room == null)
         {
-            _logger.LogError("Room not found");
+            _logger.LogError($"Room {room} is null");
             return NotFound("Room not found");
         }
 
-        var data = new {
+        if (room.UsersNames.Contains(Owner.Name))
+        {
+            _logger.LogInformation($"The user {Owner.Name} already existes in this room!");
+            return Page();
+        }
+
+        var data = new
+        {
             UserParticipe = Owner,
             Room = room
         };
@@ -60,12 +66,12 @@ public class ListRoomModel : PageModel
         {
             UriBuilder url = new UriBuilder("http://localhost:5229/");
             url.Path = room.IsPrivate ? $"/room/request/{uuid}" : $"/room/participate/{uuid}";
-            
+
             var response = await _httpClient.PostAsync(url.ToString(), content);
 
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogError("Server error");
+                _logger.LogError($"Error in httpRequest. Status-Code: {response.StatusCode}");
                 return RedirectToAction("");
             }
         }
@@ -75,27 +81,33 @@ public class ListRoomModel : PageModel
             return (IActionResult)Results.BadRequest();
         }
 
-        return RedirectToAction($"");
+        return RedirectToAction("");
     }
 
     public async Task<IActionResult> OnGetAsync()
     {
-        if (!User.Identity.IsAuthenticated)
+        if (User?.Identity?.IsAuthenticated != true)
         {
+            _logger.LogError("User isn't authenticated!");
             return RedirectToAction("");
         }
-        var claimEmail = User.FindFirst(ClaimTypes.Email)?.Value;
 
-        Owner = await _context.User.FirstOrDefaultAsync(u => u.Email == claimEmail);
+        Owner = await GetAuthenticatedUserAsync();
         var rooms = await _context.Room.Include(r => r.Adm).ToListAsync();
         if (rooms.Count != 0)
         {
-            foreach(var r in rooms)
+            foreach (var r in rooms)
             {
                 Rooms.Add(r);
             }
         }
 
         return Page();
+    }
+
+    private async Task<User> GetAuthenticatedUserAsync()
+    {
+        var claimEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+        return await _context.User.FirstOrDefaultAsync(u => u.Email == claimEmail);
     }
 }

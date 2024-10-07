@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
-using ModelTables;
+using MinimalApi.DbSet.Models;
 using MySqlX.XDevAPI;
 using Newtonsoft.Json;
 using static Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal.ExternalLoginModel;

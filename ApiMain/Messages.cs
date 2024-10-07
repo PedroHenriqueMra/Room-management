@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ModelTables;
+using MinimalApi.DbSet.Models;
 using Newtonsoft.Json;
 using NuGet.Protocol;
 using Org.BouncyCastle.Asn1.Ocsp;

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using ModelTables;
+using MinimalApi.DbSet.Models;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.IsisMtt.X509;
 using static LoginModel;

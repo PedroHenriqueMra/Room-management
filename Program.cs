@@ -49,7 +49,7 @@ builder.Services.AddAuthentication(opt => {
 
 builder.Services.AddRazorPages(opt => {
     // desabilita o token de formulario obrigatorio
-    opt.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
+    // opt.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
 });
 
 var app = builder.Build();

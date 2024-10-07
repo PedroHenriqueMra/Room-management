@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using ModelTables;
+using MinimalApi.DbSet.Models;
 
 namespace MinimalApi.Endpoints.ConfigureRegisters;
 public static class Registers

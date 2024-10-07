@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ModelTables;
+namespace MinimalApi.DbSet.Models;
 
 public class Message
 {

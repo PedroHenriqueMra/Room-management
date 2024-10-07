@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Identity.Client;
-using ModelTables;
+using MinimalApi.DbSet.Models;
 using Mysqlx;
 using MySqlX.XDevAPI.Common;
 using Org.BouncyCastle.Crypto.Generators;

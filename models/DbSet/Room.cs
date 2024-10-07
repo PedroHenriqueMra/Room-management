@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 
-namespace ModelTables;
+namespace MinimalApi.DbSet.Models;
 
 public class Room
 {

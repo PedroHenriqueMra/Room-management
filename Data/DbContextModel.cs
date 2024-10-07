@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using ModelTables;
+using MinimalApi.DbSet.Models;
 
 public class DbContextModel : IdentityDbContext<IdentityUser>
 {

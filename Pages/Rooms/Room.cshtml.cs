@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
-using ModelTables;
+using MinimalApi.DbSet.Models;
 using Newtonsoft.Json;
 
 [Authorize]
@@ -58,7 +58,7 @@ public class RoomModel : PageModel
             return NotFound("Page not found!!");
         }
 
-        var room = await _context.Room.Include(r => r.Messages).Include(r => r.Adm).FirstAsync(r => r.Id == roomId);
+        var room = await _context.Room.Include(r => r.Adm).FirstAsync(r => r.Id == roomId);
         Room = room ?? new Room();
         if (room == null)
         {
@@ -81,7 +81,7 @@ public class RoomModel : PageModel
             var response = await _httpClient.PostAsync(GetUri("/new/message"), httpContent);
             if (!response.IsSuccessStatusCode)
             {
-                Messages = room.Messages.ToList() ?? new List<Message>();
+                Messages = await _context.Message.Include(m => m.User).Where(r => r.RoomId == roomId).ToListAsync() ?? new List<Message>();
                 _logger.LogError("Error sending message!!");
                 return Page();
             }
@@ -92,7 +92,7 @@ public class RoomModel : PageModel
             return Page();
         }
 
-        Messages = room.Messages.ToList() ?? new List<Message>();
+        Messages = await _context.Message.Include(m => m.User).Where(r => r.RoomId == roomId).ToListAsync() ?? new List<Message>();
         _logger.LogInformation("Message sent");
         return Page();
     }
@@ -108,7 +108,7 @@ public class RoomModel : PageModel
             return RedirectToAction("");
         }
 
-        var room = await _context.Room.Include(r => r.Adm).Include(r => r.Messages).FirstOrDefaultAsync(r => r.Id == url);
+        var room = await _context.Room.Include(r => r.Adm).FirstOrDefaultAsync(r => r.Id == url);
         if (room == null)
         {
             _logger.LogWarning($"the room ({url}) was not found!");
@@ -132,7 +132,7 @@ public class RoomModel : PageModel
         }
 
         Room = room;
-        Messages = room.Messages.ToList();
+        Messages = await _context.Message.Include(m => m.User).Where(r => r.RoomId == url).ToListAsync();
 
         return Page();
     }

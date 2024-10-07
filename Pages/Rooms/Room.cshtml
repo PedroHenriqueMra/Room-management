@@ -8,9 +8,12 @@
     <link rel="stylesheet" href="~/css/room.css">
     <title>@Model.Room?.Adm?.Name room</title>
 </head>
+<span class="back">
+    <a href="/rooms">Back</a>
+</span>
 
 <ul>
-    @if (Model.Room?.Messages?.Count != 0)
+    @if (Model.Messages?.Count != 0)
     {
         @foreach (var m in Model.Messages)
         {

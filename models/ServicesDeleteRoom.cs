@@ -1,4 +1,5 @@
-using ModelTables;
+using MinimalApi.DbSet.Models;
+using MinimalApi.DbSet.Models;
 
 public class ServicesRoomDelete : IServicesRoomExit
 {

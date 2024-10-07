@@ -1,4 +1,4 @@
-using ModelTables;
+using MinimalApi.DbSet.Models;
 
 public interface IServicesRoomExit
 {
