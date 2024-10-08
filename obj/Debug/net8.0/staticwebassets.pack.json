@@ -1,8 +1,12 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\css\\listroom.css",
-      "PackagePath": "staticwebassets\\css\\listroom.css"
+      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\Static\\editar.png",
+      "PackagePath": "staticwebassets\\Static\\editar.png"
+    },
+    {
+      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\css\\layout.css",
+      "PackagePath": "staticwebassets\\css\\layout.css"
     },
     {
       "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\css\\manager.css",
@@ -13,8 +17,12 @@
       "PackagePath": "staticwebassets\\css\\room.css"
     },
     {
-      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\css\\site.css",
-      "PackagePath": "staticwebassets\\css\\site.css"
+      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\css\\roomslist.css",
+      "PackagePath": "staticwebassets\\css\\roomslist.css"
+    },
+    {
+      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\wwwroot\\css\\useredit.css",
+      "PackagePath": "staticwebassets\\css\\useredit.css"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.MinimalApi.Microsoft.AspNetCore.StaticWebAssets.props",

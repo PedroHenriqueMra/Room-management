@@ -1,94 +1,144 @@
-* {
-    padding: 0px;
-    margin: 0px;
-    font-family: Arial, Helvetica, sans-serif;
-    box-sizing: border-box;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
 }
 
-.input-chat {
-    width: 100vw;
-    display: flex;
-    gap: 8px;
-    position: fixed;
-    bottom: 0px;
-    margin: 10px;
-    align-items: center;
+a {
+    color: #007bff;
+    text-decoration: none;
 }
 
-.input-chat > input[type="text"] {
-    width: 80%;
-    height: 50px;
-    margin: 10px;
-    border-radius: 10px;
-    text-indent: 10px;
-    box-shadow: 80px 10px 10px rgba(0, 0, 0, 0.219);
-}
-
-.input-chat > input[type="submit"] {
-    width: 13%;
-    height: 40px;
-    background-color: #cfcbcb;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.nonemessage {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 130px;
-    width: 380px;
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.281);
-    color: rgb(177, 25, 25);
-    font-size: 22px;
-    border-radius: 10px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+a:hover {
+    text-decoration: underline;
 }
 
 .back {
     position: absolute;
     top: 10px;
     left: 10px;
-    width: 60px;
-    height: 70px;
-    border-radius: 50%;
-    background-color: rgb(65, 64, 64);
-    cursor: pointer;
 }
-.back:hover {
-    background-color: rgb(32, 31, 31);
-}
+
 .back a {
-    color: white;
-    font-weight: bold;
+    font-size: 1.1rem;
+    color: #ffffff;
+    background-color: #6c757d;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.back a:hover {
+    background-color: #5a6268;
 }
 
 ul {
-    list-style: none;
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+li {
+    margin-bottom: 15px;
 }
 
 .message-box {
-    width: 300px;
-    height: 100px;
-    background-color: cadetblue;
-    padding: 5px;
+    background-color: #ffffff;
+    border-left: 5px solid #007bff;
     border-radius: 10px;
-    margin: 15px;
+    padding: 15px;
+    margin: 10px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.who {
-    background-color: rgba(0, 0, 0, 0.199);
-    border-radius: 5px;
-    color: rgba(0, 0, 0, 0.507);
+.message-box .who {
+    font-size: 1rem;
+    color: #343a40;
     font-weight: bold;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 }
 
-.content {
+.message-box .content {
+    font-size: 1rem;
+    color: #495057;
+    line-height: 1.4;
+}
+
+.nonemessage {
+    color: #dc3545;
+    font-size: 1rem;
+    margin: 20px;
+    text-align: center;
+}
+
+.input-chat {
+    position: fixed;
+    bottom: 0;
+    left: 0;
     width: 100%;
-    height: 100%;
+    background-color: #ffffff;
+    border-top: 1px solid #ced4da;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.input-chat input[type="text"] {
+    flex-grow: 1;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.input-chat input[type="submit"] {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.input-chat input[type="submit"]:hover {
+    background-color: #218838;
+}
+
+.message-box.user-message {
+    background-color: #e2f0ff;
+    border-left: 5px solid #0056b3;
+}
+
+.message-box.admin-message {
+    background-color: #e6f7e6;
+    border-left: 5px solid #28a745;
+}
+
+.message-box:hover {
+    transform: translateY(-3px);
+    transition: transform 0.2s ease-in-out;
+}
+
+@media (max-width: 768px) {
+    .input-chat input[type="text"] {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .input-chat {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .input-chat input[type="submit"] {
+        width: 100%;
+        margin-top: 10px;
+    }
 }

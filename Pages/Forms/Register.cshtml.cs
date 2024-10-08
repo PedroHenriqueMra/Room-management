@@ -110,6 +110,6 @@ public class RegisterModel : PageModel
 
         await _httpContext.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, new AuthenticationProperties { IsPersistent = false });
  
-        return RedirectToAction("/");
+        return Redirect("http://localhost:5229/home");
     }
 }

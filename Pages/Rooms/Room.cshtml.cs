@@ -34,7 +34,7 @@ public class RoomModel : PageModel
         }
         if (!User.Identity.IsAuthenticated)
         {
-            return RedirectToAction("/login");
+            return Redirect("http://localhost:5229/auth/login");
         }
 
         var claimEmail = User.FindFirst(ClaimTypes.Email)?.Value;
@@ -42,7 +42,7 @@ public class RoomModel : PageModel
         if (user == null)
         {
             _logger.LogError("User not found!!");
-            return RedirectToAction("/login");
+            return Redirect("http://localhost:5229/auth/login");
         }
 
         if (message.Length < 1 || message.Length > 200)
@@ -52,7 +52,7 @@ public class RoomModel : PageModel
         }
 
         var path = HttpContext.Request.Path.Value;
-        var url = path.Split("/room/")[1];
+        var url = path.Split("/rooms/")[1];
         if (!Guid.TryParse(url, out var roomId))
         {
             return NotFound("Page not found!!");
@@ -101,18 +101,18 @@ public class RoomModel : PageModel
     {
         if (url == Guid.Empty)
         {
-            return RedirectToAction("/rooms");
+            return Redirect("http://localhost:5229/rooms");
         }
         if (!User.Identity.IsAuthenticated)
         {
-            return RedirectToAction("");
+            return Redirect("http://localhost:5229/home");
         }
 
         var room = await _context.Room.Include(r => r.Adm).FirstOrDefaultAsync(r => r.Id == url);
         if (room == null)
         {
             _logger.LogWarning($"the room ({url}) was not found!");
-            return RedirectToAction("/rooms");
+            return Redirect("http://localhost:5229/rooms");
         }
 
         var claimEmail = User.FindFirst(ClaimTypes.Email)?.Value;
@@ -122,13 +122,13 @@ public class RoomModel : PageModel
             if (!room.UsersNames.Contains(owner.Name))
             {
                 _logger.LogWarning($"The user ({owner.Name}) isn't in the room!!");
-                return RedirectToAction("/rooms");
+                return Redirect("http://localhost:5229/rooms");
             }
         }
         else
         {
             _logger.LogWarning($"the user ({claimEmail}) was not found!");
-            return RedirectToAction("/rooms");
+            return Redirect("http://localhost:5229/rooms");
         }
 
         Room = room;

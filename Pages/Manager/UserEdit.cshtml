@@ -1,0 +1,29 @@
+@page "/user/edit/{what}/{email}"
+@model UserEditModel
+@{}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post" class="edit-form">
+    <div class="form-group">
+        @if (Model.ViewData["Title"].ToString().Contains("name"))
+        {
+            <label for="name">New Name</label>
+            <input type="text" id="name" name="newValue" class="form-control" placeholder="Enter new name" required />
+        }
+        else if (Model.ViewData["Title"].ToString().Contains("email"))
+        {
+            <label for="email">New Email</label>
+            <input type="email" id="email" name="newValue" class="form-control" placeholder="Enter new email" required />
+        }
+        else if (Model.ViewData["Title"].ToString().Contains("password"))
+        {
+            <label for="password">New Password</label>
+            <input type="password" id="password" name="newValue" class="form-control" placeholder="Enter new password" required />
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+
+<a href="/home" class="btn btn-secondary">Cancel</a>

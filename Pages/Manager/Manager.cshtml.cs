@@ -12,15 +12,10 @@ using System.Security.Claims;
 public class ManagerModel : PageModel
 {
     private readonly ILogger<ManagerModel> _logger;
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly SignInManager<IdentityUser> _signInManager;
     private readonly DbContextModel _context;
-    public ManagerModel(DbContextModel context, ILogger<ManagerModel> logger, UserManager<IdentityUser> userManager,
-    SignInManager<IdentityUser> signInManager)
+    public ManagerModel(DbContextModel context,ILogger<ManagerModel> logger)
     {
         _context = context;
-        _userManager = userManager;
-        _signInManager = signInManager;
         _logger = logger;
     }
 
@@ -31,7 +26,7 @@ public class ManagerModel : PageModel
     {
         if (String.IsNullOrEmpty(email))
         {
-            return RedirectToPage("/");
+            return Redirect("http://localhost:5229/home");
         }
 
         var user = User.FindFirst(ClaimTypes.Email)?.Value;

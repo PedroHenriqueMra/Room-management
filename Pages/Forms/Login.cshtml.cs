@@ -85,7 +85,7 @@ public class LoginModel : PageModel
 
             _logger.LogInformation("Authenticated user");
             // depois fazer uma tela para sucesso de autenticação
-            return RedirectToAction("/");
+            return Redirect("http://localhost:5229/home");
         }
         catch (Exception ex)
         {

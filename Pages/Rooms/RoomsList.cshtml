@@ -1,9 +1,9 @@
 @page "/rooms"
-@model ListRoomModel
+@model RoomsListModel
 @{
     ViewData["Title"] = "Rooms";
 }
-<link rel="stylesheet" href="~/css/listroom.css">
+<link rel="stylesheet" href="~/css/roomslist.css">
 
 <div class="panel-rooms">
     <a class="btn btn-success" href="/rooms/create">
@@ -13,6 +13,7 @@
         <input type="text" placeholder="Search rooms">
     </div>
 </div>
+
 <hr>
 
 <h1>Rooms:</h1>
@@ -38,7 +39,7 @@
                     <div class="enter">
                         @if(r.AdmId == Model.Owner.Id || r.UsersNames.Contains(Model.Owner.Name))
                         {
-                            <a class="btn btn-success" href="~/room/@r.Id">Enter room</a>
+                            <a class="btn btn-success" href="~/rooms/@r.Id">Enter room</a>
                         }
                         else
                         {

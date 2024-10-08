@@ -54,12 +54,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUm9vbXNcQ3JlYXRlUm9vbS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/Pages/Rooms/ListRooms.cshtml]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUm9vbXNcTGlzdFJvb21zLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/Pages/Rooms/Room.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUm9vbXNcUm9vbS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/Pages/Rooms/RoomsList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUm9vbXNcUm9vbXNMaXN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/Pages/shared/_Layout.cshtml]

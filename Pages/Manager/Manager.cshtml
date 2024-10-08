@@ -1,4 +1,4 @@
-@page "/manager/{email}"
+@page "/user/manager/{email}"
 @model ManagerModel
 @{
     ViewData["Title"] = Model.UserManager.Name;
@@ -7,24 +7,24 @@
 }
 <link rel="stylesheet" href="~/css/manager.css">
 
-<h1><span class="name">@Model.UserManager.Name</span></h1>
+<h1 class="name">@Model.UserManager.Name</h1>
 
 <div class="info">
     <ul>
         <li class="field">
             <span>Name</span>
-            <div>@Model.UserManager.Name <a href="#"></a></div>
+            <div>@Model.UserManager.Name <a href="/user/edit/name/@Model.UserManager.Email">edit</a></div>
         </li>
         <li class="field">
             <span>Email</span>
-            <div>@Model.UserManager.Email <a href="#"></a></div>
+            <div>@Model.UserManager.Email <a href="/user/edit/email/@Model.UserManager.Email">edit</a></div>
         </li>
         <li class="field">
             <span>Password</span>
-            <div><a href="#">would you like to change your password?</a></div>
+            <div><a href="/user/edit/password/@Model.UserManager.Email">would you like to change your password?</a></div>
         </li>
         <li>
-            <span>Rooms you participate in</span>
+            <h2>Rooms you participate in: <span class="icon-edit"><a href="#"></a></span></h2>
             <div>@if (rooms.Count != 0)
                 {
                     foreach (var r in rooms)

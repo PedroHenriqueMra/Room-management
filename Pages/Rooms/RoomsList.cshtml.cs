@@ -9,13 +9,13 @@ using Newtonsoft.Json;
 using Org.BouncyCastle.Crypto.Digests;
 
 [Authorize]
-public class ListRoomModel : PageModel
+public class RoomsListModel : PageModel
 {
-    public ILogger<ListRoomModel> _logger;
+    public ILogger<RoomsListModel> _logger;
     public DbContextModel _context;
     public HttpClient _httpClient;
 
-    public ListRoomModel(ILogger<ListRoomModel> logger, DbContextModel context, HttpClient httpClient)
+    public RoomsListModel(ILogger<RoomsListModel> logger, DbContextModel context, HttpClient httpClient)
     {
         _context = context;
         _logger = logger;
@@ -29,7 +29,7 @@ public class ListRoomModel : PageModel
     {
         if (User?.Identity?.IsAuthenticated != true)
         {
-            return RedirectToAction("");
+            return Redirect("http://localhost:5229/home");
         }
 
         Owner = await GetAuthenticatedUserAsync();
@@ -72,7 +72,7 @@ public class ListRoomModel : PageModel
             if (!response.IsSuccessStatusCode)
             {
                 _logger.LogError($"Error in httpRequest. Status-Code: {response.StatusCode}");
-                return RedirectToAction("");
+                return Redirect("http://localhost:5229/home");
             }
         }
         catch (Exception ex)
@@ -81,7 +81,7 @@ public class ListRoomModel : PageModel
             return (IActionResult)Results.BadRequest();
         }
 
-        return RedirectToAction("");
+        return Redirect("http://localhost:5229/home");
     }
 
     public async Task<IActionResult> OnGetAsync()
@@ -89,7 +89,7 @@ public class ListRoomModel : PageModel
         if (User?.Identity?.IsAuthenticated != true)
         {
             _logger.LogError("User isn't authenticated!");
-            return RedirectToAction("");
+            return Redirect("http://localhost:5229/home");
         }
 
         Owner = await GetAuthenticatedUserAsync();

@@ -1,4 +1,4 @@
-@page "/room/{url:Guid}"
+@page "/rooms/{url:Guid}"
 @using System.Security.Claims
 @model RoomModel
 @{
@@ -18,7 +18,7 @@
         @foreach (var m in Model.Messages)
         {
             <li>
-                <div class="message-box">
+                <div class="message-box @(m.User.Email == userClaim ? "user-message" : (m.UserId == Model.Room.AdmId ? "admin-message" : ""))">
                     <span class="who">@(m.User.Email == userClaim ? "Your Message" : m.User.Name)</span>
                     <p class="content">@Html.Raw(m.Content)</p>
                 </div>

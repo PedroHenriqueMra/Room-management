@@ -1,44 +1,110 @@
-/* page /manager/... */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
 
-.info {
-    padding: 0px 5px;
-    border-radius: 5px;
-    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.13);
-
-    list-style: none;
+h1 {
+    font-size: 2.5rem;
+    text-align: center;
+    color: #4A90E2;
+    margin-top: 20px;
 }
 
 .name {
     font-weight: bold;
-    text-decoration: underline;
 }
 
-.field {
-    
+.info {
+    max-width: 600px;
+    margin: 30px auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
 }
 
-.field > span {
+.info ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.info li {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.info li:last-child {
+    border-bottom: none;
+}
+
+.field span {
+    display: block;
     font-weight: bold;
+    font-size: 1.1rem;
+    color: #666;
+}
+
+.field div {
+    font-size: 1rem;
+    margin-top: 5px;
+}
+
+.field a {
+    color: #4A90E2;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.field a:hover {
     text-decoration: underline;
-    font-size: 20px;
 }
 
-.field > div {
-    font-size: 18px;
-}
-
+/* Rooms section */
 .room {
-
+    display: inline-block;
+    background-color: #E0F7FA;
+    color: #00796B;
+    border-radius: 15px;
+    padding: 8px 15px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
 }
 
 .null {
-    font-style: italic;
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #999;
 }
-.null > a {
-    color: black;
+
+.null a {
+    color: #FF5722;
     text-decoration: none;
 }
-.null > a:hover {
+
+.null a:hover {
     text-decoration: underline;
-    color: rgba(97, 94, 94, 0.678);
+}
+
+/* Buttons */
+button {
+    background-color: #4A90E2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+button:hover {
+    background-color: #357ABD;
+}
+
+.icon-edit::before {
+    /* content: url("../Static/editar.png"); */
 }

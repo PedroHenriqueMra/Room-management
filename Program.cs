@@ -40,7 +40,7 @@ builder.Services.AddAuthentication(opt => {
     opt.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 })
 .AddCookie(opt => {
-    opt.LoginPath = "/login";
+    opt.LoginPath = "/auth/login";
     opt.Cookie.Name = "auth_cookie";
     opt.ExpireTimeSpan = TimeSpan.FromMinutes(5);
     opt.SlidingExpiration = true;

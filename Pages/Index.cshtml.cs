@@ -5,13 +5,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 [AllowAnonymous]
 public class IndexModel :PageModel
 {
-    public ILogger<IndexModel> _logger;
-
-    public IndexModel(ILogger<IndexModel> logger)
-    {
-        _logger = logger;
-    }
-
     public string? Id { get; set; }
     public string? Email { get; set; }
 
