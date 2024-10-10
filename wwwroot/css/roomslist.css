@@ -56,7 +56,6 @@ li {
     margin-bottom: 20px;
 }
 
-/* Estilos para cada room */
 .room {
     background-color: #ffffff;
     border: 1px solid #e5e5e5;
@@ -123,16 +122,9 @@ li {
     border: none;
 }
 
-/* Alerta de salas vazias */
 .text-danger {
     color: #dc3545;
     font-size: 1rem;
-}
-
-/* Efeitos e responsividade */
-.room:hover {
-    transform: translateY(-2px);
-    transition: transform 0.2s ease-in-out;
 }
 
 @media (max-width: 768px) {

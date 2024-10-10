@@ -81,7 +81,7 @@ public class RoomsListModel : PageModel
             return (IActionResult)Results.BadRequest();
         }
 
-        return Redirect("http://localhost:5229/home");
+        return Redirect($"http://localhost:5229/rooms/{uuid}");
     }
 
     public async Task<IActionResult> OnGetAsync()
