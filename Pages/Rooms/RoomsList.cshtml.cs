@@ -50,7 +50,8 @@ public class RoomsListModel : PageModel
 
         try
         {
-            var alreadyContains = await _context.Room
+            bool alreadyContains = await _context.Room
+                        .Where(r => r.Id == uuid)
                         .AnyAsync(r => r.Users.Any(u => u.Id == Owner.Id));
 
             if (alreadyContains)

@@ -2,6 +2,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Services.ServicesRoom.Delete;
 using Services.ServicesRoom.Enter;
 using Services.ServicesUser.Change;
+using Services.RoomServices.Create;
 
 namespace Services.Configuration.DI;
 
@@ -16,9 +17,11 @@ public static class ConfigureDI
         // Entrance and exit of rooms
         service.AddSingleton<IServicesEnterRoom, ServicesEnterRoom>();
         service.AddSingleton<IServicesExitRoom, ServicesExitRoom>();
+        // Create room
+        service.AddScoped<IServicesCreateRoom, ServicesCreateRoom>();
 
         // User services:
         // Change user data
-        service.AddSingleton<IServiceUserChange, ServiceUserChange>();
+        service.AddScoped<IServiceUserChange, ServiceUserChange>();
     }
 }

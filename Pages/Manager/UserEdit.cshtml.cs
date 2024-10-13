@@ -82,7 +82,7 @@ public class UserEditModel : PageModel
             }
         }
         
-        _logger.LogInformation($"The user {type}'s {user.Name} has been successfully modified!!");
+         
         return Redirect($"/user/manager/{user.Email}");
     }
 

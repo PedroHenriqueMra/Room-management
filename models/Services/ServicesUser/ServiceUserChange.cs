@@ -1,4 +1,6 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -15,10 +17,14 @@ public class ServiceUserChange : IServiceUserChange
         "name", "email", "password"
     };
 
-    private readonly IHttpContextAccessor _httpContext;
+    private readonly HttpContext _httpContext;
     public ServiceUserChange(IHttpContextAccessor httpContext)
     {
-        _httpContext = httpContext;
+        var context = httpContext.HttpContext;
+        if (context != null)
+        {
+            _httpContext = context;
+        }
     }
 
     public async Task<IResult> ChangeWithTypeAsync(ILogger log, DbContextModel context, User userChange, UserChangeData value, string type)
@@ -60,7 +66,6 @@ public class ServiceUserChange : IServiceUserChange
         try
         {
             var rooms = await context.Room.Where(r => r.Users.Any(u => u.Id == userChange.Id))
-            // .Select(r => new { r.Name, r.UserName })
             .ToListAsync();
             foreach (var r in rooms)
             {
@@ -90,12 +95,6 @@ public class ServiceUserChange : IServiceUserChange
         return Results.Ok(new { message = "User edited", newData = userChange.Name });
     }
 
-
-
-
-
-
-
     public async Task<IResult> EmailChangeAsync(ILogger log, DbContextModel context, User userChange, UserChangeData newData)
     {
         if (string.IsNullOrWhiteSpace(newData.Email))
@@ -105,7 +104,7 @@ public class ServiceUserChange : IServiceUserChange
         }
         if (userChange.Email == newData.Email)
         {
-            log.LogInformation($"newName = {newData.Email} is the same userName = {userChange.Email}");
+            log.LogInformation($"newEmail = {newData.Email} is the same user Email = {userChange.Email}");
             return Results.Conflict($"The name {newData.Email} is already yours!!");
         }
         if (await context.User.AnyAsync(u => u.Email == newData.Email))
@@ -118,27 +117,61 @@ public class ServiceUserChange : IServiceUserChange
         {
             userChange.Email = newData.Email;
             await context.SaveChangesAsync();
+
+            bool claimsUpdate = await ReplaceClaims(newData.Email, userChange.Id, log);
+            if (!claimsUpdate)
+            {
+                log.LogCritical("An error occurred while replacing claims.");
+                return Results.BadRequest(new { error = "Unable to update claims!" });
+            }
         }
         catch (DbUpdateException ex)
         {
             log.LogError($"An error ocurred in database. Message {ex}");
             return Results.BadRequest(new { error = "An error occurred while updating the email. Please try again later." });
-
         }
 
         log.LogInformation($"Email update complete. New email: {userChange.Email}");
         return Results.Ok(new { message = "User edited", newData = userChange.Email });
     }
 
-    private bool AtualizeClaims(string oldEmail, string newEmail)
+    private async Task<bool> ReplaceClaims(string newEmail, int id, ILogger log)
     {
-        var userClaim = _httpContext.HttpContext?.User.FindFirst(ClaimTypes.Email)?.Value;
-        if (userClaim != null)
+        if (_httpContext == null || _httpContext.User?.Identity?.IsAuthenticated != true)
         {
-            return true;
+            log.LogWarning("HttpContext is null or user isn't authenticated!");
+            return false;
         }
 
-        return false;
+        await _httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+        var userClaim = _httpContext.User.FindFirst(ClaimTypes.Email)?.Value;
+        if (userClaim == null)
+        {
+            log.LogWarning("User claims not found");
+            return false;
+        }
+
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Email, newEmail),
+            new Claim(ClaimTypes.NameIdentifier, id.ToString()),
+        };
+
+        var identity = new ClaimsIdentity(claims, "ApplicationCookie");
+        var principal = new ClaimsPrincipal(identity);
+
+        try
+        {
+            await _httpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            log.LogInformation($"User claims replaced successfully. New email: {newEmail}, UserID: {id}");
+            return true;
+        }
+        catch (Exception ex)
+        {
+            log.LogError($"Failed to replace user claims. Error: {ex.Message}");
+            return false;
+        }
     }
 
 

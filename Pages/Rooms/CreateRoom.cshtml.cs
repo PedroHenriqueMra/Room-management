@@ -15,11 +15,13 @@ public class CreateRoomModel : PageModel
 {
     private readonly ILogger<RegisterModel> _logger;
     private readonly DbContextModel _context;
+    private readonly IServicesCreateRoom _serviceCreate;
 
-    public CreateRoomModel(ILogger<RegisterModel> logger, DbContextModel context)
+    public CreateRoomModel(ILogger<RegisterModel> logger, DbContextModel context, IServicesCreateRoom serviceCreate)
     {
         _context = context;
         _logger = logger;
+        _serviceCreate = serviceCreate;
     }
 
     [BindProperty]
@@ -63,20 +65,17 @@ public class CreateRoomModel : PageModel
             return NotFound("User not found");
         }
 
-        var data = new {
+        var data = new CreateRoomRequest(){
             IdUser = adm.Id,
             Name = Input.Name,
             Description = Input.Description,
             IsPrivate = Input.IsPrivate
         };
-        var json = JsonConvert.SerializeObject(data);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        var client = new HttpClient() { BaseAddress = new Uri("http://localhost:5229") };
-        var response = await client.PostAsync("/new/room", content);
-        if (!response.IsSuccessStatusCode)
+        var result = await _serviceCreate.CreateRoomAsync(data);
+        if (result is BadRequestObjectResult)
         {
-            // erro!!!! (adicionar comunicação do erro com o cliente)
+            _logger.LogError($"An error ocurred when created the room. Room name {Input.Name}.!!");
             return Page();
         }
 
