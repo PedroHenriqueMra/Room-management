@@ -29,10 +29,10 @@ public class ManagerModel : PageModel
             return Redirect("http://localhost:5229/home");
         }
 
-        var user = User.FindFirst(ClaimTypes.Email)?.Value;
-        if (user != null)
+        var userClaim = User.FindFirst(ClaimTypes.Email)?.Value;
+        if (userClaim != null)
         {
-            if (user != email)
+            if (userClaim != email)
             {
                 _logger.LogError("Error: Url doesn'n match the user");
                 return NotFound("You aren't logged into your account!!.");
@@ -45,7 +45,7 @@ public class ManagerModel : PageModel
             return NotFound("You aren't logged into your account!!.");
         }
 
-        var query = await _context.User.FirstOrDefaultAsync(u => u.Email == user);
+        var query = await _context.User.FirstOrDefaultAsync(u => u.Email == userClaim);
         if (query == null)
         {
             _logger.LogError($"User for email: {email} not found in DbContext!!");

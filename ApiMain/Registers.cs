@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using MinimalApi.DbSet.Models;
+using Services.ServicesRoom.Delete;
+using Services.ServicesUser.Change;
 
 namespace MinimalApi.Endpoints.ConfigureRegisters;
 public static class Registers
@@ -29,7 +32,7 @@ public static class Registers
             try
             {
                 await context.User.AddAsync(newUser);
-                await context.SaveChangesAsync(); 
+                await context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -41,7 +44,7 @@ public static class Registers
         });
 
         // editar usuario pelo id
-        app.MapPut("/edit/{id:int}", [Authorize] async (DbContextModel context, int id, User updateData) =>
+        app.MapPut("/edit/{type}/{id:int}", async (ILogger<Program> log, DbContextModel context, string type, int id, UserChangeData updateData) =>
         {
             var user = await context.User.FindAsync(id);
             if (user == null)
@@ -49,28 +52,25 @@ public static class Registers
                 return Results.NotFound("Usuário não encontrado!!");
             }
 
-            var hashPassword = BCrypt.Net.BCrypt.HashPassword(updateData.Password);
+            var validationContext = new ValidationContext(updateData);
+            var validationResults = new List<ValidationResult>();
 
-            // mudar o nome do usuario em todas as salas:
-            var rooms = await context.Room.Where(r => r.UsersNames.Contains(user.Name)).ToListAsync();
-            for (var l = 0; l < rooms.Count; l++)
+            // Valida o modelo
+            bool isValid = Validator.TryValidateObject(updateData, validationContext, validationResults, true);
+            if (!isValid)
             {
-                var index = rooms[l].UsersNames.IndexOf(user.Name);
-                if (index != -1)
-                {
-                    rooms[l].UsersNames[index] = updateData.Name;
-                    context.Entry(rooms[l]).State = EntityState.Modified;
-                }
+                return Results.BadRequest($"Invalid date to change date");
             }
 
-            user.Name = updateData.Name;
-            user.Email = updateData.Email;
-            user.Password = hashPassword;
-            context.Entry(user).State = EntityState.Modified;
+            var serviceChange = new ServiceUserChange();
+            var result = await serviceChange.ChangeWithTypeAsync(log, context, user, updateData, type);
+            if (result is IStatusCodeHttpResult statusCode && statusCode.StatusCode != 200)
+            {
+                log.LogError($"Error ocurred in change {type}. The status code is different of 200");
+                return Results.BadRequest("An error ocurred in service");
+            }
 
-            await context.SaveChangesAsync();
-
-            return Results.Ok("Dados editados com êxito!!");
+            return Results.Ok($"Dados editados com êxito!!, {result}");
         });
 
         // deletar usuario pelo id
@@ -83,10 +83,10 @@ public static class Registers
             }
 
             // deletar as rooms
-            var rooms = await context.Room.Include(r => r.Adm).Where(r => r.UsersNames.Contains(user.Name)).ToListAsync();
+            var rooms = await context.Room.Include(r => r.Adm).Where(r => r.UserName.Contains(user.Name)).ToListAsync();
             if (rooms.Any())
             {
-                var roomService = new ServicesRoomDelete();
+                var roomService = new ServicesExitRoom();
                 foreach (var r in rooms)
                 {
                     if (r.Adm.Id == user.Id)

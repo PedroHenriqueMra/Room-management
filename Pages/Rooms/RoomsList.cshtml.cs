@@ -22,6 +22,7 @@ public class RoomsListModel : PageModel
         _httpClient = httpClient;
     }
 
+    public bool isInList { get; set; } = default;
     public List<Room> Rooms { get; set; } = new List<Room>();
     public User Owner { get; set; } = new User();
 
@@ -39,19 +40,31 @@ public class RoomsListModel : PageModel
             return NotFound("User not found");
         }
 
-        // dados par a requisição
+        // dados para a requisição
         var room = await _context.Room.FirstOrDefaultAsync(r => r.Id == uuid);
         if (room == null)
         {
-            _logger.LogError($"Room {room} is null");
+            _logger.LogError($"Room {room} is null. It doesn't exist.");
             return NotFound("Room not found");
         }
 
-        if (room.UsersNames.Contains(Owner.Name))
+        try
         {
-            _logger.LogInformation($"The user {Owner.Name} already existes in this room!");
+            var alreadyContains = await _context.Room
+                        .AnyAsync(r => r.Users.Any(u => u.Id == Owner.Id));
+
+            if (alreadyContains)
+            {
+                _logger.LogInformation($"The user {Owner.Name} already existes in this room!");
+                return Page();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"An error occurred while checking user existence: {ex.Message}");
             return Page();
         }
+
 
         var data = new
         {
@@ -93,7 +106,7 @@ public class RoomsListModel : PageModel
         }
 
         Owner = await GetAuthenticatedUserAsync();
-        var rooms = await _context.Room.Include(r => r.Adm).ToListAsync();
+        var rooms = await _context.Room.Include(r => r.Adm).Include(r => r.Users).ToListAsync();
         if (rooms.Count != 0)
         {
             foreach (var r in rooms)

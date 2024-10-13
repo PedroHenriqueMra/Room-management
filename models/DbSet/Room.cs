@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Security.Policy;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 
@@ -17,7 +18,7 @@ public class Room
     [Required]
     public int AdmId { get; set; }
     [StringLength(150)]
-    public string Description { get; set; }
+    public string? Description { get; set; }
     public bool IsPrivate { get; set; } = default;
     public DateTime CreateDate { get; set; } = DateTime.Now;
 
@@ -27,7 +28,7 @@ public class Room
     // um para muitos:
     [JsonIgnore]
     public ICollection<User>? Users { get; set; } = new List<User>();
-    public List<string>? UsersNames { get; set; } = new List<string>();
+    public List<string>? UserName { get; set; } = new List<string>();
 }
 
 public class CreateRoomRequest

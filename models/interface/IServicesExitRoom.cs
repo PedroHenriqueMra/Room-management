@@ -1,6 +1,6 @@
 using MinimalApi.DbSet.Models;
 
-public interface IServicesRoomExit
+public interface IServicesExitRoom
 {
     Task DeleteRoom(DbContextModel context, User adm, Room room);
 

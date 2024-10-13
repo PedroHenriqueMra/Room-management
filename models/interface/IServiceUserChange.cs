@@ -2,9 +2,11 @@ using MinimalApi.DbSet.Models;
 
 public interface IServiceUserChange
 {
-    Task<IResult> NameChange(DbContextModel context, User userChange, string newName);
+    Task<IResult> ChangeWithTypeAsync(ILogger log, DbContextModel context, User userChange, UserChangeData newData, string type);
 
-    Task<IResult> EmailChange(DbContextModel context, User userChange, string newEmail);
+    Task<IResult> NameChangeAsync(ILogger log, DbContextModel context, User userChange, UserChangeData newName);
 
-    Task<IResult> PasswordChange(DbContextModel context, User userChange, string newPassword);
+    Task<IResult> EmailChangeAsync(ILogger log, DbContextModel context, User userChange, UserChangeData newEmail);
+
+    Task<IResult> PasswordChangeAsync(ILogger log, DbContextModel context, User userChange, UserChangeData newPassword);
 }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MinimalApi.Migrations
 {
     [DbContext(typeof(DbContextModel))]
-    [Migration("20241006175052_init")]
-    partial class init
+    [Migration("20241012184535_v1")]
+    partial class v1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -215,7 +215,7 @@ namespace MinimalApi.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ModelTables.Message", b =>
+            modelBuilder.Entity("MinimalApi.DbSet.Models.Message", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -241,7 +241,7 @@ namespace MinimalApi.Migrations
                     b.ToTable("Message");
                 });
 
-            modelBuilder.Entity("ModelTables.Room", b =>
+            modelBuilder.Entity("MinimalApi.DbSet.Models.Room", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -254,7 +254,6 @@ namespace MinimalApi.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("TEXT");
 
@@ -266,7 +265,7 @@ namespace MinimalApi.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UsersNames")
+                    b.Property<string>("UserName")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -276,7 +275,7 @@ namespace MinimalApi.Migrations
                     b.ToTable("Room");
                 });
 
-            modelBuilder.Entity("ModelTables.User", b =>
+            modelBuilder.Entity("MinimalApi.DbSet.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -364,15 +363,15 @@ namespace MinimalApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ModelTables.Message", b =>
+            modelBuilder.Entity("MinimalApi.DbSet.Models.Message", b =>
                 {
-                    b.HasOne("ModelTables.Room", "Room")
+                    b.HasOne("MinimalApi.DbSet.Models.Room", "Room")
                         .WithMany("Messages")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ModelTables.User", "User")
+                    b.HasOne("MinimalApi.DbSet.Models.User", "User")
                         .WithMany("Messages")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -383,9 +382,9 @@ namespace MinimalApi.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ModelTables.Room", b =>
+            modelBuilder.Entity("MinimalApi.DbSet.Models.Room", b =>
                 {
-                    b.HasOne("ModelTables.User", "Adm")
+                    b.HasOne("MinimalApi.DbSet.Models.User", "Adm")
                         .WithMany("Rooms")
                         .HasForeignKey("AdmId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -394,21 +393,21 @@ namespace MinimalApi.Migrations
                     b.Navigation("Adm");
                 });
 
-            modelBuilder.Entity("ModelTables.User", b =>
+            modelBuilder.Entity("MinimalApi.DbSet.Models.User", b =>
                 {
-                    b.HasOne("ModelTables.Room", null)
+                    b.HasOne("MinimalApi.DbSet.Models.Room", null)
                         .WithMany("Users")
                         .HasForeignKey("RoomId");
                 });
 
-            modelBuilder.Entity("ModelTables.Room", b =>
+            modelBuilder.Entity("MinimalApi.DbSet.Models.Room", b =>
                 {
                     b.Navigation("Messages");
 
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("ModelTables.User", b =>
+            modelBuilder.Entity("MinimalApi.DbSet.Models.User", b =>
                 {
                     b.Navigation("Messages");
 

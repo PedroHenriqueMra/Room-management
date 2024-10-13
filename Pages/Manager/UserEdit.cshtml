@@ -1,13 +1,14 @@
 @page "/user/edit/{what}/{email}"
 @model UserEditModel
-@{}
+@{
+}
 
 <h2>@ViewData["Title"]</h2>
 
 <form method="post" class="edit-form">
     <h1>Change @Model.What</h1>
     <div class="form-group">
-        @if (Model.ViewData["Title"].ToString().Contains(Model.What))
+        @if (Model.What == "name")
         {
             <label asp-for="Input.Name">New Name</label>
             @Html.TextBoxFor(m => m.Input.Name, new { @placeholder = "New Name" })
@@ -15,7 +16,7 @@
             @Html.Hidden("email", @ViewData["Email"])
             <span class="text-danger" asp-validation-for="Input.Name"></span>
         }
-        else if (Model.ViewData["Title"].ToString().Contains(Model.What))
+        else if (Model.What == "email")
         {
             <label asp-for="Input.Email">New Email</label>
             @Html.TextBoxFor(m => m.Input.Email, new { @placeholder = "New-Email@gmail.com" })
@@ -23,7 +24,7 @@
             @Html.Hidden("email", @ViewData["Email"])
             <span class="text-danger" asp-validation-for="Input.Email"></span>
         }
-        else if (Model.ViewData["Title"].ToString().Contains(Model.What))
+        else
         {
             <label class="mb-3" asp-for="Input.Password">New Password</label>
             @Html.TextBoxFor(m => m.Input.Password, new { @placeholder = "Your password (minimum 8, maximum 100)" })

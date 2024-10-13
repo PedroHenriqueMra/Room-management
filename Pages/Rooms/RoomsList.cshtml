@@ -32,12 +32,12 @@
                     <div class="info-room">
                         <p class="description">@r.Description</p>
                         <div class="other-info">
-                            <p>Room contains: @r.UsersNames.Count() Users</p>
+                            <p>Room contains: @r.Users.Count() Users</p>
                             <span class="date">@r.CreateDate</span>
                         </div>
                     </div>
                     <div class="enter">
-                        @if(r.AdmId == Model.Owner.Id || r.UsersNames.Contains(Model.Owner.Name))
+                        @if(r.AdmId == Model.Owner.Id || r.Users.Any(u => u.Id == Model.Owner.Id))
                         {
                             <a class="btn btn-success" href="~/rooms/@r.Id">Enter room</a>
                         }

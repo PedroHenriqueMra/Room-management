@@ -5,15 +5,16 @@ using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MinimalApi.Endpoints;
+using Services.Configuration.DI;
 // using MinimalApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHttpClient();
-builder.Services.AddHttpContextAccessor();
+// Configure DIs
+builder.Services.AddAllDependencies();
 
 builder.Services.AddDbContext<DbContextModel>(
-    options => options.UseSqlite("Data Source=elelel.db"));
+    options => options.UseSqlite("Data Source=ttestssss.db"));
 
 // identity:
 builder.Services.AddDefaultIdentity<IdentityUser>(opt => opt.SignIn.RequireConfirmedAccount = true)

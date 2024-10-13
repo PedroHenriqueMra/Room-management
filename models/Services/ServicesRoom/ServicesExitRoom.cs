@@ -1,7 +1,9 @@
 using MinimalApi.DbSet.Models;
 using MinimalApi.DbSet.Models;
 
-public class ServicesRoomDelete : IServicesRoomExit
+namespace Services.ServicesRoom.Delete;
+
+public class ServicesExitRoom : IServicesExitRoom
 {
     public async Task DeleteRoom(DbContextModel context, User adm, Room room)
     {
@@ -41,7 +43,7 @@ public class ServicesRoomDelete : IServicesRoomExit
         user.RoomsNames.Remove(room.Name);
 
         room.Users.Remove(user);
-        room.UsersNames.Remove(user.Name);
+        room.UserName.Remove(user.Name);
 
         return Results.Ok("Você não faz mais parte da sala!!");
     }

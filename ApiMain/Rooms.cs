@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MinimalApi.DbSet.Models;
+using Services.ServicesRoom.Delete;
+using Services.ServicesRoom.Enter;
 
 namespace MinimalApi.Endpoints.ConfigureRooms;
 public static class Rooms
@@ -31,7 +34,7 @@ public static class Rooms
                 IsPrivate = roomData.IsPrivate
             };
             newRoom.Users.Add(adm);
-            newRoom.UsersNames.Add(adm.Name);
+            newRoom.UserName.Add(adm.Name);
             adm.Rooms.Add(newRoom);
             adm.RoomsNames.Add(newRoom.Name);
 
@@ -42,15 +45,15 @@ public static class Rooms
         });
 
         // deletar uma sala (apenas adm)
-        app.MapDelete("/room/delete/{uuid:guid}/{id:int}", [Authorize] async (DbContextModel context, Guid uuid, int id) =>
+        app.MapDelete("/room/delete/{uuid:guid}/{id:int}", async (DbContextModel context, Guid uuid, int id) =>
         {
-            var room = await context.Room.FindAsync(uuid);
+            var room = await context.Room.Include(r => r.Users).FirstOrDefaultAsync(r => r.Id == uuid);
             if (room == null)
             {
                 return Results.NotFound("Sala não encontrada!");
             }
 
-            var adm = await context.User.FindAsync(id);
+            var adm = await context.User.Include(u => u.Rooms).FirstOrDefaultAsync(u => u.Id == id);
             if (adm == null)
             {
                 return Results.NotFound("Usuário não encontardo!!");
@@ -61,14 +64,14 @@ public static class Rooms
                 return Results.BadRequest("O usuário não contem as permissões necessárias para esta ação!!");
             }
 
-            var servicesRoom = new ServicesRoomDelete();
+            var servicesRoom = new ServicesExitRoom();
             servicesRoom.DeleteRoom(context, adm, room);
 
             return Results.Ok("Sala deletada com êxito!!");
         });
         
         // participar de uma sala (sala publica)
-        app.MapPost("/room/participate/{uuid:guid}", async (DbContextModel context, ParticipeRoomData roomData) =>
+        app.MapPost("/room/participate/{uuid:guid}", async (ILogger<Program> log, DbContextModel context, [FromBody] ParticipeRoomData roomData) =>
         {
             bool dataEmpty = roomData.Room == null || roomData.UserParticipe == null ? true : false;
 
@@ -82,7 +85,7 @@ public static class Rooms
             var entityUser = await context.User.Include(u => u.Rooms).FirstAsync(u => u.Id == roomData.UserParticipe.Id);
 
             var serviceRoom = new ServicesEnterRoom();
-            var resultService = await serviceRoom.IncludeUserAsync(context, entityUser, entityRoom);
+            var resultService = await serviceRoom.IncludeUserAsync(log, context, entityUser, entityRoom);
 
             return resultService;
         });

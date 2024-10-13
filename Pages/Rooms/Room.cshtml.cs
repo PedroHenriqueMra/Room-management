@@ -108,7 +108,7 @@ public class RoomModel : PageModel
             return Redirect("http://localhost:5229/home");
         }
 
-        var room = await _context.Room.Include(r => r.Adm).FirstOrDefaultAsync(r => r.Id == url);
+        var room = await _context.Room.Include(r => r.Adm).Include(r => r.Users).FirstOrDefaultAsync(r => r.Id == url);
         if (room == null)
         {
             _logger.LogWarning($"the room ({url}) was not found!");
@@ -119,7 +119,7 @@ public class RoomModel : PageModel
         var owner = await _context.User.FirstOrDefaultAsync(u => u.Email == claimEmail);
         if (owner != null)
         {
-            if (!room.UsersNames.Contains(owner.Name))
+            if (!room.Users.Any(u => u.Id == owner.Id))
             {
                 _logger.LogWarning($"The user ({owner.Name}) isn't in the room!!");
                 return Redirect("http://localhost:5229/rooms");
