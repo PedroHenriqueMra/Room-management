@@ -1,1 +1,1 @@
-# Projeto com Asp.Net de autenticação e criação de salas
+# Projeto Asp.Net de autenticação, gerenciamento e criação de salas de chat
