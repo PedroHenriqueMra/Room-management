@@ -4,26 +4,27 @@ using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 using Microsoft.EntityFrameworkCore;
 using MinimalApi.DbSet.Models;
 using Org.BouncyCastle.Tls;
+using Utils.RegularExpression.Room;
 
 namespace Services.ServicesRoom.Enter;
 
 public class ServicesEnterRoom : IServicesEnterRoom
 {
-    public async Task<IResult> IncludeUserAsync(ILogger log, DbContextModel context, User user, Room room)
+    public async Task<IResult> IncludeUserAsync(ILogger log, DbContextModel context, ParticipeRoomData participeData)
     {
-        var checkData = await CheckDataAsync(log, context, user, room);
-        if (checkData is IStatusCodeHttpResult statusCode && statusCode.StatusCode != 200)
+        var checkData = await CheckDataAsync(log, context, participeData.User, participeData.Room, participeData.Password);
+        if (checkData is IStatusCodeHttpResult statusCode && statusCode.StatusCode > 299)
         {
-            log.LogWarning("Check datas error");
+            log.LogWarning($"Check datas error, StatusCode: {statusCode}.");
             return checkData;
         }
 
         try
         {
-            room.UserName.Add(user.Name);
-            room.Users.Add(user);
-            user.RoomsNames.Add(room.Name);
-            user.Rooms.Add(room);
+            participeData.Room.UserName.Add(participeData.User.Name);
+            participeData.Room.Users.Add(participeData.User);
+            participeData.User.RoomsNames.Add(participeData.Room.Name);
+            participeData.User.Rooms.Add(participeData.Room);
 
             await context.SaveChangesAsync();
         }
@@ -34,28 +35,44 @@ public class ServicesEnterRoom : IServicesEnterRoom
         }
 
         log.LogWarning("User entered successfully");
-        return Results.Ok(new { Message = "User entered successfully", Room = room, User = user });
+        return Results.Ok(new { Message = "User entered successfully", Room = participeData.Room, User = participeData.User });
     }
 
-    private async Task<IResult> CheckDataAsync(ILogger log, DbContextModel context, User user, Room room)
+    private async Task<IResult> CheckDataAsync(ILogger log, DbContextModel context, User user, Room room, string? password)
     {
         var existeRoom = await context.Room.FirstOrDefaultAsync(r => r.Id == room.Id);
-        if (existeRoom == null)
+        if (!await context.Room.AnyAsync(r => r.Id == room.Id))
         {
             log.LogWarning("Room not existes");
             return Results.NotFound("Room doesn't existes");
         }
 
-        if (room.IsPrivate)
-        {
-            log.LogWarning("The room is private");
-            return Results.Forbid();
-        }
-
         if (room.Users.Any(u => u.Id == user.Id))
         {
             log.LogInformation($"User {user.Name} is already in the room");
-            return Results.Conflict("User already existes");
+            return Results.Conflict("User already is into the room");
+        }
+
+        if (room.IsPrivate)
+        {
+            if (password == null)
+            {
+                log.LogInformation($"This room is private and not contains a password");
+                return Results.BadRequest("A password is required for this room!");
+            }
+
+            bool regexPassword = RoomCheckRegularExpression.RoomPasswordIsValid(password);
+            if (!regexPassword)
+            {
+                log.LogInformation($"Invalid character for {password}");
+                return Results.BadRequest($"Error of character for {password}");
+            }
+
+            if (room.Password != password)
+            {
+                log.LogInformation($"Incorrect password for room {room.Name}");
+                return Results.BadRequest($"Incorrect Password, try another");
+            }
         }
 
         log.LogInformation("Data checks passed");

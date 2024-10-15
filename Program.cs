@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAllDependencies();
 
 builder.Services.AddDbContext<DbContextModel>(
-    options => options.UseSqlite("Data Source=ttestssss.db"));
+    options => options.UseSqlite("Data Source=alallalal.db"));
 
 // identity:
 builder.Services.AddDefaultIdentity<IdentityUser>(opt => opt.SignIn.RequireConfirmedAccount = true)

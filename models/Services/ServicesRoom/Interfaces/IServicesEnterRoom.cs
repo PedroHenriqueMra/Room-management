@@ -4,5 +4,5 @@ using MinimalApi.DbSet.Models;
 
 public interface IServicesEnterRoom
 {
-    Task<IResult> IncludeUserAsync(ILogger log, DbContextModel context, User user, Room room);
+    Task<IResult> IncludeUserAsync(ILogger log, DbContextModel context, ParticipeRoomData data);
 }

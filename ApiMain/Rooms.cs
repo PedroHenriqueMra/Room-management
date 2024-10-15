@@ -45,63 +45,44 @@ public static class Rooms
         // });
 
         // deletar uma sala (apenas adm)
-        app.MapDelete("/room/delete/{uuid:guid}/{id:int}", async (DbContextModel context, Guid uuid, int id) =>
+
+        //deletar todas as salas
+        app.MapDelete("/room/delete", async (DbContextModel context) =>
         {
-            var room = await context.Room.Include(r => r.Users).FirstOrDefaultAsync(r => r.Id == uuid);
-            if (room == null)
+            var room = await context.Room.Include(r => r.Adm).Include(r => r.Users).ToListAsync();
+            if (room.Count == 0)
             {
                 return Results.NotFound("Sala não encontrada!");
             }
 
-            var adm = await context.User.Include(u => u.Rooms).FirstOrDefaultAsync(u => u.Id == id);
-            if (adm == null)
-            {
-                return Results.NotFound("Usuário não encontardo!!");
-            }
-
-            if (room.AdmId != adm.Id)
-            {
-                return Results.BadRequest("O usuário não contem as permissões necessárias para esta ação!!");
-            }
-
             var servicesRoom = new ServicesExitRoom();
-            servicesRoom.DeleteRoom(context, adm, room);
+            foreach (var r in room)
+            {
+                servicesRoom.DeleteRoom(context, r.Adm, r);
+            }
 
             return Results.Ok("Sala deletada com êxito!!");
         });
         
         // participar de uma sala (sala publica)
-        app.MapPost("/room/participate/{uuid:guid}", async (ILogger<Program> log, DbContextModel context, [FromBody] ParticipeRoomData roomData) =>
-        {
-            bool dataEmpty = roomData.Room == null || roomData.UserParticipe == null ? true : false;
+        // app.MapPost("/room/participate/{uuid:guid}", async (ILogger<Program> log, DbContextModel context, [FromBody] ParticipeRoomData roomData) =>
+        // {
+        //     bool dataEmpty = roomData.Room == null || roomData.UserParticipe == null ? true : false;
 
-            if (dataEmpty)
-            {
-                Console.WriteLine("Request with empty data!");
-                return Results.StatusCode(204); // empty data
-            }
+        //     if (dataEmpty)
+        //     {
+        //         Console.WriteLine("Request with empty data!");
+        //         return Results.StatusCode(204); // empty data
+        //     }
 
-            var entityRoom = await context.Room.Include(r => r.Users).FirstAsync(r => r.Id == roomData.Room.Id);
-            var entityUser = await context.User.Include(u => u.Rooms).FirstAsync(u => u.Id == roomData.UserParticipe.Id);
+        //     var entityRoom = await context.Room.Include(r => r.Users).FirstAsync(r => r.Id == roomData.Room.Id);
+        //     var entityUser = await context.User.Include(u => u.Rooms).FirstAsync(u => u.Id == roomData.UserParticipe.Id);
 
-            var serviceRoom = new ServicesEnterRoom();
-            var resultService = await serviceRoom.IncludeUserAsync(log, context, entityUser, entityRoom);
+        //     var serviceRoom = new ServicesEnterRoom();
+        //     var resultService = await serviceRoom.IncludeUserAsync(log, context, entityUser, entityRoom);
 
-            return resultService;
-        });
-
-        // solicitar entrada na sala (sala privada)
-        app.MapPost("/room/request/{uuid:guid}", async (DbContextModel context, ParticipeRoomData roomData) =>
-        {
-            Console.WriteLine("testeee: sala privada");
-            return Results.StatusCode(200);
-        });
-
-        // sair de uma sala
-        app.MapPut("/room/exit/", async (DbContextModel context) =>
-        {
-           
-        });
+        //     return resultService;
+        // });
 
     }
 }

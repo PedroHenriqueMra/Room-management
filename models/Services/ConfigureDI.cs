@@ -21,7 +21,9 @@ public static class ConfigureDI
         service.AddScoped<IServicesCreateRoom, ServicesCreateRoom>();
 
         // User services:
-        // Change user data
-        service.AddScoped<IServiceUserChange, ServiceUserChange>();
+        // User create, Login
+        service.AddScoped<IUserServices, UserServices>();
+        // Manager user
+        service.AddScoped<IUserManageServices, UserManageServices>();
     }
 }

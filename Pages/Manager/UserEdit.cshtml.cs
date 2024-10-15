@@ -18,9 +18,9 @@ public class UserEditModel : PageModel
 {
     private readonly ILogger<UserEditModel> _logger;
     private readonly DbContextModel _context;
-    private readonly IServiceUserChange _serviceChange;
+    private readonly IUserManageServices _serviceChange;
 
-    public UserEditModel(ILogger<UserEditModel> logger, DbContextModel context, IServiceUserChange serviceChange)
+    public UserEditModel(ILogger<UserEditModel> logger, DbContextModel context, IUserManageServices serviceChange)
     {
         _logger = logger;
         _context = context;
@@ -70,7 +70,7 @@ public class UserEditModel : PageModel
         {
             var result = await _serviceChange.ChangeWithTypeAsync(_logger, _context, user, Input, type);
 
-            if (result is BadRequest)
+            if (result is IStatusCodeHttpResult status && status.StatusCode > 299)
             {
                 _logger.LogCritical($"A response BadRequest was received");
                 return RedirectToPage($"/user/edit/{type}/{email}");

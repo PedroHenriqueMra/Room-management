@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -34,8 +35,12 @@ public class CreateRoomModel : PageModel
         [Display(Name = "Name")]
         public string Name { get; set; }
         [StringLength(150)]
-        public string Description { get; set; }
+        [Display(Name = "Name")]
+        public string? Description { get; set; }
         public bool IsPrivate { get; set; } = default;
+        [StringLength(100, MinimumLength = 8)]
+        [Display(Name = "password")]
+        public string? Password { get; set; }
     }
 
     public async Task<IActionResult> OnPostAsync()
@@ -45,8 +50,8 @@ public class CreateRoomModel : PageModel
             return Page();
         }
 
-        var roomsContext = _context.Room.FirstOrDefault(r => r.Name == Input.Name);
-        if (roomsContext != null)
+        var roomContext = _context.Room.FirstOrDefault(r => r.Name == Input.Name);
+        if (roomContext != null)
         {
             ViewData["NameFail"] = true;
             return Page();
@@ -66,14 +71,15 @@ public class CreateRoomModel : PageModel
         }
 
         var data = new CreateRoomRequest(){
-            IdUser = adm.Id,
+            IdAdm = adm.Id,
             Name = Input.Name,
             Description = Input.Description,
-            IsPrivate = Input.IsPrivate
+            IsPrivate = Input.IsPrivate,
+            Password = Input.Password
         };
 
         var result = await _serviceCreate.CreateRoomAsync(data);
-        if (result is BadRequestObjectResult)
+        if (result is IStatusCodeHttpResult status && status.StatusCode > 299)
         {
             _logger.LogError($"An error ocurred when created the room. Room name {Input.Name}.!!");
             return Page();

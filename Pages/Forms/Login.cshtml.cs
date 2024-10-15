@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using static Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal.ExternalLoginModel;
+using Utils.RegularExpression.User;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 [AllowAnonymous]
 public class LoginModel : PageModel
@@ -16,11 +18,13 @@ public class LoginModel : PageModel
     private readonly ILogger<LoginModel> _logger;
     private readonly DbContextModel _context;
     private readonly IHttpContextAccessor _httpContext;
-    public LoginModel(ILogger<LoginModel> logger, DbContextModel context, IHttpContextAccessor httpContext)
+    private readonly IUserServices _userService;
+    public LoginModel(ILogger<LoginModel> logger, DbContextModel context, IHttpContextAccessor httpContext, IUserServices userService)
     {
         _logger = logger;
         _context = context;
         _httpContext = httpContext;
+        _userService = userService;
     }
 
     [BindProperty]
@@ -34,7 +38,7 @@ public class LoginModel : PageModel
         [Display(Name = "Your Email")]
         public string Email { get; set; }
         [Required]
-        [StringLength(100, MinimumLength = 8, ErrorMessage = "the password must have be between 8 and 100 characters")]
+        [StringLength(50, MinimumLength = 8, ErrorMessage = "the password must have be between 8 and 100 characters")]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,100}$", ErrorMessage = "Inválid Characters!!")]
         [Display(Name = "Your password")]
         public string Password { get; set; }
@@ -57,40 +61,38 @@ public class LoginModel : PageModel
             return Page();
         }
 
-        var confereUser = await _context.User.FirstOrDefaultAsync(u => u.Email == Input.Email);
-        if (confereUser == null)
+        var result = await _userService.UserLoginAsync(Input.Password, Input.Email);
+        if (result is IStatusCodeHttpResult status && status.StatusCode > 299)
         {
-            _logger.LogError("Error in email");
+            _logger.LogInformation($"Something went wrong in authentication for user {Input.Email}!!");
             return Page();
-            // return (IActionResult)Results.BadRequest("Error in email");
-        }
-        bool passwordMatch = BCrypt.Net.BCrypt.Verify(Input.Password, confereUser.Password);
-        if (!passwordMatch)
-        {
-            _logger.LogError("Error in password");
-            return Page();
-            // return (IActionResult)Results.BadRequest("Error in password");
         }
 
-        var claims = new List<Claim>
+        var user = await _context.User.FirstAsync(u => u.Email == Input.Email);
+        if (user != null)
         {
-            new Claim(ClaimTypes.Email, Input.Email),
-            new Claim(ClaimTypes.NameIdentifier, confereUser.Id.ToString())
+            var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
         };
-        try
-        {
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-            await _httpContext.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, new AuthenticationProperties { IsPersistent = Input.Remember });
+            try
+            {
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                await _httpContext.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, new AuthenticationProperties { IsPersistent = Input.Remember });
 
-            _logger.LogInformation("Authenticated user");
-            // depois fazer uma tela para sucesso de autenticação
-            return Redirect("http://localhost:5229/home");
+                _logger.LogInformation("Authenticated user");
+                return Redirect("http://localhost:5229/home");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogDebug($"Exeption error: {ex}");
+                return (IActionResult)Results.BadRequest("An error occurred during login.");
+            }
         }
-        catch (Exception ex)
-        {
-            _logger.LogDebug($"Exeption error: {ex}");
-            return (IActionResult)Results.BadRequest("An error occurred during login.");
-        }
+
+        _logger.LogDebug($"An error ocurred in user query!. User: {Input.Email}");
+        return Page();
     }
 }

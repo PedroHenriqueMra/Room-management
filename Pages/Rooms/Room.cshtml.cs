@@ -116,7 +116,7 @@ public class RoomModel : PageModel
         }
 
         var claimEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-        var owner = await _context.User.FirstOrDefaultAsync(u => u.Email == claimEmail);
+        var owner = await _context.User.Include(u => u.Rooms).FirstOrDefaultAsync(u => u.Email == claimEmail);
         if (owner != null)
         {
             if (!room.Users.Any(u => u.Id == owner.Id))
@@ -132,7 +132,7 @@ public class RoomModel : PageModel
         }
 
         Room = room;
-        Messages = await _context.Message.Include(m => m.User).Where(r => r.RoomId == url).ToListAsync();
+        Messages = await _context.Message.Include(m => m.User).Where(r => r.RoomId == url).ToListAsync(); 
 
         return Page();
     }

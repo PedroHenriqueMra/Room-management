@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using MinimalApi.DbSet.Models;
+using Utils.RegularExpression.Room;
 
 namespace Services.RoomServices.Create;
 
@@ -14,7 +16,21 @@ public class ServicesCreateRoom : IServicesCreateRoom
 
     public async Task<IResult> CreateRoomAsync(CreateRoomRequest roomData)
     {
-        var adm = await _context.User.FindAsync(roomData.IdUser);
+        if (roomData.IsPrivate)
+        {
+            if (roomData.Password == null)
+            {
+                return Results.BadRequest("A password is required for this room");
+            }
+            
+            bool isValid = RoomCheckRegularExpression.RoomPasswordIsValid(roomData.Password);
+            if (!isValid)
+            {
+                return Results.BadRequest($"Error, invalid characters for this password {roomData.Password}");
+            }
+        }
+
+        var adm = await _context.User.FindAsync(roomData.IdAdm);
         if (adm == null)
         {
             return Results.NotFound("Usuário não encontrado!");
@@ -34,7 +50,8 @@ public class ServicesCreateRoom : IServicesCreateRoom
                 Adm = adm,
                 Description = roomData.Description,
                 AdmId = adm.Id,
-                IsPrivate = roomData.IsPrivate
+                IsPrivate = roomData.IsPrivate,
+                Password = roomData.Password ?? null
             };
             newRoom.Users.Add(adm);
             newRoom.UserName.Add(adm.Name);

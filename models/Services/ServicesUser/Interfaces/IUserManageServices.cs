@@ -1,6 +1,6 @@
 using MinimalApi.DbSet.Models;
 
-public interface IServiceUserChange
+public interface IUserManageServices
 {
     Task<IResult> ChangeWithTypeAsync(ILogger log, DbContextModel context, User userChange, UserChangeData newData, string type);
 

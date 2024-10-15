@@ -10,7 +10,7 @@ using ZstdSharp.Unsafe;
 
 namespace Services.ServicesUser.Change;
 
-public class ServiceUserChange : IServiceUserChange
+public class UserManageServices : IUserManageServices
 {
     private static readonly List<string> AllowedFields = new List<string>
     {
@@ -18,7 +18,7 @@ public class ServiceUserChange : IServiceUserChange
     };
 
     private readonly HttpContext _httpContext;
-    public ServiceUserChange(IHttpContextAccessor httpContext)
+    public UserManageServices(IHttpContextAccessor httpContext)
     {
         var context = httpContext.HttpContext;
         if (context != null)

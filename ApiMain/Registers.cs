@@ -11,37 +11,37 @@ public static class Registers
 {
     public static void EndPointsRegisters(this WebApplication app)
     {
-        app.MapPost("/new", async (DbContextModel context, User user) =>
-        {
-            var existingUser = await context.User
-            .Where(u => u.Email == user.Email || u.Name == user.Name)
-            .FirstOrDefaultAsync();
-            if (existingUser != null)
-            {
-                // email ou nome ja existentes!
-                return Results.BadRequest("Email ou nome já existente!!");
-            }
+        // app.MapPost("/new", async (DbContextModel context, User user) =>
+        // {
+        //     var existingUser = await context.User
+        //     .Where(u => u.Email == user.Email || u.Name == user.Name)
+        //     .FirstOrDefaultAsync();
+        //     if (existingUser != null)
+        //     {
+        //         // email ou nome ja existentes!
+        //         return Results.BadRequest("Email ou nome já existente!!");
+        //     }
 
-            var hashPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            var newUser = new User()
-            {
-                Name = user.Name,
-                Email = user.Email,
-                Password = hashPassword
-            };
-            try
-            {
-                await context.User.AddAsync(newUser);
-                await context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Exeption: {ex}");
-                return Results.BadRequest("An exeption occured");
-            }
+        //     var hashPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
+        //     var newUser = new User()
+        //     {
+        //         Name = user.Name,
+        //         Email = user.Email,
+        //         Password = hashPassword
+        //     };
+        //     try
+        //     {
+        //         await context.User.AddAsync(newUser);
+        //         await context.SaveChangesAsync();
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Console.WriteLine($"Exeption: {ex}");
+        //         return Results.BadRequest("An exeption occured");
+        //     }
 
-            return Results.Created($"{newUser.Id}", newUser.Id);
-        });
+        //     return Results.Created($"{newUser.Id}", newUser.Id);
+        // });
 
         // editar usuario pelo id
         // app.MapPut("/edit/{type}/{id:int}", async (ILogger<Program> log, DbContextModel context, string type, int id, UserChangeData updateData) =>
@@ -108,5 +108,34 @@ public static class Registers
 
         //     return Results.Ok("Usuário removido com êxito!!");
         // });
+
+        app.MapDelete("/delete/all", async (DbContextModel context) =>
+        {
+            foreach (var item in context.User)
+            {
+                try
+                {
+                    context.User.Remove(item);
+                }
+                catch{}
+            }
+            foreach (var item in context.Room)
+            {
+                try
+                {
+                    context.Room.Remove(item);
+                }
+                catch{}
+            }
+            foreach (var item in context.Message)
+            {
+                try
+                {
+                    context.Message.Remove(item);
+                }
+                catch{}
+            }
+            context.SaveChanges();
+        });
     }
 }

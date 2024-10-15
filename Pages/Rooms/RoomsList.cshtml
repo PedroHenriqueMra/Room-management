@@ -32,7 +32,6 @@
                     <div class="info-room">
                         <p class="description">@r.Description</p>
                         <div class="other-info">
-                            <p>Room contains: @r.Users.Count() Users</p>
                             <span class="date">@r.CreateDate</span>
                         </div>
                     </div>
@@ -44,8 +43,17 @@
                         else
                         {
                             <form method="post">
-                                <input class="@(r.IsPrivate ? "btn btn-warning" : "btn btn-success")" type="submit" value="@(r.IsPrivate ? "request entry" : "Join the room")">
-                                @Html.Hidden("isPrivate", r.IsPrivate)
+                                @if (r.IsPrivate)
+                                {
+                                    <input type="text" placeholder="Type the password room" required name="password">
+                                    <input type="submit" value="Submit" required class="btn btn-success">
+                                    <span class="text-danger"></span>
+                                }
+                                else
+                                {
+                                    <input type="submit" value="Join the room">
+                                    @Html.Hidden("password", "")
+                                }
                                 @Html.Hidden("uuid", r.Id)
                             </form>
                         }

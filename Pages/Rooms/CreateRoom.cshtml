@@ -20,10 +20,26 @@
         <span class="text-danger" asp-validation-for="Input.Description"></span>
     </div>
     <div class="mb-3">
-        @Html.CheckBoxFor(c => c.Input.IsPrivate)
+        @Html.CheckBoxFor(c => c.Input.IsPrivate, new { @id = "isPrivate" })
         <label asp-for="Input.IsPrivate">Deprive the room?</label>
+    </div>
+    <div class="mb-3" id="form-password" style="display: none;">
+        <input asp-for="Input.Password" type="text" class="form-control" placeholder="password of your room">
+        <span class="text-danger" asp-validation-for="Input.Password"></span>
     </div>
     <div>
         <input class="btn btn-success" type="submit" value="Submit">
     </div>
 </form>
+
+<script>
+    const checkBox = document.querySelector("#isPrivate");
+    checkBox.addEventListener("change", check => {
+        if (document.querySelector("#isPrivate").checked)
+        {
+            document.querySelector("#form-password").style.display = "block";
+        } else {
+            document.querySelector("#form-password").style.display = "none";
+        }
+    });
+</script>

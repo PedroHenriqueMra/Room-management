@@ -15,7 +15,7 @@ public class User
     [StringLength(260)]
     public string Email { get; set; }
     [Required]
-    [StringLength(100, MinimumLength = 8)]
+    [StringLength(50, MinimumLength = 8)]
     [DataType(DataType.Password)]
     [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]")]
     public string Password { get; set; }
@@ -23,11 +23,11 @@ public class User
 
     // um para muitos:
     [JsonIgnore]
-    public ICollection<Room>? Rooms { get; set; } = new List<Room>();
+    public List<Room>? Rooms { get; set; } = new List<Room>();
     public List<string>? RoomsNames { get; set; } = new List<string>();
 
     // um para muitos:
-    public ICollection<Message>? Messages { get; set; } = new List<Message>();
+    public List<Message>? Messages { get; set; } = new List<Message>();
 }
 
 public class UserChangeData
