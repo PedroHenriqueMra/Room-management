@@ -30,7 +30,7 @@ public class ServicesCreateRoom : IServicesCreateRoom
             }
         }
 
-        var adm = await _context.User.FindAsync(roomData.IdAdm);
+        var adm = await _context.User.Include(u => u.Rooms).FirstAsync(u => u.Id == roomData.IdAdm);
         if (adm == null)
         {
             return Results.NotFound("Usuário não encontrado!");

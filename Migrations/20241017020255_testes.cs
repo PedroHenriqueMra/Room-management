@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MinimalApi.Migrations
 {
     /// <inheritdoc />
-    public partial class teste1 : Migration
+    public partial class testes : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,23 @@ namespace MinimalApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 260, nullable: false),
+                    Password = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    RoomsNames = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -157,21 +174,6 @@ namespace MinimalApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Message",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Content = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    RoomId = table.Column<Guid>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Message", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Room",
                 columns: table => new
                 {
@@ -187,29 +189,63 @@ namespace MinimalApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Room", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Room_User_AdmId",
+                        column: x => x.AdmId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Message",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 260, nullable: false),
-                    Password = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    RoomsNames = table.Column<string>(type: "TEXT", nullable: true),
-                    RoomId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    Content = table.Column<string>(type: "TEXT", maxLength: 200, nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    RoomId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Message", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_User_Room_RoomId",
+                        name: "FK_Message_Room_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Room",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Message_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RoomUser",
+                columns: table => new
+                {
+                    RoomsId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    UsersId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoomUser", x => new { x.RoomsId, x.UsersId });
+                    table.ForeignKey(
+                        name: "FK_RoomUser_Room_RoomsId",
+                        column: x => x.RoomsId,
+                        principalTable: "Room",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RoomUser_User_UsersId",
+                        column: x => x.UsersId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -265,42 +301,14 @@ namespace MinimalApi.Migrations
                 column: "AdmId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_RoomId",
-                table: "User",
-                column: "RoomId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Message_Room_RoomId",
-                table: "Message",
-                column: "RoomId",
-                principalTable: "Room",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Message_User_UserId",
-                table: "Message",
-                column: "UserId",
-                principalTable: "User",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Room_User_AdmId",
-                table: "Room",
-                column: "AdmId",
-                principalTable: "User",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                name: "IX_RoomUser_UsersId",
+                table: "RoomUser",
+                column: "UsersId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_User_Room_RoomId",
-                table: "User");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -318,6 +326,9 @@ namespace MinimalApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Message");
+
+            migrationBuilder.DropTable(
+                name: "RoomUser");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MinimalApi.Migrations
 {
     [DbContext(typeof(DbContextModel))]
-    [Migration("20241015191730_teste1")]
-    partial class teste1
+    [Migration("20241017020255_testes")]
+    partial class testes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -302,17 +302,27 @@ namespace MinimalApi.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("RoomId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("RoomsNames")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoomId");
-
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("RoomUser", b =>
+                {
+                    b.Property<Guid>("RoomsId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("RoomsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("RoomUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -388,33 +398,37 @@ namespace MinimalApi.Migrations
             modelBuilder.Entity("MinimalApi.DbSet.Models.Room", b =>
                 {
                     b.HasOne("MinimalApi.DbSet.Models.User", "Adm")
-                        .WithMany("Rooms")
+                        .WithMany()
                         .HasForeignKey("AdmId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Adm");
                 });
 
-            modelBuilder.Entity("MinimalApi.DbSet.Models.User", b =>
+            modelBuilder.Entity("RoomUser", b =>
                 {
                     b.HasOne("MinimalApi.DbSet.Models.Room", null)
-                        .WithMany("Users")
-                        .HasForeignKey("RoomId");
+                        .WithMany()
+                        .HasForeignKey("RoomsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MinimalApi.DbSet.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MinimalApi.DbSet.Models.Room", b =>
                 {
                     b.Navigation("Messages");
-
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("MinimalApi.DbSet.Models.User", b =>
                 {
                     b.Navigation("Messages");
-
-                    b.Navigation("Rooms");
                 });
 #pragma warning restore 612, 618
         }

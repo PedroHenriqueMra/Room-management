@@ -19,14 +19,24 @@ public class ServicesEnterRoom : IServicesEnterRoom
             return checkData;
         }
 
+        if (participeData.Room.Users.Any(u => u.Id == participeData.User.Id))
+        {
+            log.LogWarning($"The user {participeData.User.Name} already existe in room {participeData.Room.Name}!");
+            return Results.Conflict("User  already existe in this room!");
+        }
+
         try
         {
-            participeData.Room.UserName.Add(participeData.User.Name);
-            participeData.Room.Users.Add(participeData.User);
-            participeData.User.RoomsNames.Add(participeData.Room.Name);
-            participeData.User.Rooms.Add(participeData.Room);
+            if (!participeData.Room.Users.Contains(participeData.User))
+            {
+                participeData.Room.Users.Add(participeData.User);
+                participeData.Room.UserName.Add(participeData.User.Name);
+            
+                participeData.User.Rooms.Add(participeData.Room);
+                participeData.User.RoomsNames.Add(participeData.Room.Name);
 
-            await context.SaveChangesAsync();
+                await context.SaveChangesAsync();
+            }
         }
         catch (Exception Ex)
         {

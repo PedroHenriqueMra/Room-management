@@ -27,7 +27,7 @@
                 <div class="room">
                     <h1>@r.Name 
                         @* Trocar msg do span por um icone de edição *@
-                        <span class="who">@(r.Adm.Id == Model.Owner.Id ? "sua sala" : $"sala de {r.Adm.Name}")</span>
+                        <span class="who">@(r.AdmId == Model.Owner.Id ? "sua sala" : $"sala de {r.Adm.Name}")</span>
                     </h1>
                     <div class="info-room">
                         <p class="description">@r.Description</p>

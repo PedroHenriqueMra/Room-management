@@ -40,8 +40,7 @@ public class DbContextModel : IdentityDbContext<IdentityUser>
             .ValueGeneratedOnAdd();
         modelBuilder.Entity<User>()
             .HasMany(a => a.Rooms)
-            .WithOne(r => r.Adm)
-            .HasForeignKey(r => r.AdmId);
+            .WithMany(r => r.Users);
         modelBuilder.Entity<User>()
             .HasMany(u => u.Messages)
             .WithOne(m => m.User)
@@ -59,8 +58,13 @@ public class DbContextModel : IdentityDbContext<IdentityUser>
             .HasKey(r => r.Id);
         modelBuilder.Entity<Room>()
             .HasOne(r => r.Adm)
-            .WithMany(a => a.Rooms)
-            .HasForeignKey(r => r.AdmId);
+            .WithMany()
+            .HasForeignKey(r => r.AdmId)
+            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Room>()
+            .HasMany(r => r.Users)
+            .WithMany(u => u.Rooms);
+
         modelBuilder.Entity<Message>()
             .HasOne(m => m.User)
             .WithMany(u => u.Messages)

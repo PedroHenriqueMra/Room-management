@@ -31,7 +31,7 @@ public class RoomsListModel : PageModel
     {
         if (User?.Identity?.IsAuthenticated != true)
         {
-            return Redirect("http://localhost:5229/home");
+            return RedirectToPage("/home");
         }
 
         Owner = await GetAuthenticatedUserAsync();
@@ -51,6 +51,7 @@ public class RoomsListModel : PageModel
         try
         {
             bool alreadyContains = await _context.Room
+                        .Include(r => r.Users)
                         .Where(r => r.Id == uuid)
                         .AnyAsync(r => r.Users.Any(u => u.Id == Owner.Id));
 
@@ -96,11 +97,11 @@ public class RoomsListModel : PageModel
         if (User?.Identity?.IsAuthenticated != true)
         {
             _logger.LogError("User isn't authenticated!");
-            return Redirect("http://localhost:5229/home");
+            return RedirectToPage("/home");
         }
 
         Owner = await GetAuthenticatedUserAsync();
-        var rooms = await _context.Room.Include(r => r.Adm).Include(r => r.Users).ToListAsync();
+        var rooms = await _context.Room.AsNoTracking().Include(r => r.Adm).Include(r => r.Users).ToListAsync();
         if (rooms.Count != 0)
         {
             foreach (var r in rooms)

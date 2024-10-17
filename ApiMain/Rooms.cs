@@ -46,24 +46,6 @@ public static class Rooms
 
         // deletar uma sala (apenas adm)
 
-        //deletar todas as salas
-        app.MapDelete("/room/delete", async (DbContextModel context) =>
-        {
-            var room = await context.Room.Include(r => r.Adm).Include(r => r.Users).ToListAsync();
-            if (room.Count == 0)
-            {
-                return Results.NotFound("Sala não encontrada!");
-            }
-
-            var servicesRoom = new ServicesExitRoom();
-            foreach (var r in room)
-            {
-                servicesRoom.DeleteRoom(context, r.Adm, r);
-            }
-
-            return Results.Ok("Sala deletada com êxito!!");
-        });
-        
         // participar de uma sala (sala publica)
         // app.MapPost("/room/participate/{uuid:guid}", async (ILogger<Program> log, DbContextModel context, [FromBody] ParticipeRoomData roomData) =>
         // {
@@ -84,6 +66,24 @@ public static class Rooms
         //     return resultService;
         // });
 
+
+        //deletar todas as salas
+        app.MapDelete("/room/delete", async (DbContextModel context) =>
+        {
+            var room = await context.Room.Include(r => r.Adm).Include(r => r.Users).ToListAsync();
+            if (room.Count == 0)
+            {
+                return Results.NotFound("Sala não encontrada!");
+            }
+
+            var servicesRoom = new ServicesExitRoom();
+            foreach (var r in room)
+            {
+                servicesRoom.DeleteRoom(context, r.Adm, r);
+            }
+
+            return Results.Ok("Sala deletada com êxito!!");
+        });
     }
 }
 

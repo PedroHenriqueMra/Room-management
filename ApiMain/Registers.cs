@@ -109,7 +109,7 @@ public static class Registers
         //     return Results.Ok("Usuário removido com êxito!!");
         // });
 
-        app.MapDelete("/delete/all", async (DbContextModel context) =>
+        app.MapDelete("/delete/database", async (DbContextModel context) =>
         {
             foreach (var item in context.User)
             {
