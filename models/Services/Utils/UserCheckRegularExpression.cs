@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace Utils.RegularExpression.User;
+namespace MinimalApi.Services.Utils.RegularExpression.User;
 
 public static class UserCheckRegularExpression
 {

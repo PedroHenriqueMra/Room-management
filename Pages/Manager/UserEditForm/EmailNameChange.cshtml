@@ -1,0 +1,16 @@
+@page "/user/edit/{id:int}"
+@model BaseModelChangeData
+
+@{
+    var template = ViewData["TemplateForm"] ?? "_ConfirmPasswordPartial";
+}
+
+<h1>Change Email/Name</h1>
+
+<form method="post">
+    @{
+        await Html.RenderPartialAsync(template.ToString(), Model);
+    }
+    @Html.AntiForgeryToken()
+    @Html.Hidden("id", Model.Id)
+</form>

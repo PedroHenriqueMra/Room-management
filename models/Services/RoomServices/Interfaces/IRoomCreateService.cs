@@ -1,6 +1,6 @@
 using MinimalApi.DbSet.Models;
 
-public interface IServicesCreateRoom
+public interface IRoomCreateService
 {
     Task<IResult> CreateRoomAsync(CreateRoomRequest data);
 }

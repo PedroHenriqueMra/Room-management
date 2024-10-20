@@ -5,11 +5,11 @@ using Utils.RegularExpression.Room;
 
 namespace Services.RoomServices.Create;
 
-public class ServicesCreateRoom : IServicesCreateRoom
+public class RoomCreateService : IRoomCreateService
 {
     private readonly DbContextModel _context;
 
-    public ServicesCreateRoom(DbContextModel context)
+    public RoomCreateService(DbContextModel context)
     {
         _context = context;
     }

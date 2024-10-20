@@ -24,11 +24,11 @@ public class Room
     public DateTime CreateDate { get; set; } = DateTime.Now;
 
     // um para muitos:
-    public List<Message>? Messages { get; set; } = new List<Message>();
+    public ICollection<Message>? Messages { get; set; } = new List<Message>();
 
     // um para muitos:
     [JsonIgnore]
-    public List<User>? Users { get; set; } = new List<User>();
+    public ICollection<User>? Users { get; set; } = new List<User>();
     public List<string>? UserName { get; set; } = new List<string>();
 }
 

@@ -16,9 +16,9 @@ public class RoomsListModel : PageModel
 {
     private readonly ILogger<RoomsListModel> _logger;
     private readonly DbContextModel _context;
-    private readonly IServicesEnterRoom _serviceRoom;
+    private readonly IEnterRoomService _serviceRoom;
 
-    public RoomsListModel(ILogger<RoomsListModel> logger, DbContextModel context, IServicesEnterRoom serviceRoom)
+    public RoomsListModel(ILogger<RoomsListModel> logger, DbContextModel context, IEnterRoomService serviceRoom)
     {
         _context = context;
         _logger = logger;

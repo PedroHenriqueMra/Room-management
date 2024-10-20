@@ -14,27 +14,40 @@ public class RoomModel : PageModel
 {
     private readonly ILogger<RoomModel> _logger;
     private readonly DbContextModel _context;
-    private readonly HttpClient _httpClient;
-    public Room Room { get; set; }
-    public List<Message> Messages { get; set; }
-
-    public RoomModel(ILogger<RoomModel> logger, DbContextModel context, HttpClient httpClient)
+    private readonly IMessageServices _messageService;
+    public RoomModel(ILogger<RoomModel> logger, DbContextModel context, IMessageServices messageService)
     {
         _context = context;
         _logger = logger;
-        _httpClient = httpClient;
+        _messageService = messageService;
     }
+    public Room Room { get; set; }
+    public List<Message> Messages { get; set; }
 
-    public async Task<IActionResult> OnPostAsync(string message)
+    public async Task<IActionResult> OnPostAsync(string message, [FromForm] Guid uuid)
     {
+        if (uuid == Guid.Empty)
+        {
+            _logger.LogDebug("The room uuid is empty!!");
+            if (!await LoadData(uuid))
+            {
+                return Page();
+            }
+            return RedirectToPage("rooms");
+        }
+
         if (string.IsNullOrWhiteSpace(message))
         {
             _logger.LogError("Null message or empty message");
-            return Page();
+            if (await LoadData(uuid))
+            {
+                return Page();
+            }
+            return RedirectToPage("rooms");
         }
         if (!User.Identity.IsAuthenticated)
         {
-            return Redirect("http://localhost:5229/auth/login");
+            return RedirectToPage("/auth/login");
         }
 
         var claimEmail = User.FindFirst(ClaimTypes.Email)?.Value;
@@ -42,57 +55,45 @@ public class RoomModel : PageModel
         if (user == null)
         {
             _logger.LogError("User not found!!");
-            return Redirect("http://localhost:5229/auth/login");
+            return RedirectToPage("/auth/login");
         }
 
-        if (message.Length < 1 || message.Length > 200)
-        {
-            _logger.LogWarning("The message must contain a length of: (0 => 200) characters");
-            return Page();
-        }
-
-        var path = HttpContext.Request.Path.Value;
-        var url = path.Split("/rooms/")[1];
-        if (!Guid.TryParse(url, out var roomId))
-        {
-            return NotFound("Page not found!!");
-        }
-
-        var room = await _context.Room.Include(r => r.Adm).FirstAsync(r => r.Id == roomId);
+        var room = await _context.Room.Include(r => r.Adm).FirstAsync(r => r.Id == uuid);
         Room = room ?? new Room();
         if (room == null)
         {
             _logger.LogError("The room not found!");
-            return Page();
+            return RedirectToPage("rooms");
         }
 
-        var data = new
-        {
-            Content = message,
-            IdRoom = roomId,
-            IdUser = user.Id,
-        };
-        var json = JsonConvert.SerializeObject(data);
-        var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-
-        Uri GetUri(string path) => new Uri("http://localhost:5229" + path);
         try
         {
-            var response = await _httpClient.PostAsync(GetUri("/new/message"), httpContent);
-            if (!response.IsSuccessStatusCode)
+            var response = await _messageService.SendMessageAsync(user.Id, room.Id, message);
+            if (response is IStatusCodeHttpResult statusCode && statusCode.StatusCode > 299)
             {
-                Messages = await _context.Message.Include(m => m.User).Where(r => r.RoomId == roomId).ToListAsync() ?? new List<Message>();
-                _logger.LogError("Error sending message!!");
-                return Page();
+                _logger.LogCritical("An error ocurred while the send message");
+                if (await LoadData(uuid))
+                {
+                    return Page();
+                }
+                return RedirectToPage("rooms");
             }
         }
-        catch (HttpRequestException ex)
+        catch (Exception ex)
         {
             _logger.LogError($"Error sending message: {ex.Message}");
-            return Page();
+           if (await LoadData(uuid))
+            {
+                return Page();
+            }
+            return RedirectToPage("rooms");
         }
 
-        Messages = await _context.Message.Include(m => m.User).Where(r => r.RoomId == roomId).ToListAsync() ?? new List<Message>();
+        if (!await LoadData(uuid))
+        {
+            return RedirectToPage("rooms");
+        }
+
         _logger.LogInformation("Message sent");
         return Page();
     }
@@ -101,18 +102,18 @@ public class RoomModel : PageModel
     {
         if (url == Guid.Empty)
         {
-            return Redirect("http://localhost:5229/rooms");
+            return RedirectToPage("rooms");
         }
         if (!User.Identity.IsAuthenticated)
         {
-            return Redirect("http://localhost:5229/home");
+            return RedirectToPage("/home");
         }
 
         var room = await _context.Room.Include(r => r.Adm).Include(r => r.Users).FirstOrDefaultAsync(r => r.Id == url);
         if (room == null)
         {
             _logger.LogWarning($"the room ({url}) was not found!");
-            return Redirect("http://localhost:5229/rooms");
+            return RedirectToPage("rooms");
         }
 
         var claimEmail = User.FindFirst(ClaimTypes.Email)?.Value;
@@ -122,18 +123,37 @@ public class RoomModel : PageModel
             if (!room.Users.Any(u => u.Id == owner.Id))
             {
                 _logger.LogWarning($"The user ({owner.Name}) isn't in the room!!");
-                return Redirect("http://localhost:5229/rooms");
+                return RedirectToPage("rooms");
             }
         }
         else
         {
             _logger.LogWarning($"the user ({claimEmail}) was not found!");
-            return Redirect("http://localhost:5229/rooms");
+            return RedirectToPage("rooms");
         }
 
         Room = room;
-        Messages = await _context.Message.Include(m => m.User).Where(r => r.RoomId == url).ToListAsync(); 
+        if (!await LoadData(url))
+        {
+            return RedirectToPage("rooms");
+        }
 
         return Page();
+    }
+
+    private async Task<bool> LoadData(Guid uuid)
+    {
+        try
+        {
+            Messages = await _context.Message.Include(m => m.User).Where(r => r.RoomId == uuid).ToListAsync() ?? new List<Message>();
+            Room = await _context.Room.Include(r => r.Adm).FirstAsync(r => r.Id == uuid);
+        }
+        catch
+        {
+            _logger.LogError("An error ocurred while room data loading");
+            return false;
+        }
+
+        return true;
     }
 }

@@ -19,13 +19,3 @@ public class Message
     public Room Room { get; set; }
     public Guid RoomId { get; set; }
 }
-
-public class MessageRequest
-{
-    [Required]
-    public string Content { get; set; }
-    [Required]
-    public Guid IdRoom { get; set; }
-    [Required]
-    public int IdUser { get; set; }
-}

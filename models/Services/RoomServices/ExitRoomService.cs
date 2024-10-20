@@ -3,7 +3,7 @@ using MinimalApi.DbSet.Models;
 
 namespace Services.ServicesRoom.Delete;
 
-public class ServicesExitRoom : IServicesExitRoom
+public class ExitRoomService : IExitRoomService
 {
     public async Task DeleteRoom(DbContextModel context, User adm, Room room)
     {

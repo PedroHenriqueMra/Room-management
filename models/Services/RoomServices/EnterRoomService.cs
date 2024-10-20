@@ -8,7 +8,7 @@ using Utils.RegularExpression.Room;
 
 namespace Services.ServicesRoom.Enter;
 
-public class ServicesEnterRoom : IServicesEnterRoom
+public class EnterRoomService : IEnterRoomService
 {
     public async Task<IResult> IncludeUserAsync(ILogger log, DbContextModel context, ParticipeRoomData participeData)
     {

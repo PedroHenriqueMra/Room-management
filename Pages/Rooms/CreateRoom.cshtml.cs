@@ -16,9 +16,9 @@ public class CreateRoomModel : PageModel
 {
     private readonly ILogger<RegisterModel> _logger;
     private readonly DbContextModel _context;
-    private readonly IServicesCreateRoom _serviceCreate;
+    private readonly IRoomCreateService _serviceCreate;
 
-    public CreateRoomModel(ILogger<RegisterModel> logger, DbContextModel context, IServicesCreateRoom serviceCreate)
+    public CreateRoomModel(ILogger<RegisterModel> logger, DbContextModel context, IRoomCreateService serviceCreate)
     {
         _context = context;
         _logger = logger;

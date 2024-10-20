@@ -35,6 +35,7 @@
     <div class="input-chat">
         <input type="text" placeholder="Type your message" name="message" required>
         <input type="submit" value="Submit">
+        @Html.Hidden("uuid", Model.Room.Id)
     </div>
 </form>
 

@@ -76,7 +76,7 @@ public static class Rooms
                 return Results.NotFound("Sala não encontrada!");
             }
 
-            var servicesRoom = new ServicesExitRoom();
+            var servicesRoom = new ExitRoomService();
             foreach (var r in room)
             {
                 servicesRoom.DeleteRoom(context, r.Adm, r);

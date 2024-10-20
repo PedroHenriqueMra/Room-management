@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace Utils.RegularExpression.Room;
+namespace MinimalApi.Services.Utils.RegularExpression.Room;
 
 public static class RoomCheckRegularExpression
 {

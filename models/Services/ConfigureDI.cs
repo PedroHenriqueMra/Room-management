@@ -15,15 +15,18 @@ public static class ConfigureDI
 
         // Rooms services:
         // Entrance and exit of rooms
-        service.AddSingleton<IServicesEnterRoom, ServicesEnterRoom>();
-        service.AddSingleton<IServicesExitRoom, ServicesExitRoom>();
+        service.AddSingleton<IEnterRoomService, EnterRoomService>();
+        service.AddSingleton<IExitRoomService, ExitRoomService>();
         // Create room
-        service.AddScoped<IServicesCreateRoom, ServicesCreateRoom>();
+        service.AddScoped<IRoomCreateService, RoomCreateService>();
 
         // User services:
         // User create, Login
         service.AddScoped<IUserServices, UserServices>();
         // Manager user
         service.AddScoped<IUserManageServices, UserManageServices>();
+
+        // Message services:
+        service.AddScoped<IMessageServices, MessageServices>();
     }
 }
