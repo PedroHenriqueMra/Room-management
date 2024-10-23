@@ -21,17 +21,8 @@ public partial class UserManageServices
         return null;
     }
 
-    private string LogicValidationName(User user, string name)
+    private async Task<string> LogicValidationNameAsync(string name)
     {
-        if (string.IsNullOrWhiteSpace(name) || user.Name == name)
-        {
-            var message = user.Name == name
-                ? $"The name {user.Name} is already yours!!"
-                : "The email is null or empty!";
-            _logger.LogWarning(message);
-            return message;
-        }
-
         var isValidName = UserCheckRegularExpression.IsValidName(name);
         if (!isValidName)
         {
@@ -41,21 +32,17 @@ public partial class UserManageServices
             return message;
         }
 
+        if (await _context.User.AnyAsync(u => u.Name == name))
+        {
+            _logger.LogWarning($"The name {name} already is in using");
+            return $"The name {name} already is in using";
+        }
+
         return null;
     }
 
-    private async Task<string> LogicValidationEmail(User user, string email)
+    private async Task<string> LogicValidationEmailAsync(string email)
     {
-        if (string.IsNullOrWhiteSpace(email) || user.Email == email)
-        {
-            var message = user.Email == email
-            ? $"You already is using the email {email}, choose another please"
-            : "The email is null or empty!";
-
-            _logger.LogWarning(message);
-            return message;
-        }
-
         var emailRegexIsValid = UserCheckRegularExpression.IsValidEmail(email);
         if (!emailRegexIsValid)
         {

@@ -34,7 +34,7 @@ public class ManagerModel : PageModel
         {
             if (userClaim != email)
             {
-                _logger.LogError("Error: Url doesn'n match the user");
+                _logger.LogError($"Error: Url doesn'n match the user whose claims email is {userClaim}");
                 return NotFound("You aren't logged into your account!!.");
             }
             _logger.LogInformation("You have entered the user manager page!!");

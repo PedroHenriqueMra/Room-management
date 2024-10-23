@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using MinimalApi.DbSet.Models;
 using Org.BouncyCastle.Crypto.Operators;
-using Utils.RegularExpression.Message;
+using MinimalApi.Services.Utils.RegularExpression.Message;
 
 public class MessageServices : IMessageServices
 {

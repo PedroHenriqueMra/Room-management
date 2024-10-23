@@ -21,7 +21,7 @@ using MinimalApi.DbSet.Models;
 using MySqlX.XDevAPI;
 using Newtonsoft.Json;
 using static Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal.ExternalLoginModel;
-using Utils.RegularExpression;
+using MinimalApi.Services.Utils.RegularExpression;
 using Microsoft.AspNetCore.Http.HttpResults;
 using NuGet.Common;
 
@@ -102,6 +102,6 @@ public class RegisterModel : PageModel
 
         await _httpContext.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, new AuthenticationProperties { IsPersistent = false });
  
-        return Redirect("http://localhost:5229/home");
+        return RedirectToPage("home");
     }
 }

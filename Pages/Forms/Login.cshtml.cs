@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using static Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal.ExternalLoginModel;
-using Utils.RegularExpression.User;
+using MinimalApi.Services.Utils.RegularExpression.User;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 [AllowAnonymous]

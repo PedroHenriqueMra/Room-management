@@ -1,12 +1,18 @@
 <div class="mb-3">
     <label for="idname">Change Name</label>
-    <input type="text" name="name" id="idname" placeholder="Type a new name if you want change it">
-    <span class="text-danger"></span>
+    <input type="text" name="name" id="idname" placeholder="Type a new name if you want change it" value="@(Model.User?.Name ?? "")">
+    @if(TempData["ErrorMessageName"] != null)
+    {
+        <span class="text-danger">@TempData["ErrorMessageName"]</span>
+    }
 </div>
 <div class="mb-3">
     <label for="idemail">Change Email</label>
-    <input type="email" name="email" id="idemail" placeholder="Type a new email if you want change it">
-    <span class="text-danger"></span>
+    <input type="email" name="email" id="idemail" placeholder="Type a new email if you want change it" value="@(Model.User?.Email ?? "")">
+    @if(TempData["ErrorMessageEmail"] != null)
+    {
+        <span class="text-danger">@TempData["ErrorMessageEmail"]</span>
+    }
 </div>
 <div>
     <input class="btn btn-success" type="submit" value="Change" asp-page-handler="Change">

@@ -1,8 +1,9 @@
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.EntityFrameworkCore;
 using MinimalApi.DbSet.Models;
+using MinimalApi.Services.Utils.RegularExpression.User;
 using SQLitePCL;
-using Utils.RegularExpression.User;
+using MinimalApi.Services.Utils.RegularExpression.User;
 
 public class UserServices : IUserServices
 {

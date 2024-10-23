@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 using Microsoft.EntityFrameworkCore;
 using MinimalApi.DbSet.Models;
 using Org.BouncyCastle.Tls;
-using Utils.RegularExpression.Room;
+using MinimalApi.Services.Utils.RegularExpression.Room;
 
 namespace Services.ServicesRoom.Enter;
 

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using MinimalApi.DbSet.Models;
-using Utils.RegularExpression.Room;
+using MinimalApi.Services.Utils.RegularExpression.Room;
 
 namespace Services.RoomServices.Create;
 

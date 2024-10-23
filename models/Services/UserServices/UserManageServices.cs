@@ -8,6 +8,7 @@ using MinimalApi.DbSet.Models;
 using MySqlX.XDevAPI.Common;
 using ZstdSharp.Unsafe;
 using MinimalApi.Services.Utils.RegularExpression.User;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Services.ServicesUser.Change;
 
@@ -42,7 +43,13 @@ public partial class UserManageServices : IUserManageServices
             return Results.NotFound($"The user which id is {id} not found!");
         }
 
-        var logicValidationName = LogicValidationName(user, name);
+        if (user.Name == name || String.IsNullOrEmpty(name))
+        {
+            _logger.LogInformation("The user didn't change your name!");
+            return Results.NoContent();
+        }
+
+        var logicValidationName = await LogicValidationNameAsync(name);
         if (!String.IsNullOrEmpty(logicValidationName))
         {
             _logger.LogWarning($"Some error ocurred in logic validation name. Message: {logicValidationName}");
@@ -83,13 +90,13 @@ public partial class UserManageServices : IUserManageServices
     public async Task<IResult> EmailChangeAsync(int id, string email)
     {
         var user = await GetUserAsync(id);
-        if (user == null)
+        if (user.Email == email || String.IsNullOrEmpty(email))
         {
-            _logger.LogWarning($"The user whose id is {id} not found");
-            return Results.NotFound($"The user which id is {id} not found!");
+            _logger.LogWarning($"The user didn't change your email!");
+            return Results.NoContent();
         }
 
-        var logicValidationEmail = await LogicValidationEmail(user, email);
+        var logicValidationEmail = await LogicValidationEmailAsync(email);
         if (!String.IsNullOrEmpty(logicValidationEmail))
         {
             _logger.LogWarning($"Some error ocurred in logic validation name. Message: {logicValidationEmail}");
