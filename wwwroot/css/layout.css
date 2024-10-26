@@ -18,6 +18,7 @@ body, html {
     color: #ffffff !important;
     font-size: 1rem;
     transition: color 0.2s ease;
+    cursor: pointer;
 }
 
 .nav-link:hover {

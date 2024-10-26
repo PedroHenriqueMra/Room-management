@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 [AllowAnonymous]
-public class IndexModel :PageModel
+public class IndexModel : PageModel
 {
-    public string? Id { get; set; }
-    public string? Email { get; set; }
+    public string? Id;
+    public string? Email;
 
     public void OnGet()
     {
@@ -18,11 +18,13 @@ public class IndexModel :PageModel
     public IActionResult OnPost()
     {
         var claimEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-        if (claimEmail != null)
+        if (!String.IsNullOrEmpty(claimEmail))
         {
-            return RedirectToPage($"user/manager/{claimEmail}");
+            return Redirect($"http://localhost:5229/user/manager/{claimEmail}");
         }
 
-        return RedirectToPage("home");
+        Email = claimEmail ?? "No authenticated";
+        Id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "No authenticated";
+        return Redirect("http://localhost:5229/home");
     }
 }

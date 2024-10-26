@@ -9,6 +9,8 @@ using MySqlX.XDevAPI.Common;
 using ZstdSharp.Unsafe;
 using MinimalApi.Services.Utils.RegularExpression.User;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Cms;
+using Azure;
 
 namespace Services.ServicesUser.Change;
 
@@ -131,6 +133,37 @@ public partial class UserManageServices : IUserManageServices
 
     public async Task<IResult> PasswordChangeAsync(int id, string password)
     {
-        return Results.Ok();
+        var user = await _context.User.FindAsync(id);
+        if (user == null)
+        {
+            _logger.LogWarning($"The user which id {id} not found!");
+            return Results.BadRequest(new { message = $"User with ID {id} not found." });
+        }
+
+        if (BCrypt.Net.BCrypt.Verify(password, user.Password))
+        {
+            _logger.LogInformation("The password wasan't chanded!");
+            return Results.BadRequest(new { message = "The user password wasan't changed!" });
+        }
+
+        if (!UserCheckRegularExpression.IsValidPassword(password))
+        {
+            _logger.LogWarning($"Password regex error for {password}");
+            return Results.Conflict(new { message = $"Some character is wrong in password!" });
+        }
+
+        try
+        {
+            user.Password = BCrypt.Net.BCrypt.HashPassword(password);
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex)
+        {
+            _logger.LogWarning($"An error ocurred while the data was changed on database!. Message: {ex}");
+            return Results.BadRequest(new { message = "An internal server error with database ocurred!" });
+        }
+
+        _logger.LogInformation("The user password was changed!");
+        return Results.Ok(new { message = "The user password was changed successfully" });
     }
 }
