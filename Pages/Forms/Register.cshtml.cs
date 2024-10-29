@@ -32,12 +32,14 @@ public class RegisterModel : PageModel
     private readonly IHttpContextAccessor _httpContext;
     private readonly IUserServices _userServices;
     private readonly DbContextModel _context;
-    public RegisterModel(ILogger<RegisterModel> logger, IHttpContextAccessor httpContext, IUserServices userServices, DbContextModel context)
+    private readonly IGetMessageError _getMessageError;
+    public RegisterModel(ILogger<RegisterModel> logger, IHttpContextAccessor httpContext, IUserServices userServices, DbContextModel context, IGetMessageError getMessageError)
     {
         _logger = logger;
         _httpContext = httpContext;
         _userServices = userServices;
         _context = context;
+        _getMessageError = getMessageError;
     }
 
     [BindProperty]
@@ -81,6 +83,10 @@ public class RegisterModel : PageModel
             var response = await _userServices.UserCreateAsync(newUser);
             if (response is IStatusCodeHttpResult status && status.StatusCode > 299)
             {
+                string msg = _getMessageError.GetMessage(response, "Value", '=', '}');
+                TempData["ErrorMessage"] = msg;
+
+                _logger.LogWarning($"An error ocurred to register. Message error: {msg}");
                 return Page();
             }
         }
@@ -101,7 +107,7 @@ public class RegisterModel : PageModel
         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
         await _httpContext.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, new AuthenticationProperties { IsPersistent = false });
- 
-        return RedirectToPage("home");
+
+        return Redirect("/home");
     }
 }

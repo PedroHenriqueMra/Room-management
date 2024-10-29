@@ -142,8 +142,8 @@ public partial class UserManageServices : IUserManageServices
 
         if (BCrypt.Net.BCrypt.Verify(password, user.Password))
         {
-            _logger.LogInformation("The password wasan't chanded!");
-            return Results.BadRequest(new { message = "The user password wasan't changed!" });
+            _logger.LogInformation($"Your new password is the same as your old password!. New password: {password}");
+            return Results.BadRequest(new { message = "You didn't change your password!. Please type other." });
         }
 
         if (!UserCheckRegularExpression.IsValidPassword(password))

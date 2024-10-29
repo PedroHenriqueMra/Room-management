@@ -17,12 +17,13 @@ public class CreateRoomModel : PageModel
     private readonly ILogger<RegisterModel> _logger;
     private readonly DbContextModel _context;
     private readonly IRoomCreateService _serviceCreate;
-
-    public CreateRoomModel(ILogger<RegisterModel> logger, DbContextModel context, IRoomCreateService serviceCreate)
+    private readonly IGetMessageError _getMessageError;
+    public CreateRoomModel(ILogger<RegisterModel> logger, DbContextModel context, IRoomCreateService serviceCreate, IGetMessageError getMessageError)
     {
         _context = context;
         _logger = logger;
         _serviceCreate = serviceCreate;
+        _getMessageError = getMessageError;
     }
 
     [BindProperty]
@@ -81,7 +82,10 @@ public class CreateRoomModel : PageModel
         var result = await _serviceCreate.CreateRoomAsync(data);
         if (result is IStatusCodeHttpResult status && status.StatusCode > 299)
         {
-            _logger.LogError($"An error ocurred when created the room. Room name {Input.Name}.!!");
+            string msg = _getMessageError.GetMessage(result, "Value", '=', '}');
+
+            _logger.LogError($"An error ocurred when created the room. Room name {Input.Name}. Message: {msg}");
+            TempData["ErrorMessage"] = msg;
             return Page();
         }
 

@@ -19,12 +19,14 @@ public class LoginModel : PageModel
     private readonly DbContextModel _context;
     private readonly IHttpContextAccessor _httpContext;
     private readonly IUserServices _userService;
-    public LoginModel(ILogger<LoginModel> logger, DbContextModel context, IHttpContextAccessor httpContext, IUserServices userService)
+    private readonly IGetMessageError _getMessageError;
+    public LoginModel(ILogger<LoginModel> logger, DbContextModel context, IHttpContextAccessor httpContext, IUserServices userService, IGetMessageError getMessageError)
     {
         _logger = logger;
         _context = context;
         _httpContext = httpContext;
         _userService = userService;
+        _getMessageError = getMessageError;
     }
 
     [BindProperty]
@@ -64,7 +66,10 @@ public class LoginModel : PageModel
         var result = await _userService.UserLoginAsync(Input.Password, Input.Email);
         if (result is IStatusCodeHttpResult status && status.StatusCode > 299)
         {
-            _logger.LogInformation($"Something went wrong in authentication for user {Input.Email}!!");
+            string msg = _getMessageError.GetMessage(result, "Value", '=', '}');
+            TempData["MessageError"] = msg;
+
+            _logger.LogInformation($"Something went wrong in authentication for user {Input.Email}. Messag: {msg}");
             return Page();
         }
 

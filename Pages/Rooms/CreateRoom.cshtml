@@ -27,6 +27,11 @@
         <input asp-for="Input.Password" type="text" class="form-control" placeholder="password of your room">
         <span class="text-danger" asp-validation-for="Input.Password"></span>
     </div>
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <span class="text-danger">@TempData["ErrorMessage"]</span>
+    }
+   
     <div>
         <input class="btn btn-success" type="submit" value="Submit">
     </div>

@@ -30,7 +30,13 @@
             @Html.CheckBoxFor(c => c.Input.Remember)
             <label asp-for="Input.Remember" class="form-check-label" >Remember-me</label>
         </div>
+        @if (TempData["MessageError"] != null)
+        {
+            <span class="text-danger">@TempData["MessageError"]</span>
+        }
+        <br>
         <button type="submit" class="btn btn-primary">Confirmar</button>
+        
     </form>
 </div>
 

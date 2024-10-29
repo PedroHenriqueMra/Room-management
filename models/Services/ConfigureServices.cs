@@ -28,5 +28,8 @@ public static class ConfigureDI
 
         // Message services:
         service.AddScoped<IMessageServices, MessageServices>();
+
+        // Service get message error:
+        service.AddSingleton<IGetMessageError, GetMessageError>();
     }
 }

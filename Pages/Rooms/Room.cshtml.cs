@@ -15,11 +15,13 @@ public class RoomModel : PageModel
     private readonly ILogger<RoomModel> _logger;
     private readonly DbContextModel _context;
     private readonly IMessageServices _messageService;
-    public RoomModel(ILogger<RoomModel> logger, DbContextModel context, IMessageServices messageService)
+    private readonly IGetMessageError _getMessageError;
+    public RoomModel(ILogger<RoomModel> logger, DbContextModel context, IMessageServices messageService, IGetMessageError getMessageError)
     {
         _context = context;
         _logger = logger;
         _messageService = messageService;
+        _getMessageError = getMessageError;
     }
     public Room Room { get; set; }
     public List<Message> Messages { get; set; }
@@ -71,7 +73,9 @@ public class RoomModel : PageModel
             var response = await _messageService.SendMessageAsync(user.Id, room.Id, message);
             if (response is IStatusCodeHttpResult statusCode && statusCode.StatusCode > 299)
             {
-                _logger.LogCritical("An error ocurred while the send message");
+                string msg = _getMessageError.GetMessage(response, "Value", '=', '}');
+
+                _logger.LogCritical($"An error ocurred while the send message. Error message: {msg}");
                 if (await LoadData(uuid))
                 {
                     return Page();

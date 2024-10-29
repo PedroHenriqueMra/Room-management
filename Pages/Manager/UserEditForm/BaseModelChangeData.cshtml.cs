@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using MinimalApi.DbSet.Models;
+using Org.BouncyCastle.Security;
 
 [Authorize]
 public class BaseModelChangeData : PageModel
@@ -12,12 +13,14 @@ public class BaseModelChangeData : PageModel
     private readonly DbContextModel _context;
     private readonly IUserManageServices _userChangeService;
     private readonly IHttpContextAccessor _httpContext;
-    public BaseModelChangeData(ILogger<BaseModelChangeData> logger, DbContextModel context, IUserManageServices userChangeService, IHttpContextAccessor httpContext)
+    private readonly IGetMessageError _getMessageError;
+    public BaseModelChangeData(ILogger<BaseModelChangeData> logger, DbContextModel context, IUserManageServices userChangeService, IHttpContextAccessor httpContext, IGetMessageError getMessageError)
     {
         _logger = logger;
         _context = context;
         _userChangeService = userChangeService;
         _httpContext = httpContext;
+        _getMessageError = getMessageError;
     }
 
     public int Id;
@@ -29,12 +32,6 @@ public class BaseModelChangeData : PageModel
         if (user == null)
         {
             return NotFound($"The user which id is {id} not found!");
-        }
-
-        if (Request.Path.ToString().Contains("password"))
-        {
-            _logger.LogInformation("Change password");
-            return Page();
         }
 
         _logger.LogInformation("Change email/name");
@@ -60,6 +57,7 @@ public class BaseModelChangeData : PageModel
         if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
         {
             _logger.LogInformation("password is incorrect!!");
+            TempData["IncorrectPassword"] = true;
             return Page();
         }
 
@@ -81,26 +79,32 @@ public class BaseModelChangeData : PageModel
 
             if (result is IStatusCodeHttpResult status && status.StatusCode > 299)
             {
-                _logger.LogError($"An error ocurred when change email. Message:");
-                TempData["ErrorMessageEmail"] = "";
+                string msg = _getMessageError.GetMessage(result, "Value", '=', '}');
+
+                _logger.LogError($"An error ocurred when change email. Message: {msg}");
+                TempData["ErrorMessageEmail"] = msg;
             }
             else
             {
                 _logger.LogInformation("Success to change email!!");
+                TempData["SuccessEmail"] = "Email was changed successffuly!";
             }
         }
 
         if (name != null && name != user.Name)
         {
             var result = await _userChangeService.NameChangeAsync(id, name);
-            if (result is ObjectResult response && response.StatusCode > 299)
+            if (result is IStatusCodeHttpResult response && response.StatusCode > 299)
             {
-                _logger.LogError($"An error ocurred when change name. Message:");
-                TempData["ErrorMessageName"] = response.Value;
+                string msg = _getMessageError.GetMessage(result, "Value", '=', '}');
+                
+                _logger.LogError($"An error ocurred when change name. Message: {msg}");
+                TempData["ErrorMessageName"] = msg;
             }
             else
             {
                 _logger.LogInformation("Success to change email!!");
+                TempData["SuccessName"] = "Name was changed successffuly!";
             }
         }
 

@@ -17,12 +17,13 @@ public class RoomsListModel : PageModel
     private readonly ILogger<RoomsListModel> _logger;
     private readonly DbContextModel _context;
     private readonly IEnterRoomService _serviceRoom;
-
-    public RoomsListModel(ILogger<RoomsListModel> logger, DbContextModel context, IEnterRoomService serviceRoom)
+    private readonly IGetMessageError _getMessageError;
+    public RoomsListModel(ILogger<RoomsListModel> logger, DbContextModel context, IEnterRoomService serviceRoom, IGetMessageError getMessageError)
     {
         _context = context;
         _logger = logger;
         _serviceRoom = serviceRoom;
+        _getMessageError = getMessageError;
     }
     public List<Room> Rooms { get; set; } = new List<Room>();
     public User Owner { get; set; } = new User();
@@ -79,8 +80,11 @@ public class RoomsListModel : PageModel
 
             if (response is IStatusCodeHttpResult status && status.StatusCode > 299)
             {
-                _logger.LogError($"Error when Entering the room. Room: {room.Name}");
-                return RedirectToPage("/rooms");
+                string msg = _getMessageError.GetMessage(response, "Value", '=', '}');
+
+                _logger.LogError($"Error when Entering the room. Room: {room.Name}. Message: {msg}");
+                TempData["ErrorMessage"] = msg;
+                return Redirect("/rooms");
             }
         }
         catch (Exception ex)

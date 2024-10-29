@@ -47,7 +47,10 @@
                                 {
                                     <input type="password" placeholder="Type the password room" required name="password">
                                     <input type="submit" value="Submit" required class="btn btn-success">
-                                    <span class="text-danger"></span>
+                                    if (TempData["ErrorMessage"] != null)
+                                    {
+                                        <span class="text-danger">@TempData["ErrorMessage"]</span>
+                                    }
                                 }
                                 else
                                 {
