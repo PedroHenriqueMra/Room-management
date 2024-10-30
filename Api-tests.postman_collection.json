@@ -1,0 +1,51 @@
+{
+	"info": {
+		"_postman_id": "db2ef4e4-b0ad-46c7-bec7-ce557a6a34f8",
+		"name": "Api-tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36499102"
+	},
+	"item": [
+		{
+			"name": "List users/rooms of system",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5229/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5229",
+					"path": [
+						"list"
+					]
+				},
+				"description": "This endpoint shows the system data"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete all system data",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5229/delete/database",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5229",
+					"path": [
+						"delete",
+						"database"
+					]
+				},
+				"description": "This endpoint deletes all data of the system data"
+			},
+			"response": []
+		}
+	]
+}

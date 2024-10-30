@@ -1,0 +1,55 @@
+@page "/user/manager/{id:int}"
+@model ManagerModel
+@{
+    ViewData["Title"] = Model.UserManager.Name;
+
+    var rooms = Model.UserManager.RoomsNames?.ToList();
+}
+<link rel="stylesheet" href="~/css/manager.css">
+
+<h1 class="name">@Model.UserManager.Name</h1>
+
+<div class="info">
+    <ul>
+        <li class="field">
+            <span>Name</span>
+            <div>@Model.UserManager.Name
+                <a href="/user/edit/@Model.UserManager.Id"><i class="fa-solid fa-pencil"></i></a>
+            </div>
+        </li>
+        <li class="field">
+            <span>Email</span>
+            <div>@Model.UserManager.Email
+                <a href="/user/edit/@Model.UserManager.Id"><i class="fa-solid fa-pencil"></i></a>
+            </div>
+        </li>
+        <li class="field">
+            <span>Password</span>
+            <div>
+                <a href="/user/edit/password/@Model.UserManager.Id">would you like to change your password?</a>
+            </div>
+        </li>
+        <li class="field">
+            <span>Manage your rooms</span>
+            <div>
+                You have @Model.countManageRooms rooms <a href="/user/manager/room/@Model.UserManager.Id"><i class="fa-solid fa-pencil"></i></a>
+            </div>
+        </li>
+        <li>
+            <h2>Rooms you participate in:</h2>
+            <div>
+                @if (rooms.Count != 0)
+                {
+                    foreach (var r in rooms)
+                    {
+                        <span class="room">@r</span>
+                    }
+                }
+                else
+                {
+                    <span class="null"><a href="~/rooms">you are not in any rooms yet!</a></span>
+                }
+            </div>
+        </li>
+    </ul>
+</div>

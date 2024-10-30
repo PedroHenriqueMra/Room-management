@@ -1,0 +1,28 @@
+<div class="mb-3">
+    <label for="idname">Change Name</label>
+    <input type="text" name="name" id="idname" placeholder="Type a new name if you want change it" value="@(Model.User?.Name ?? "")">
+    @if(TempData["ErrorMessageName"] != null)
+    {
+        <span class="text-danger">@TempData["ErrorMessageName"]</span>
+    }
+    @if (TempData["SuccessName"] != null)
+    {
+        <span class="text-success">@TempData["SuccessName"]</span>
+    }
+</div>
+<div class="mb-3">
+    <label for="idemail">Change Email</label>
+    <input type="email" name="email" id="idemail" placeholder="Type a new email if you want change it" value="@(Model.User?.Email ?? "")">
+    @if(TempData["ErrorMessageEmail"] != null)
+    {
+        <span class="text-danger">@TempData["ErrorMessageEmail"]</span>
+    }
+    @if (TempData["SuccessEmail"] != null)
+    {
+        <span class="text-success">@TempData["SuccessEmail"]</span>
+    }
+</div>
+<div>
+    <input class="btn btn-success" type="submit" value="Change" asp-page-handler="Change">
+    <a class="btn btn-primary" href="/user/manager/@Model.Id">Back</a>
+</div>
