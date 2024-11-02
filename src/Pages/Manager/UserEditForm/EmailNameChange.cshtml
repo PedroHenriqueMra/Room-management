@@ -2,14 +2,15 @@
 @model BaseModelChangeData
 
 @{
-    var template = ViewData["TemplateForm"] ?? "_ConfirmPasswordPartial";
+    var partialDocument = ViewData["TemplateForm"] ?? "_ConfirmPasswordPartial.cshtml";
+    var file = $"~/Pages/Manager/Partials/{partialDocument}";
 }
 
 <h1>Change Email/Name</h1>
 
 <form method="post">
     @{
-        await Html.RenderPartialAsync(template.ToString(), Model);
+        await Html.RenderPartialAsync(file, Model);
     }
     @Html.AntiForgeryToken()
     @Html.Hidden("id", Model.Id)

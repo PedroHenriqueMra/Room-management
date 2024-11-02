@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\MinimalApi.csproj": {}
+    "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\MinimalApi.csproj": {}
   },
   "projects": {
-    "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\MinimalApi.csproj": {
+    "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\MinimalApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\MinimalApi.csproj",
+        "projectUniqueName": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\MinimalApi.csproj",
         "projectName": "MinimalApi",
-        "projectPath": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\MinimalApi.csproj",
+        "projectPath": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\MinimalApi.csproj",
         "packagesPath": "C:\\Users\\pedro\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\obj\\",
+        "outputPath": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pedro\\AppData\\Roaming\\NuGet\\NuGet.Config"

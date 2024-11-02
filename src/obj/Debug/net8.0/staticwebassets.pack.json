@@ -1,23 +1,27 @@
 {
   "Files": [
     {
-      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\layout.css",
+      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\layout.css",
       "PackagePath": "staticwebassets\\css\\layout.css"
     },
     {
-      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\manager.css",
+      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\manager.css",
       "PackagePath": "staticwebassets\\css\\manager.css"
     },
     {
-      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\room.css",
+      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\room.css",
       "PackagePath": "staticwebassets\\css\\room.css"
     },
     {
-      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\roomslist.css",
+      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\roommanage.css",
+      "PackagePath": "staticwebassets\\css\\roommanage.css"
+    },
+    {
+      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\roomslist.css",
       "PackagePath": "staticwebassets\\css\\roomslist.css"
     },
     {
-      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\useredit.css",
+      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\useredit.css",
       "PackagePath": "staticwebassets\\css\\useredit.css"
     },
     {

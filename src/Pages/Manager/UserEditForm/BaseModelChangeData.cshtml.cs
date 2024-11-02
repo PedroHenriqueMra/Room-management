@@ -62,7 +62,7 @@ public class BaseModelChangeData : PageModel
         }
 
         _logger.LogInformation("password is correct!!");
-        ViewData["TemplateForm"] = "_FormChangeNameEmailPartial";
+        ViewData["TemplateForm"] = "_FormChangeNameEmailPartial.cshtml";
         return Page();
     }
 
@@ -108,7 +108,7 @@ public class BaseModelChangeData : PageModel
             }
         }
 
-        ViewData["TemplateForm"] = "_FormChangeNameEmailPartial";
+        ViewData["TemplateForm"] = "_FormChangeNameEmailPartial.cshtml";
         return Page();
     }
 }
