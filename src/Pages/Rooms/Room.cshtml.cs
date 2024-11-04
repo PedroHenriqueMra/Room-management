@@ -26,7 +26,7 @@ public class RoomModel : PageModel
     public Room Room { get; set; }
     public List<Message> Messages { get; set; }
 
-    public async Task<IActionResult> OnPostAsync(string message, [FromForm] Guid uuid)
+    public async Task<IActionResult> OnPostAsync(int id, string message, [FromForm] Guid uuid)
     {
         if (uuid == Guid.Empty)
         {
@@ -36,6 +36,19 @@ public class RoomModel : PageModel
                 return Page();
             }
             return RedirectToPage("rooms");
+        }
+
+        var user = await _context.User.FindAsync(id);
+        if (user == null)
+        {
+            _logger.LogError("User not found!!");
+            return RedirectToPage("/auth/login");
+        }
+        var claimEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+        if (user.Email != claimEmail)
+        {
+            _logger.LogWarning($"The user authenticated don't matche with id: {id}");
+            return RedirectToPage("/auth/login");
         }
 
         if (string.IsNullOrWhiteSpace(message))
@@ -51,15 +64,7 @@ public class RoomModel : PageModel
         {
             return RedirectToPage("/auth/login");
         }
-
-        var claimEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-        var user = await _context.User.FirstOrDefaultAsync(u => u.Email == claimEmail);
-        if (user == null)
-        {
-            _logger.LogError("User not found!!");
-            return RedirectToPage("/auth/login");
-        }
-
+        
         var room = await _context.Room.Include(r => r.Adm).FirstAsync(r => r.Id == uuid);
         Room = room ?? new Room();
         if (room == null)

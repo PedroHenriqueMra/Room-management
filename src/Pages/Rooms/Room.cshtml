@@ -2,6 +2,7 @@
 @using System.Security.Claims
 @model RoomModel
 @{
+    var userIdentifier = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     var userClaim = User.FindFirst(ClaimTypes.Email)?.Value;
 }
 <head>
@@ -35,10 +36,15 @@
     <div class="input-chat">
         <input type="text" placeholder="Type your message" name="message" required>
         <input type="submit" value="Submit">
+        @Html.Hidden("id", Int32.Parse(userIdentifier))
         @Html.Hidden("uuid", Model.Room.Id)
     </div>
 </form>
 
+<script src="Scripts/jquery-1.10.2.min.js"></script>
+<script src="Scripts/jquery.signalR-2.1.0.min.js"></script>
+<script src="signalr/hubs"></script>
+<script src="../../wwwroot/js/SignalR.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         var header = document.querySelector("header");
