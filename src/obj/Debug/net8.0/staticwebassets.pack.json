@@ -25,6 +25,10 @@
       "PackagePath": "staticwebassets\\css\\useredit.css"
     },
     {
+      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\signalR.js",
+      "PackagePath": "staticwebassets\\js\\signalR.js"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.MinimalApi.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "NGcrfVXvGz6aETc4iHx3+uXQNHuOFvBD5c7ph2xGaT0=",
+  "Hash": "Rt8yQYaGDa3uO9BHrt3IPA4c1sKNFLflgY4RrtJc0mI=",
   "Source": "MinimalApi",
   "BasePath": "_content/MinimalApi",
   "Mode": "Default",
@@ -1269,6 +1269,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\useredit.css"
+    },
+    {
+      "Identity": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\signalR.js",
+      "SourceId": "MinimalApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\",
+      "BasePath": "_content/MinimalApi",
+      "RelativePath": "js/signalR.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\signalR.js"
     }
   ]
 }

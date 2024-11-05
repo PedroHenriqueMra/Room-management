@@ -2,7 +2,7 @@
 @using System.Security.Claims
 @model RoomModel
 @{
-    var userIdentifier = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    var userIdentifier = Int32.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
     var userClaim = User.FindFirst(ClaimTypes.Email)?.Value;
 }
 <head>
@@ -13,7 +13,7 @@
     <a href="/rooms">Back</a>
 </span>
 
-<ul>
+<ul id="ulteste">
     @if (Model.Messages?.Count != 0)
     {
         @foreach (var m in Model.Messages)
@@ -34,17 +34,16 @@
 
 <form method="post">
     <div class="input-chat">
-        <input type="text" placeholder="Type your message" name="message" required>
-        <input type="submit" value="Submit">
-        @Html.Hidden("id", Int32.Parse(userIdentifier))
+        <input type="text" placeholder="Type your message" name="message" required id="inputUser">
+        <input type="submit" value="Submit" id="button">
+        @Html.Hidden("id", userIdentifier)
         @Html.Hidden("uuid", Model.Room.Id)
     </div>
 </form>
 
-<script src="Scripts/jquery-1.10.2.min.js"></script>
-<script src="Scripts/jquery.signalR-2.1.0.min.js"></script>
-<script src="signalr/hubs"></script>
-<script src="../../wwwroot/js/SignalR.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+<script src="~/js/signalR.js"></script>
+
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         var header = document.querySelector("header");

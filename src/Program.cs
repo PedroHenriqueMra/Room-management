@@ -18,6 +18,18 @@ builder.Services.ConfigureIdentity();
 builder.Services.ConfigureCookie();
 
 builder.Services.AddRazorPages();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder.WithOrigins("https://http://localhost:5229")
+                .AllowAnyHeader()
+                .WithMethods("GET", "POST")
+                .AllowCredentials();
+        });
+});
+
 // SignalR
 builder.Services.AddSignalR();
 
