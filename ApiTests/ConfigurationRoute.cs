@@ -1,16 +1,5 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Identity.Client;
 using MinimalApi.DbSet.Models;
-using Mysqlx;
-using MySqlX.XDevAPI.Common;
-using Org.BouncyCastle.Crypto.Generators;
 using Microsoft.EntityFrameworkCore;
-using ApiTests.Endpoints.ConfigureMessages;
-using ApiTests.Endpoints.ConfigureRegisters;
-using ApiTests.Endpoints.ConfigureRooms;
 
 namespace ApiTests.Endpoints
 {
@@ -18,28 +7,88 @@ namespace ApiTests.Endpoints
     {
         internal static void RoutesEndPoints(this WebApplication app)
         {
-            // listagens de salas e usuarios
+            // users, rooms list
             app.MapGet("/list", async (DbContextModel context) =>
             {
                 var users = await context.User.ToListAsync();
                 var rooms = await context.Room.ToListAsync();
 
-                var display = new Dictionary<string, object>{
-                { "Users", users },
-                { "Rooms", rooms }
+                var display = new Dictionary<string, object>
+                {
+                    { "Users", users },
+                    { "Rooms", rooms }
                 };
 
                 return Results.Ok(display);
             });
 
-            // endpoints register:
-            app.EndPointsRegisters();
+            // list chat connections
+            app.MapGet("/list/chat", async (DbContextModel context) =>
+            {
+                var chatGroups = await context.ChatGroup.ToListAsync();
+                var display = new Dictionary<string, object>
+                {
+                    { "Connections", chatGroups }
+                };
 
-            // endpoints rooms:
-            app.EndpointsRooms();
+                return Results.Ok(display);
+            });
 
-            // endpoints message:
-            app.EndpointsMessages();
+            // delete all data
+            app.MapDelete("/delete/database", async (DbContextModel context) =>
+            {
+                foreach (var item in context.User)
+                {
+                    try
+                    {
+                        context.User.Remove(item);
+                    }
+                    catch { }
+                }
+                foreach (var item in context.Room)
+                {
+                    try
+                    {
+                        context.Room.Remove(item);
+                    }
+                    catch { }
+                }
+                foreach (var item in context.Message)
+                {
+                    try
+                    {
+                        context.Message.Remove(item);
+                    }
+                    catch {}
+                }
+                context.SaveChanges();
+            });
+
+            // generate a test account (for tests)
+            // preferably generate the test after clean database
+            app.MapGet("/gen/test", async (DbContextModel context) =>
+            {
+                try
+                {
+                    User testAccount = new User 
+                    {
+                        Name = "test",
+                        Email = "systemtest@gmail.com",
+                        // choose your own password
+                        Password = "Phh12345",
+                    };
+
+                    testAccount.Password = BCrypt.Net.BCrypt.HashPassword(testAccount.Password);
+
+                    await context.User.AddAsync(testAccount);
+                    await context.SaveChangesAsync();
+                    
+                    return Task.FromResult(testAccount);
+                }
+                catch {}
+                
+                return Task.FromException(new ArgumentException("A possible data confict ocurred while testAccount creation"));
+            }); 
         }
     }
 }

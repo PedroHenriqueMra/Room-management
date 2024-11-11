@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAllDependencies();
 
 builder.Services.AddDbContext<DbContextModel>(
-    options => options.UseSqlite("Data Source=adjisajd.db"));
+    options => options.UseSqlite("Data Source=AppInDevelopment.db"));
 
 // Configure authentication
 builder.Services.ConfigureIdentity();
@@ -49,7 +49,7 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 // map SignalR
-app.MapHub<ChatSignalR>("/chat");
+app.MapHub<ChatHub>("/chat");
 
 app.UseEndpoints(endpoint => {
     endpoint.MapRazorPages();

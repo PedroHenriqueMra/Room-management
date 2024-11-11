@@ -108,34 +108,5 @@ public static class Registers
 
         //     return Results.Ok("Usuário removido com êxito!!");
         // });
-
-        app.MapDelete("/delete/database", async (DbContextModel context) =>
-        {
-            foreach (var item in context.User)
-            {
-                try
-                {
-                    context.User.Remove(item);
-                }
-                catch{}
-            }
-            foreach (var item in context.Room)
-            {
-                try
-                {
-                    context.Room.Remove(item);
-                }
-                catch{}
-            }
-            foreach (var item in context.Message)
-            {
-                try
-                {
-                    context.Message.Remove(item);
-                }
-                catch{}
-            }
-            context.SaveChanges();
-        });
     }
 }

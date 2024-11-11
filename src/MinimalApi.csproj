@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- include Tests archive -->
+    <Compile Include="..\Tests\*" />
     <!-- include ApiTests archive -->
     <Compile Include="..\ApiTests\*" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />

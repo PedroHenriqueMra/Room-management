@@ -9,6 +9,7 @@ public class DbContextModel : IdentityDbContext<IdentityUser>
     public DbSet<User> User { get; set; }
     public DbSet<Message> Message { get; set; }
     public DbSet<Room> Room { get; set; }
+    public DbSet<ChatGroup> ChatGroup { get; set; }
 
     public static bool _created = false;
     public DbContextModel(DbContextOptions<DbContextModel> options)
@@ -73,6 +74,9 @@ public class DbContextModel : IdentityDbContext<IdentityUser>
             .HasOne(m => m.Room)
             .WithMany(r => r.Messages)
             .HasForeignKey(m => m.RoomId);
+
+        modelBuilder.Entity<ChatGroup>()
+            .HasKey(c => c.ChatId);
 
         base.OnModelCreating(modelBuilder);
     }

@@ -34,10 +34,10 @@
 
 <form method="post">
     <div class="input-chat">
-        <input type="text" placeholder="Type your message" name="message" required id="inputUser">
-        <input type="submit" value="Submit" id="button">
+        <input type="text" placeholder="Type your message" name="message" required id="message">
+        <input type="submit" value="Submit" id="sendMessage">
         @Html.Hidden("id", userIdentifier)
-        @Html.Hidden("uuid", Model.Room.Id)
+        @Html.Hidden("uuid", Model.Room.Id, new { id = "hidden_roomId" })
     </div>
 </form>
 

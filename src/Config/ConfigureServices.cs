@@ -3,6 +3,7 @@ using Services.ServicesRoom.Delete;
 using Services.ServicesRoom.Enter;
 using Services.ServicesUser.Change;
 using Services.RoomServices.Create;
+using MinimalApi.Chat.Services;
 
 namespace MinimalApi.Services.Configuration.DI;
 
@@ -31,5 +32,8 @@ public static class ConfigureDI
 
         // Service get message error:
         service.AddSingleton<IGetMessageError, GetMessageError>();
+
+        // Service hub
+        service.AddScoped<IChatService, ChatInMemoryService>();
     }
 }
