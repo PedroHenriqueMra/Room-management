@@ -13,7 +13,7 @@
     <a href="/rooms">Back</a>
 </span>
 
-<ul id="ulteste">
+<ul id="ul-messages">
     @if (Model.Messages?.Count != 0)
     {
         @foreach (var m in Model.Messages)
@@ -36,14 +36,14 @@
     <div class="input-chat">
         <input type="text" placeholder="Type your message" name="message" required id="message">
         <input type="submit" value="Submit" id="sendMessage">
-        @Html.Hidden("id", userIdentifier)
+        @Html.Hidden("id", userIdentifier, new { id = "hidden_userId"})
         @Html.Hidden("uuid", Model.Room.Id, new { id = "hidden_roomId" })
     </div>
 </form>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
-<script src="~/js/signalR.js"></script>
-
+<script src="~/js/messages.js"></script>
+<script type="module" src="~/js/signalR.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         var header = document.querySelector("header");

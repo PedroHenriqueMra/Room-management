@@ -1,5 +1,9 @@
 using System.Text.RegularExpressions;
+using Azure;
+using Azure.Core;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
@@ -14,68 +18,60 @@ public class ChatHub : Hub
     private readonly IChatService _chatService;
     private readonly DbContextModel _context;
     private readonly ILogger<ChatHub> _logger;
-    public ChatHub(IChatService chatService, DbContextModel context, ILogger<ChatHub> logger)
+    private readonly HttpContext _httpContext;
+    public ChatHub(IChatService chatService, DbContextModel context, ILogger<ChatHub> logger, IHttpContextAccessor httpContext)
     {
         _chatService = chatService;
         _context = context;
+        if (httpContext.HttpContext != null)
+        {
+            _httpContext = httpContext.HttpContext;
+        }
     }
     
     public override async Task OnConnectedAsync()
     {
         await base.OnConnectedAsync();
+        
+        var roomId = GetRoomId();
+        if (roomId == Guid.Empty)
+        {
+            _logger.LogError("The room id is null!");
+            
+            await Clients.Caller.SendAsync("ReceiveError", "error-onnection", "await we are fixing it...");
+            
+            Context.Abort();
+        }
     }
 
     public override async Task OnDisconnectedAsync(Exception exception)
     {
+        var roomId = GetRoomId();
+
+        await _chatService.RemoveClient(Context.ConnectionId, roomId);
+
         await base.OnDisconnectedAsync(exception);
     }
 
     public async Task AddToGroup(Guid roomId)
     {
-        var chatRoom = await GetChatAsync(roomId);
-        if (chatRoom == null)
+        var queryChat = await _context.ChatGroup.FirstOrDefaultAsync(c => c.RoomId == roomId);
+        if (queryChat != null)
+        {
+            await _chatService.IncludeClient(Context.ConnectionId, roomId);
+        }
+        else
         {
             await _chatService.CreateGroup(Context.ConnectionId, roomId);
         }
-
-        if (!chatRoom.ConnectionIds.Contains(Context.ConnectionId))
-        {
-            chatRoom.ConnectionIds.Add(Context.ConnectionId);
-            await _context.SaveChangesAsync();
-        }
     }
 
-    public async Task RemoveFromGroup(Guid roomId)
-    {
-        var chatRoom = await GetChatAsync(roomId);
-        if (chatRoom == null) 
-        {
-            _logger.LogWarning($"The room {roomId} not found");
-            await Clients.Caller.SendAsync("ReceiveMessage", "error", "room not found");
-            return;
-        }
+    // public async Task RemoveFromGroup(Guid roomId)
+    // {
 
-        var isInGroup = chatRoom.ConnectionIds.Contains(Context.ConnectionId);
-        if (isInGroup)
-        {
-            try
-            {
-                chatRoom.ConnectionIds.Remove(Context.ConnectionId);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"The user {Context.ConnectionId} isn't in the room: {roomId}");
-            }
-            
-            return;
-        }
+    // }
 
-        _logger.LogWarning($"User {Context.ConnectionId} not found in this room {roomId}");
-        await Clients.Caller.SendAsync("ReceiveMessage", "error", "user not found");
-    }
-
-    public async Task SendMesageToGroup(string name, string message, Guid roomId)
+    public async Task SendMesageToGroup(int userId, string message, Guid roomId)
     {
         var room = await GetChatAsync(roomId);
         if (room == null)
@@ -85,19 +81,35 @@ public class ChatHub : Hub
             return;
         }
 
-        if (room.ConnectionIds.Count > 0)
+        var user = await _context.User.FindAsync(userId);
+        if (user != null)
         {
-            var userMessage = new ChatMessage {
-            UserName = name,
-            Content = message
-            };
+            Console.WriteLine(userId);
+            Console.WriteLine(user.Name);
             await Clients.Clients(room.ConnectionIds)
-                .SendAsync("ReceiveMessage", name, message);
+                .SendAsync("ReceiveMessage", user.Name, message);
+        }
+        else
+        {
+            _logger.LogWarning($"The user wich id {userId} didm't matche");
+            await Clients.Caller.SendAsync("ReceiveError", "error-onnection", "await we are fixing it...");
         }
     }
 
     private async Task<ChatGroup> GetChatAsync(Guid roomId)
     {
         return await _context.ChatGroup.FirstOrDefaultAsync(c => c.RoomId == roomId);
+    }
+
+    private Guid GetRoomId()
+    {
+        // queryString: ?chatId=.....
+        var queryString = _httpContext.Request.Query["chatId"].ToString();
+        if (Guid.TryParse(queryString, out Guid id))
+        {
+            return id;
+        }
+
+        return Guid.Empty;
     }
 }

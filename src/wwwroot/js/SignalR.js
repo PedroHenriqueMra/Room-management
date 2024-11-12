@@ -1,19 +1,24 @@
+import { messageError, chatMessage } from "./messages.js";
 // room id
 var roomId = $("#hidden_roomId")[0].value;
-console.log(roomId)
-// if (roomId == null) {
-//     console.log("This room not exists");
-//     return;
-// }
 
 var connection = new signalR.HubConnectionBuilder().withUrl(`/chat?chatId=${roomId}`).build();
-
 document.getElementById("sendMessage").disabled = true;
 
 connection.on("ReceiveMessage", function (user, message) {
-    var li = document.createElement("li");
-    li.textContent = `${user} says ${message}`;
-    document.getElementById("ulteste").appendChild(li);
+    // Create element to display message
+    chatMessage(user, message);
+});
+
+connection.on("ReceiveError", function (errorName, errorMessage) {
+    if (errorName == "error-onnection") {
+        var roomId = $("#hidden_roomId")[0].value;
+        roomId == undefined
+            ? window.location = "/rooms"
+            : window.location.reload();
+        // Create element to display error message
+        messageError(errorName, errorMessage)
+    }
 });
 
 connection.start()
@@ -29,9 +34,9 @@ connection.start()
     });
 
 document.getElementById("sendMessage").addEventListener("click", function (event) {
-    var user = "fulano"
+    var userId = parseInt($("#hidden_userId")[0].value);
     var message = document.getElementById("message").value;
-    connection.invoke("SendMesageToGroup", user, message, roomId)
+    connection.invoke("SendMesageToGroup", userId, message, roomId)
     .catch(function (err) {
         return console.error(err.toString());
     });

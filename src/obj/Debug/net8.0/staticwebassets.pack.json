@@ -25,6 +25,10 @@
       "PackagePath": "staticwebassets\\css\\useredit.css"
     },
     {
+      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\messages.js",
+      "PackagePath": "staticwebassets\\js\\messages.js"
+    },
+    {
       "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\signalR.js",
       "PackagePath": "staticwebassets\\js\\signalR.js"
     },

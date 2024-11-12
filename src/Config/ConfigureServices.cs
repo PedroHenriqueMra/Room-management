@@ -34,6 +34,6 @@ public static class ConfigureDI
         service.AddSingleton<IGetMessageError, GetMessageError>();
 
         // Service hub
-        service.AddScoped<IChatService, ChatInMemoryService>();
+        service.AddScoped<IChatService, ChatHubService>();
     }
 }
