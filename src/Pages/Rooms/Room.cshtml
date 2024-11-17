@@ -38,6 +38,7 @@
         <input type="submit" value="Submit" id="sendMessage">
         @Html.Hidden("id", userIdentifier, new { id = "hidden_userId"})
         @Html.Hidden("uuid", Model.Room.Id, new { id = "hidden_roomId" })
+        @Html.AntiForgeryToken()
     </div>
 </form>
 

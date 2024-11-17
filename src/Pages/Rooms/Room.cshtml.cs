@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.WebEncoders.Testing;
 using MinimalApi.DbSet.Models;
 using Newtonsoft.Json;
 
+// [IgnoreAntiforgeryToken]
 [Authorize]
 public class RoomModel : PageModel
 {
@@ -26,103 +28,39 @@ public class RoomModel : PageModel
     public Room Room { get; set; }
     public List<Message> Messages { get; set; }
 
-    public async Task<IActionResult> OnPostAsync(int id, string message, [FromForm] Guid uuid)
+    public class DataForCreateMessage
     {
-        if (uuid == Guid.Empty)
-        {
-            _logger.LogDebug("The room uuid is empty!!");
-            if (!await LoadData(uuid))
-            {
-                return Page();
-            }
-            return RedirectToPage("rooms");
-        }
-
-        var user = await _context.User.FindAsync(id);
-        if (user == null)
-        {
-            _logger.LogError("User not found!!");
-            return RedirectToPage("/auth/login");
-        }
-        var claimEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-        if (user.Email != claimEmail)
-        {
-            _logger.LogWarning($"The user authenticated don't matche with id: {id}");
-            return RedirectToPage("/auth/login");
-        }
-
-        if (string.IsNullOrWhiteSpace(message))
-        {
-            _logger.LogError("Null message or empty message");
-            if (await LoadData(uuid))
-            {
-                return Page();
-            }
-            return RedirectToPage("rooms");
-        }
-        if (!User.Identity.IsAuthenticated)
-        {
-            return RedirectToPage("/auth/login");
-        }
-        
-        var room = await _context.Room.Include(r => r.Adm).FirstAsync(r => r.Id == uuid);
-        Room = room ?? new Room();
-        if (room == null)
-        {
-            _logger.LogError("The room not found!");
-            return RedirectToPage("rooms");
-        }
-
-        try
-        {
-            var response = await _messageService.SendMessageAsync(user.Id, room.Id, message);
-            if (response is IStatusCodeHttpResult statusCode && statusCode.StatusCode > 299)
-            {
-                string msg = _getMessageError.GetMessage(response, "Value", '=', '}');
-
-                _logger.LogCritical($"An error ocurred while the send message. Error message: {msg}");
-                if (await LoadData(uuid))
-                {
-                    return Page();
-                }
-                return RedirectToPage("rooms");
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error sending message: {ex.Message}");
-           if (await LoadData(uuid))
-            {
-                return Page();
-            }
-            return RedirectToPage("rooms");
-        }
-
-        if (!await LoadData(uuid))
-        {
-            return RedirectToPage("rooms");
-        }
-
-        _logger.LogInformation("Message sent");
-        return Page();
+        public int UserId { get; set; }
+        public Guid RoomId { get; set; }
+        public string Message { get; set; }
+    }
+    // endpoint to fetch js
+    public async Task<IActionResult> OnPostAsync([FromBody] DataForCreateMessage data)
+    {
+        Console.WriteLine($"id: {data.UserId}\nmessage: {data.Message}\nroom id: {data.RoomId}");
+        var response = new {
+            StatusCode = 400,
+            Message = "teste"
+        };
+        return new ObjectResult(JsonConvert.SerializeObject(response));
     }
 
     public async Task<IActionResult> OnGetAsync(Guid url)
     {
         if (url == Guid.Empty)
         {
-            return RedirectToPage("rooms");
+            return Redirect("/rooms");
         }
         if (!User.Identity.IsAuthenticated)
         {
-            return RedirectToPage("/home");
+            return Redirect("/home");
         }
 
         var room = await _context.Room.Include(r => r.Adm).Include(r => r.Users).FirstOrDefaultAsync(r => r.Id == url);
         if (room == null)
         {
             _logger.LogWarning($"the room ({url}) was not found!");
-            return RedirectToPage("rooms");
+            return Redirect("/rooms");
         }
 
         var claimEmail = User.FindFirst(ClaimTypes.Email)?.Value;
@@ -132,19 +70,19 @@ public class RoomModel : PageModel
             if (!room.Users.Any(u => u.Id == owner.Id))
             {
                 _logger.LogWarning($"The user ({owner.Name}) isn't in the room!!");
-                return RedirectToPage("rooms");
+                return Redirect("/rooms");
             }
         }
         else
         {
             _logger.LogWarning($"the user ({claimEmail}) was not found!");
-            return RedirectToPage("rooms");
+            return Redirect("/rooms");
         }
 
         Room = room;
         if (!await LoadData(url))
         {
-            return RedirectToPage("rooms");
+            return Redirect("/rooms");
         }
 
         return Page();

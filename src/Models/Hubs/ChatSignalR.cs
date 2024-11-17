@@ -66,6 +66,7 @@ public class ChatHub : Hub
         }
     }
 
+    // adm function:
     // public async Task RemoveFromGroup(Guid roomId)
     // {
 
@@ -87,7 +88,7 @@ public class ChatHub : Hub
             Console.WriteLine(userId);
             Console.WriteLine(user.Name);
             await Clients.Clients(room.ConnectionIds)
-                .SendAsync("ReceiveMessage", user.Name, message);
+                .SendAsync("ReceiveMessage", user.Id, message, roomId);
         }
         else
         {

@@ -5,9 +5,9 @@ var roomId = $("#hidden_roomId")[0].value;
 var connection = new signalR.HubConnectionBuilder().withUrl(`/chat?chatId=${roomId}`).build();
 document.getElementById("sendMessage").disabled = true;
 
-connection.on("ReceiveMessage", function (user, message) {
+connection.on("ReceiveMessage", function (userId, message, roomId) {
     // Create element to display message
-    chatMessage(user, message);
+    chatMessage(userId, message, roomId);
 });
 
 connection.on("ReceiveError", function (errorName, errorMessage) {
