@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using MinimalApi.DbSet.Models;
 using Org.BouncyCastle.Crypto.Operators;
 using MinimalApi.Services.Utils.RegularExpression.Message;
+using Newtonsoft.Json;
 
 public class MessageServices : IMessageServices
 {
@@ -14,8 +15,13 @@ public class MessageServices : IMessageServices
         _logger = logger;
     }
 
-    public async Task<IResult> SendMessageAsync(int userId, Guid uuidRoom, string message)
+    public async Task<IResult> CreateMessageAsync(int? userId, Guid? uuidRoom, string? message)
     {
+        if (userId == null || uuidRoom == null || message == null)
+        {
+            _logger.LogWarning($"Some data is null");
+            return Results.BadRequest($"the data is null");
+        }
         var user = await _context.User.FindAsync(userId);
         if (user == null)
         {
@@ -56,7 +62,15 @@ public class MessageServices : IMessageServices
             await _context.SaveChangesAsync();
 
             _logger.LogInformation("The save completed");
-            return Results.Created();
+
+            // send just user email, user name and  mesage content.
+            var ContentMessage = new {
+                UserEmail = newMessage.User.Email,
+                UserName = newMessage.User.Name,
+                Content = newMessage.Content
+            };
+
+            return Results.Content(JsonConvert.SerializeObject(ContentMessage));
         }
         catch (Exception ex)
         {

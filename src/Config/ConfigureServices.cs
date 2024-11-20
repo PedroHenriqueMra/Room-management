@@ -31,7 +31,7 @@ public static class ConfigureDI
         service.AddScoped<IMessageServices, MessageServices>();
 
         // Service get message error:
-        service.AddSingleton<IGetMessageError, GetMessageError>();
+        service.AddSingleton<IGetPropertyAnonymous, GetPropertyAnonymous>();
 
         // Service hub
         service.AddScoped<IChatService, ChatHubService>();

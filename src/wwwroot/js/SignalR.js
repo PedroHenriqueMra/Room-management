@@ -1,13 +1,16 @@
-import { messageError, chatMessage } from "./messages.js";
+import { chatMessageError } from "./components/messageError.js";
+import { sendMessage } from "./api.js";
+
 // room id
 var roomId = $("#hidden_roomId")[0].value;
 
 var connection = new signalR.HubConnectionBuilder().withUrl(`/chat?chatId=${roomId}`).build();
 document.getElementById("sendMessage").disabled = true;
 
-connection.on("ReceiveMessage", function (userId, message, roomId) {
+// userInfos = {"userName", "userEmail", "userId"}
+connection.on("ReceiveMessage", async function (userInfos, message, roomId) {
     // Create element to display message
-    chatMessage(userId, message, roomId);
+    await sendMessage(userInfos, message, roomId);
 });
 
 connection.on("ReceiveError", function (errorName, errorMessage) {
@@ -17,7 +20,7 @@ connection.on("ReceiveError", function (errorName, errorMessage) {
             ? window.location = "/rooms"
             : window.location.reload();
         // Create element to display error message
-        messageError(errorName, errorMessage)
+        chatMessageError(errorName, errorMessage)
     }
 });
 
@@ -33,13 +36,14 @@ connection.start()
         return console.error(err.toString());
     });
 
-document.getElementById("sendMessage").addEventListener("click", function (event) {
+document.getElementById("sendMessage")
+.addEventListener("click", function (event) {
+    event.preventDefault();
+    
     var userId = parseInt($("#hidden_userId")[0].value);
     var message = document.getElementById("message").value;
     connection.invoke("SendMesageToGroup", userId, message, roomId)
     .catch(function (err) {
         return console.error(err.toString());
     });
-
-    event.preventDefault();
 });

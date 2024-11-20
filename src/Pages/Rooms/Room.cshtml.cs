@@ -17,8 +17,8 @@ public class RoomModel : PageModel
     private readonly ILogger<RoomModel> _logger;
     private readonly DbContextModel _context;
     private readonly IMessageServices _messageService;
-    private readonly IGetMessageError _getMessageError;
-    public RoomModel(ILogger<RoomModel> logger, DbContextModel context, IMessageServices messageService, IGetMessageError getMessageError)
+    private readonly IGetPropertyAnonymous _getMessageError;
+    public RoomModel(ILogger<RoomModel> logger, DbContextModel context, IMessageServices messageService, IGetPropertyAnonymous getMessageError)
     {
         _context = context;
         _logger = logger;
@@ -30,19 +30,39 @@ public class RoomModel : PageModel
 
     public class DataForCreateMessage
     {
-        public int UserId { get; set; }
-        public Guid RoomId { get; set; }
-        public string Message { get; set; }
+        public int? UserId { get; set; }
+        public Guid? RoomId { get; set; }
+        public string? Message { get; set; }
     }
     // endpoint to fetch js
     public async Task<IActionResult> OnPostAsync([FromBody] DataForCreateMessage data)
     {
-        Console.WriteLine($"id: {data.UserId}\nmessage: {data.Message}\nroom id: {data.RoomId}");
-        var response = new {
-            StatusCode = 400,
-            Message = "teste"
-        };
-        return new ObjectResult(JsonConvert.SerializeObject(response));
+        if (data.UserId == null || data.RoomId == null || data.Message == null)
+        {
+            _logger.LogWarning("Algum dado (userId, RoomId, Message) nao foi preenchido no cliente.");
+
+            return StatusCode(400, "Algo deu errado!. Dados nececssarios nao preenchidos");
+        }
+        User user = await GetUserWithAuthentication(data.UserId);
+        if (user == null)
+        {
+            _logger.LogWarning($"User not found. The user {data.UserId} don't matche with email claims");
+
+            return StatusCode(401, "Algo deu errado!. Erro de autenticação");
+        }
+
+        var request = await _messageService.CreateMessageAsync(data.UserId, data.RoomId, data.Message);
+
+        if (request is IStatusCodeHttpResult status && status.StatusCode > 299)
+        {
+            string msg = _getMessageError.GetMessage(request, "Value", '=', '}');
+            _logger.LogWarning($"An error ocurred while create a new message.\nError message: {msg}");
+
+            return StatusCode(400, msg);
+        }
+
+        var content = _getMessageError.GetMessage(request, "ResponseContent",null,null);
+        return StatusCode(200, content);
     }
 
     public async Task<IActionResult> OnGetAsync(Guid url)
@@ -102,5 +122,27 @@ public class RoomModel : PageModel
         }
 
         return true;
+    }
+
+    private async Task<User> GetUserWithAuthentication(int? id)
+    {
+        var claims = User.FindFirst(ClaimTypes.Email)?.Value;
+        if (claims == null)
+        {
+            return null;
+        }
+
+        var findUser = await _context.User.FindAsync(id);
+        if (findUser == null)
+        {
+            return null;
+        }
+
+        if (findUser.Email != claims)
+        {
+            return null;
+        }
+
+        return findUser;
     }
 }

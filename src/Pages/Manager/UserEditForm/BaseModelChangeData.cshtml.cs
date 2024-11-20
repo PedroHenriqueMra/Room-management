@@ -13,8 +13,8 @@ public class BaseModelChangeData : PageModel
     private readonly DbContextModel _context;
     private readonly IUserManageServices _userChangeService;
     private readonly IHttpContextAccessor _httpContext;
-    private readonly IGetMessageError _getMessageError;
-    public BaseModelChangeData(ILogger<BaseModelChangeData> logger, DbContextModel context, IUserManageServices userChangeService, IHttpContextAccessor httpContext, IGetMessageError getMessageError)
+    private readonly IGetPropertyAnonymous _getMessageError;
+    public BaseModelChangeData(ILogger<BaseModelChangeData> logger, DbContextModel context, IUserManageServices userChangeService, IHttpContextAccessor httpContext, IGetPropertyAnonymous getMessageError)
     {
         _logger = logger;
         _context = context;

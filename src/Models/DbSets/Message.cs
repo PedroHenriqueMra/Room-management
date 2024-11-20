@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace MinimalApi.DbSet.Models;
 
@@ -11,11 +12,13 @@ public class Message
 
     // muitos para um:
     [Required]
+    [JsonIgnore]
     public User User { get; set; }
     public int UserId { get; set; }
 
     // muitos para um:
     [Required]
+    [JsonIgnore]
     public Room Room { get; set; }
     public Guid RoomId { get; set; }
 }

@@ -32,8 +32,8 @@ public class RegisterModel : PageModel
     private readonly IHttpContextAccessor _httpContext;
     private readonly IUserServices _userServices;
     private readonly DbContextModel _context;
-    private readonly IGetMessageError _getMessageError;
-    public RegisterModel(ILogger<RegisterModel> logger, IHttpContextAccessor httpContext, IUserServices userServices, DbContextModel context, IGetMessageError getMessageError)
+    private readonly IGetPropertyAnonymous _getMessageError;
+    public RegisterModel(ILogger<RegisterModel> logger, IHttpContextAccessor httpContext, IUserServices userServices, DbContextModel context, IGetPropertyAnonymous getMessageError)
     {
         _logger = logger;
         _httpContext = httpContext;

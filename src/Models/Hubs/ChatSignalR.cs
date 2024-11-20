@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using MinimalApi.Chat.Services;
 using MinimalApi.DbSet.Models;
+using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1;
 
 namespace MinimalApi.Chat;
@@ -85,10 +86,13 @@ public class ChatHub : Hub
         var user = await _context.User.FindAsync(userId);
         if (user != null)
         {
-            Console.WriteLine(userId);
-            Console.WriteLine(user.Name);
+            var userInfos = new {
+                UserId = user.Id,
+                UserEmail = user.Email,
+                UserName = user.Name
+            };
             await Clients.Clients(room.ConnectionIds)
-                .SendAsync("ReceiveMessage", user.Id, message, roomId);
+                .SendAsync("ReceiveMessage", JsonConvert.SerializeObject(userInfos), message, roomId);
         }
         else
         {
