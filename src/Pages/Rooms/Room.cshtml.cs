@@ -17,13 +17,13 @@ public class RoomModel : PageModel
     private readonly ILogger<RoomModel> _logger;
     private readonly DbContextModel _context;
     private readonly IMessageServices _messageService;
-    private readonly IGetPropertyAnonymous _getMessageError;
+    private readonly IGetPropertyAnonymous _getPropAnonymous;
     public RoomModel(ILogger<RoomModel> logger, DbContextModel context, IMessageServices messageService, IGetPropertyAnonymous getMessageError)
     {
         _context = context;
         _logger = logger;
         _messageService = messageService;
-        _getMessageError = getMessageError;
+        _getPropAnonymous = getMessageError;
     }
     public Room Room { get; set; }
     public List<Message> Messages { get; set; }
@@ -37,31 +37,35 @@ public class RoomModel : PageModel
     // endpoint to fetch js
     public async Task<IActionResult> OnPostAsync([FromBody] DataForCreateMessage data)
     {
+        string content;
         if (data.UserId == null || data.RoomId == null || data.Message == null)
         {
             _logger.LogWarning("Algum dado (userId, RoomId, Message) nao foi preenchido no cliente.");
+            content = "Algo deu errado!. Dados nececssarios nao preenchidos";
 
-            return StatusCode(400, "Algo deu errado!. Dados nececssarios nao preenchidos");
+            return StatusCode(400, JsonConvert.SerializeObject(content));
         }
         User user = await GetUserWithAuthentication(data.UserId);
         if (user == null)
         {
             _logger.LogWarning($"User not found. The user {data.UserId} don't matche with email claims");
+            content = "Algo deu errado!. Erro de autenticação";
 
-            return StatusCode(401, "Algo deu errado!. Erro de autenticação");
+            return StatusCode(401, JsonConvert.SerializeObject(content));
         }
 
+        // create message with service
         var request = await _messageService.CreateMessageAsync(data.UserId, data.RoomId, data.Message);
 
         if (request is IStatusCodeHttpResult status && status.StatusCode > 299)
         {
-            string msg = _getMessageError.GetMessage(request, "Value", '=', '}');
-            _logger.LogWarning($"An error ocurred while create a new message.\nError message: {msg}");
+            content = _getPropAnonymous.GetMessage(request, "Value", '=', '}');
+            _logger.LogWarning($"An error ocurred while create a new message.\nError message: {content}");
 
-            return StatusCode(400, msg);
+            return StatusCode(400, JsonConvert.SerializeObject(content));
         }
 
-        var content = _getMessageError.GetMessage(request, "ResponseContent",null,null);
+        content = _getPropAnonymous.GetMessage(request, "ResponseContent",null,null);
         return StatusCode(200, content);
     }
 

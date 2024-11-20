@@ -36,12 +36,14 @@ connection.start()
         return console.error(err.toString());
     });
 
-document.getElementById("sendMessage")
-.addEventListener("click", function (event) {
+var buttonSendMessage = document.getElementById("sendMessage");
+buttonSendMessage.addEventListener("click", function (event) {
     event.preventDefault();
     
     var userId = parseInt($("#hidden_userId")[0].value);
     var message = document.getElementById("message").value;
+    document.getElementById("message").value = "";
+
     connection.invoke("SendMesageToGroup", userId, message, roomId)
     .catch(function (err) {
         return console.error(err.toString());

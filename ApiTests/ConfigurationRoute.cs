@@ -61,6 +61,14 @@ namespace ApiTests.Endpoints
                     }
                     catch {}
                 }
+                foreach (var item in context.ChatGroup)
+                {
+                    try
+                    {
+                        context.ChatGroup.Remove(item);
+                    }
+                    catch {}
+                }
                 context.SaveChanges();
             });
 

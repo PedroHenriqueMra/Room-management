@@ -79,7 +79,7 @@ public class ChatHub : Hub
         if (room == null)
         {
             _logger.LogWarning("Room not found");
-            await Clients.Caller.SendAsync("ReceiveMessage", "error", "room not found");
+            await Clients.Caller.SendAsync("ReceiveMessage", "Error", "room not found");
             return;
         }
 

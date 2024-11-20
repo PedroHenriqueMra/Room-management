@@ -1,18 +1,19 @@
 import { chatMessageError } from "./components/messageError.js";
+import { chatMessage } from "./components/message.js";
 
 export async function sendMessage(userInfos, message, roomId) {
     // userInfos = {"UserId", "UserEmail", "UserName"}
     userInfos = JSON.parse(userInfos);
-    console.log("user id: " + userInfos.UserId);
-    console.log("user email: " + userInfos.UserEmail);
-    console.log("user name: " + userInfos.UserName);
-    console.log("message: " + message);
-    console.log("room id: " + roomId);
+    
+    // console.log("user id: " + userInfos.UserId);
+    // console.log("user email: " + userInfos.UserEmail);
+    // console.log("user name: " + userInfos.UserName);
+    // console.log("message: " + message);
+    // console.log("room id: " + roomId);
     var statusCode = await fetchCreateMessage(userInfos.UserId, message, roomId);
     console.log("StatusCode: " + statusCode);
     if (statusCode === 200) {
-        chatMessageError("Error", message);
-        // chatMessage(userInfos, message);
+        chatMessage(userInfos, message);
     }
 }
 
@@ -29,13 +30,14 @@ function fetchCreateMessage(userId, message, roomId) {
         }
     })
     .then(response => {
-        console.log(response);
         if (!response.ok) {
             return response.json()
             .then(err => {
-                err["status"] = response.status;
-                console.log(JSON.stringify(err));
-                throw err;
+                var objectError = {
+                    message: err,
+                    status: response.status
+                }
+                throw objectError;
             });
         }
 
@@ -44,11 +46,11 @@ function fetchCreateMessage(userId, message, roomId) {
     .catch(err => {
         if (err.status == 401) {
             console.log("redirected (401)");
+            alert("You are not authenticated!");
             window.location.href = "http://localhost:5229/auth/login";
             return 401;
         }
-        console.error(err);
-        chatMessageError("Error", err);
+        chatMessageError("Error", err.message);
 
         return 400;
     })

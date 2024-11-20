@@ -19,7 +19,7 @@
         @foreach (var m in Model.Messages)
         {
             <li>
-                <div class="message-box @(m.User.Email == userClaim ? "user-message" : (m.UserId == Model.Room.AdmId ? "admin-message" : ""))">
+                <div class="message-box @(m.User.Email == userClaim ? "user-message" : "")">
                     <span class="who">@(m.User.Email == userClaim ? "Your Message" : m.User.Name)</span>
                     <p class="content">@Html.Raw(m.Content)</p>
                 </div>
@@ -51,6 +51,7 @@
     document.addEventListener("DOMContentLoaded", () => {
         var header = document.querySelector("header");
         var footer = document.querySelector("footer");
+        var ulMessages = document.getElementById("ul-messages"); 
 
         if (header) {
             header.remove();
@@ -59,5 +60,14 @@
         if (footer) {
             footer.remove();
         };
+
+        if (ulMessages.length >= 1) {
+            var voidMessage = document.getElementsByClassName("nonemessage")[0];
+            console.log(voidMessage);
+            if (voidMessage !== null) {
+                console.log("deleted")
+                voidMessage.remove();
+            }
+        }
     });
 </script>
