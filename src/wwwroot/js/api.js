@@ -5,11 +5,11 @@ export async function sendMessage(userInfos, message, roomId) {
     // userInfos = {"UserId", "UserEmail", "UserName"}
     userInfos = JSON.parse(userInfos);
     
-    // console.log("user id: " + userInfos.UserId);
-    // console.log("user email: " + userInfos.UserEmail);
-    // console.log("user name: " + userInfos.UserName);
-    // console.log("message: " + message);
-    // console.log("room id: " + roomId);
+    console.log("user id: " + userInfos.UserId);
+    console.log("user email: " + userInfos.UserEmail);
+    console.log("user name: " + userInfos.UserName);
+    console.log("message: " + message);
+    console.log("room id: " + roomId);
     var statusCode = await fetchCreateMessage(userInfos.UserId, message, roomId);
     console.log("StatusCode: " + statusCode);
     if (statusCode === 200) {
@@ -18,9 +18,9 @@ export async function sendMessage(userInfos, message, roomId) {
 }
 
 // receive user email, user name and message
-function fetchCreateMessage(userId, message, roomId) {
-    const url = `http://localhost:5229/rooms/${roomId}`;
-    const body = { userId, message, roomId }
+function fetchCreateMessage(UserId, Message, RoomId) {
+    const url = `http://localhost:5229/rooms/${RoomId}`;
+    const body = { UserId, RoomId, Message}
     return fetch(url, {
         method: "POST",
         body: JSON.stringify(body),

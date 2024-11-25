@@ -10,8 +10,8 @@ using Microsoft.Extensions.WebEncoders.Testing;
 using MinimalApi.DbSet.Models;
 using Newtonsoft.Json;
 
-// [IgnoreAntiforgeryToken]
-[Authorize]
+[IgnoreAntiforgeryToken]
+// [Authorize]
 public class RoomModel : PageModel
 {
     private readonly ILogger<RoomModel> _logger;
@@ -35,27 +35,27 @@ public class RoomModel : PageModel
         public string? Message { get; set; }
     }
     // endpoint to fetch js
-    public async Task<IActionResult> OnPostAsync([FromBody] DataForCreateMessage data)
+    public async Task<IActionResult> OnPostAsync([FromBody]DataForCreateMessage? RequestData)
     {
         string content;
-        if (data.UserId == null || data.RoomId == null || data.Message == null)
+        if (RequestData?.UserId == null || RequestData?.RoomId == null || RequestData?.Message == null)
         {
             _logger.LogWarning("Algum dado (userId, RoomId, Message) nao foi preenchido no cliente.");
             content = "Algo deu errado!. Dados nececssarios nao preenchidos";
 
             return StatusCode(400, JsonConvert.SerializeObject(content));
         }
-        User user = await GetUserWithAuthentication(data.UserId);
+        User user = await GetUserWithAuthentication(RequestData.UserId);
         if (user == null)
         {
-            _logger.LogWarning($"User not found. The user {data.UserId} don't matche with email claims");
+            _logger.LogWarning($"User not found. The user {RequestData.UserId} don't matche with email claims");
             content = "Algo deu errado!. Erro de autenticação";
 
             return StatusCode(401, JsonConvert.SerializeObject(content));
         }
 
         // create message with service
-        var request = await _messageService.CreateMessageAsync(data.UserId, data.RoomId, data.Message);
+        var request = await _messageService.CreateMessageAsync(RequestData.UserId, RequestData.RoomId, RequestData.Message);
 
         if (request is IStatusCodeHttpResult status && status.StatusCode > 299)
         {

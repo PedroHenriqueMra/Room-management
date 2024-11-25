@@ -5,6 +5,7 @@
 //      </div>
 // </li>
 // 
+import { downScreen } from "../functions/downScreen.js";
 
 export function chatMessageError(errorName, errorMessage) {
     var li = document.createElement("li");
@@ -29,4 +30,6 @@ export function chatMessageError(errorName, errorMessage) {
     // append li in ul:
     var ulTarget = $("#ul-messages")[0];
     ulTarget.appendChild(li);
+
+    downScreen();
 }

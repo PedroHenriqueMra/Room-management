@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\Static\\icons8-conectado-16.png",
+      "PackagePath": "staticwebassets\\Static\\icons8-conectado-16.png"
+    },
+    {
       "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\layout.css",
       "PackagePath": "staticwebassets\\css\\layout.css"
     },
@@ -35,6 +39,10 @@
     {
       "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\components\\messageError.js",
       "PackagePath": "staticwebassets\\js\\components\\messageError.js"
+    },
+    {
+      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\functions\\downScreen.js",
+      "PackagePath": "staticwebassets\\js\\functions\\downScreen.js"
     },
     {
       "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\signalR.js",

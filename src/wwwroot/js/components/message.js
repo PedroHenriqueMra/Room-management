@@ -10,6 +10,8 @@
 // </li>
 
 // userInfos = {"UserId", "UserEmail", "UserName"}
+import { downScreen } from "../functions/downScreen.js";
+
 export function chatMessage(userInfos, message) {
     var li = document.createElement("li");
     var div = document.createElement("div");
@@ -27,7 +29,6 @@ export function chatMessage(userInfos, message) {
     p.textContent = message;
 
     var classDiv = "message-box" + (userInfos.UserId == currentId ? " user-message" : "");
-    console.log("classDiv: " + classDiv);
     div.setAttribute("class", classDiv);
     div.appendChild(span);
     div.appendChild(p);
@@ -35,4 +36,6 @@ export function chatMessage(userInfos, message) {
     li.appendChild(div);
     var ulTarget = $("#ul-messages")[0];
     ulTarget.appendChild(li);
+
+    downScreen();
 }

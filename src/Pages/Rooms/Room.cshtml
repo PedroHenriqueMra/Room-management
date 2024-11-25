@@ -2,6 +2,7 @@
 @using System.Security.Claims
 @model RoomModel
 @{
+    Layout = "";
     var userIdentifier = Int32.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
     var userClaim = User.FindFirst(ClaimTypes.Email)?.Value;
 }
@@ -9,9 +10,15 @@
     <link rel="stylesheet" href="~/css/room.css">
     <title>@Model.Room?.Adm?.Name room</title>
 </head>
-<span class="back">
-    <a href="/rooms">Back</a>
-</span>
+<header>
+    <span class="back">
+        <a href="/rooms">Back</a>
+    </span>
+    |
+    <div class="count-online">
+        <p>USUARIOS ONLINE: <span class="counter"></span></p>
+    </div>
+</header>
 
 <ul id="ul-messages">
     @if (Model.Messages?.Count != 0)
@@ -42,32 +49,18 @@
     </div>
 </form>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+<script type="module" src="~/js/functions/downScreen.js"></script>
 <script type="module" src="~/js/components/message.js"></script>
 <script type="module" src="~/js/components/messageError.js"></script>
 <script type="module" src="~/js/api.js"></script>
 <script type="module" src="~/js/signalR.js"></script>
+
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        var header = document.querySelector("header");
-        var footer = document.querySelector("footer");
-        var ulMessages = document.getElementById("ul-messages"); 
-
-        if (header) {
-            header.remove();
-        };
-
-        if (footer) {
-            footer.remove();
-        };
-
-        if (ulMessages.length >= 1) {
-            var voidMessage = document.getElementsByClassName("nonemessage")[0];
-            console.log(voidMessage);
-            if (voidMessage !== null) {
-                console.log("deleted")
-                voidMessage.remove();
-            }
-        }
-    });
+    window.onload = () => {
+        const ulElement = $("#ul-messages")[0];
+        const bottomElement = ulElement.scrollHeight;
+        document.body.scrollTop = bottomElement;
+    }
 </script>

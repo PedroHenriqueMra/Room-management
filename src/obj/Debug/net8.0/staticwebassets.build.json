@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "a/q3320Z6IAOrtHulrmG8GjldKbOrG2uTDWk+hla0Sc=",
+  "Hash": "bifD6Rnw389XzaDbb1UWfSuUeCGmhfqXpSUD1kIuCJ0=",
   "Source": "MinimalApi",
   "BasePath": "_content/MinimalApi",
   "Mode": "Default",
@@ -1328,6 +1328,25 @@
       "OriginalItemSpec": "wwwroot\\js\\components\\messageError.js"
     },
     {
+      "Identity": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\functions\\downScreen.js",
+      "SourceId": "MinimalApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\",
+      "BasePath": "_content/MinimalApi",
+      "RelativePath": "js/functions/downScreen.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\functions\\downScreen.js"
+    },
+    {
       "Identity": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\signalR.js",
       "SourceId": "MinimalApi",
       "SourceType": "Discovered",
@@ -1345,6 +1364,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\signalR.js"
+    },
+    {
+      "Identity": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\Static\\icons8-conectado-16.png",
+      "SourceId": "MinimalApi",
+      "SourceType": "Discovered",
+      "ContentRoot": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\",
+      "BasePath": "_content/MinimalApi",
+      "RelativePath": "Static/icons8-conectado-16.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Static\\icons8-conectado-16.png"
     }
   ]
 }

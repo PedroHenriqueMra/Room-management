@@ -14,11 +14,11 @@ connection.on("ReceiveMessage", async function (userInfos, message, roomId) {
 });
 
 connection.on("ReceiveError", function (errorName, errorMessage) {
-    if (errorName == "error-onnection") {
+    if (errorName == "error-connection") {
         var roomId = $("#hidden_roomId")[0].value;
-        roomId == undefined
-            ? window.location = "/rooms"
-            : window.location.reload();
+        if (roomId == null) {
+            window.location = "/rooms";
+        }
         // Create element to display error message
         chatMessageError(errorName, errorMessage)
     }

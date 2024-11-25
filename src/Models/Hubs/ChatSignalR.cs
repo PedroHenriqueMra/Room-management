@@ -97,7 +97,7 @@ public class ChatHub : Hub
         else
         {
             _logger.LogWarning($"The user wich id {userId} didm't matche");
-            await Clients.Caller.SendAsync("ReceiveError", "error-onnection", "await we are fixing it...");
+            await Clients.Caller.SendAsync("ReceiveError", "error-connection", "await we are fixing it...");
         }
     }
 

@@ -4,7 +4,7 @@ namespace MinimalApi.Services.Utils.RegularExpression.Message;
 
 public static class MessageCheckRegularExpression
 {
-    private static readonly string MessageRegex = @"^[a-zA-Z0-9]{1,200}$";
+    private static readonly string MessageRegex = @"^(.|\n){1,200}$";
 
     public static bool MessageIsValid(string message)
     {
