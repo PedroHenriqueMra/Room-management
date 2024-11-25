@@ -17,8 +17,8 @@ public class RoomsListModel : PageModel
     private readonly ILogger<RoomsListModel> _logger;
     private readonly DbContextModel _context;
     private readonly IEnterRoomService _serviceRoom;
-    private readonly IGetMessageError _getMessageError;
-    public RoomsListModel(ILogger<RoomsListModel> logger, DbContextModel context, IEnterRoomService serviceRoom, IGetMessageError getMessageError)
+    private readonly IGetPropertyAnonymous _getMessageError;
+    public RoomsListModel(ILogger<RoomsListModel> logger, DbContextModel context, IEnterRoomService serviceRoom, IGetPropertyAnonymous getMessageError)
     {
         _context = context;
         _logger = logger;

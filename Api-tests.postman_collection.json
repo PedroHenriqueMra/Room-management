@@ -1,16 +1,71 @@
 {
 	"info": {
-		"_postman_id": "db2ef4e4-b0ad-46c7-bec7-ce557a6a34f8",
-		"name": "Api-tests",
+		"_postman_id": "833aadbd-8d62-4aea-95bf-b663d7731c97",
+		"name": "Api tests of web app",
+		"description": "Api to make tests in app.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "36499102"
+		"_exporter_id": "39449952"
 	},
 	"item": [
 		{
-			"name": "List users/rooms of system",
+			"name": "List all chat groups",
 			"request": {
 				"method": "GET",
 				"header": [],
+				"url": {
+					"raw": "http://localhost:5229/list/chat",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5229",
+					"path": [
+						"list",
+						"chat"
+					]
+				},
+				"description": "It route returns all chat groups records that have alreary been created."
+			},
+			"response": []
+		},
+		{
+			"name": "Generate a new user for testing",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5229/gen/test",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5229",
+					"path": [
+						"gen",
+						"test"
+					]
+				},
+				"description": "It creates a new user registration in the system. you can configure it in /ApiTests/ConfigurationRoute.cs"
+			},
+			"response": []
+		},
+		{
+			"name": "List all users and rooms of system",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "http://localhost:5229/list",
 					"protocol": "http",
@@ -22,7 +77,7 @@
 						"list"
 					]
 				},
-				"description": "This endpoint shows the system data"
+				"description": "It list all user and room records."
 			},
 			"response": []
 		},
@@ -31,6 +86,15 @@
 			"request": {
 				"method": "DELETE",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "http://localhost:5229/delete/database",
 					"protocol": "http",
@@ -43,7 +107,7 @@
 						"database"
 					]
 				},
-				"description": "This endpoint deletes all data of the system data"
+				"description": "It delete all system records. Include: Chat roup, Users and rooms. You can confugure it in /ApiTests/ConfigurationRoute.cs."
 			},
 			"response": []
 		}

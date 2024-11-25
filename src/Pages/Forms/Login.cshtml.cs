@@ -19,8 +19,8 @@ public class LoginModel : PageModel
     private readonly DbContextModel _context;
     private readonly IHttpContextAccessor _httpContext;
     private readonly IUserServices _userService;
-    private readonly IGetMessageError _getMessageError;
-    public LoginModel(ILogger<LoginModel> logger, DbContextModel context, IHttpContextAccessor httpContext, IUserServices userService, IGetMessageError getMessageError)
+    private readonly IGetPropertyAnonymous _getMessageError;
+    public LoginModel(ILogger<LoginModel> logger, DbContextModel context, IHttpContextAccessor httpContext, IUserServices userService, IGetPropertyAnonymous getMessageError)
     {
         _logger = logger;
         _context = context;

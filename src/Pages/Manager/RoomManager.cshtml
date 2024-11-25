@@ -14,11 +14,11 @@
                     <span>@rm.Name</span> -
                     <span>@rm.Description</span> -
                     <span>Actions:</span>
-                    <form method="post">
+                    <form method="post" id="form-manager">
                         @Html.Hidden("RoomId", rm.Id)
-                        <button asp-page-handler="Edit"
-                                class="btn btn-success">Edit</button> | 
-                        <button asp-page-handler="Delete" class="btn btn-danger">Delete</button>
+                        <button class="btn btn-success"
+                                asp-page-handler="Edit">Edit</button> | 
+                        <button class="btn btn-danger">Delete</button>
                     </form>
                 </li>
                 <br>
@@ -42,6 +42,12 @@
     @* document.addEventListener("submit", event => {
         event.preventDefault();
 
-
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://localhost:5229/user/manager/room/@Model.currentUserManager.Id?handle=Edit");
+        xhr.onload = event => {
+            alert("Server response: "+ event.target.response);
+        };
+        var formData = new FormData(document.getElementById("form-manager"));
+        xhr.send(formData);
     }) *@
 </script>

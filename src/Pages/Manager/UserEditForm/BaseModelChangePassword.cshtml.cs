@@ -7,8 +7,8 @@ public class BaseModelChangePassword : PageModel
 {
     private readonly ILogger<BaseModelChangePassword> _logger;
     private readonly IUserManageServices _userManagerService;
-    private readonly IGetMessageError _getMessageError;
-    public BaseModelChangePassword(ILogger<BaseModelChangePassword> logger, IUserManageServices userManagerService, IGetMessageError getMessageError)
+    private readonly IGetPropertyAnonymous _getMessageError;
+    public BaseModelChangePassword(ILogger<BaseModelChangePassword> logger, IUserManageServices userManagerService, IGetPropertyAnonymous getMessageError)
     {
         _logger = logger;
         _userManagerService = userManagerService;

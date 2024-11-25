@@ -1,12 +1,8 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using ApiTests.Endpoints;
 using MinimalApi.Services.Configuration.DI;
 using MinimalApi.Services.Authentication;
+using MinimalApi.Chat;
 // using MinimalApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,16 +11,27 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAllDependencies();
 
 builder.Services.AddDbContext<DbContextModel>(
-    options => options.UseSqlite("Data Source=adjisajd.db"));
+    options => options.UseSqlite("Data Source=AppInDevelopment.db"));
 
 // Configure authentication
 builder.Services.ConfigureIdentity();
 builder.Services.ConfigureCookie();
 
-// builder.Services.AddRazorPages(opt => {
-    // desabilita o token de formulario obrigatorio
-    // opt.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
-// });
+builder.Services.AddRazorPages();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder.WithOrigins("https://http://localhost:5229")
+                .AllowAnyHeader()
+                .WithMethods("GET", "POST")
+                .AllowCredentials();
+        });
+});
+
+// SignalR
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -41,6 +48,8 @@ app.UseAuthorization();
 // app.UseMiddleware<MyMiddleware>();
 
 app.MapRazorPages();
+// map SignalR
+app.MapHub<ChatHub>("/chat");
 
 app.UseEndpoints(endpoint => {
     endpoint.MapRazorPages();

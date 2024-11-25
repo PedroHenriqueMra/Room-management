@@ -17,8 +17,8 @@ public class CreateRoomModel : PageModel
     private readonly ILogger<RegisterModel> _logger;
     private readonly DbContextModel _context;
     private readonly IRoomCreateService _serviceCreate;
-    private readonly IGetMessageError _getMessageError;
-    public CreateRoomModel(ILogger<RegisterModel> logger, DbContextModel context, IRoomCreateService serviceCreate, IGetMessageError getMessageError)
+    private readonly IGetPropertyAnonymous _getMessageError;
+    public CreateRoomModel(ILogger<RegisterModel> logger, DbContextModel context, IRoomCreateService serviceCreate, IGetPropertyAnonymous getMessageError)
     {
         _context = context;
         _logger = logger;

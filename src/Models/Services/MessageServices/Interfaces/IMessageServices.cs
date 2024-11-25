@@ -1,4 +1,4 @@
 public interface IMessageServices
 {
-    Task<IResult> SendMessageAsync(int userId, Guid uuidRoom, string message);
+    Task<IResult> CreateMessageAsync(int? userId, Guid? uuidRoom, string? message);
 }

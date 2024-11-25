@@ -5,6 +5,27 @@ body {
     padding: 0;
 }
 
+::-webkit-scrollbar {
+    width: 0px;
+}
+
+header {
+    width: 99vw;
+    height: 70px;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    padding: 5px;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    border-radius: 10px;
+    border-bottom: solid black .5px;
+    box-shadow: 1px 0px 10px rgba(0, 0, 0, 0.219);
+}
+
 a {
     color: #007bff;
     text-decoration: none;
@@ -15,9 +36,7 @@ a:hover {
 }
 
 .back {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+    margin: 0px 10px;
 }
 
 .back a {
@@ -29,6 +48,22 @@ a:hover {
     transition: background-color 0.2s ease;
 }
 
+.count-online {
+    width: 50%;
+    padding: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+}
+
+.counter {
+    font-weight: bolder;
+}
+
+.count-online
+p::before {
+    content: url("../Static/icons8-conectado-16.png");
+}
+
 .back a:hover {
     background-color: #5a6268;
 }
@@ -36,7 +71,7 @@ a:hover {
 ul {
     list-style-type: none;
     padding: 0;
-    margin: 20px 0;
+    margin: 110px 50px 80px 50px;
 }
 
 li {
@@ -79,7 +114,7 @@ li {
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 100%;
+    width: 99vw;
     background-color: #ffffff;
     border-top: 1px solid #ced4da;
     padding: 10px;
@@ -121,6 +156,10 @@ li {
     border-left: 5px solid #28a745;
 }
 
+.box-message-your {
+    float: right;
+}
+
 @media (max-width: 768px) {
     .input-chat input[type="text"] {
         width: 100%;
@@ -135,5 +174,9 @@ li {
     .input-chat input[type="submit"] {
         width: 100%;
         margin-top: 10px;
+    }
+
+    ul {
+        margin: 110px 50px 120px 50px;
     }
 }

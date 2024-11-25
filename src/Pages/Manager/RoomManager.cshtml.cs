@@ -50,7 +50,7 @@ public class RoomManagerModel : PageModel
         return Page();
     }
 
-    public async Task<IActionResult> OnPostEditAsync(int id)
+    public async Task<IActionResult> OnGetEditAsync(int id)
     {
         var user = await AuthUserAsync(id);
         if (user == null)

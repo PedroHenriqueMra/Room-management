@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MinimalApi.Migrations
 {
     /// <inheritdoc />
-    public partial class testes : Migration
+    public partial class test : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,19 @@ namespace MinimalApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ChatGroup",
+                columns: table => new
+                {
+                    ChatId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    RoomId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ConnectionIds = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatGroup", x => x.ChatId);
                 });
 
             migrationBuilder.CreateTable(
@@ -323,6 +336,9 @@ namespace MinimalApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "ChatGroup");
 
             migrationBuilder.DropTable(
                 name: "Message");
