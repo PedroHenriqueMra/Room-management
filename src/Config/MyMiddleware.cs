@@ -1,3 +1,5 @@
+// using System.Security.Claims;
+
 // namespace MinimalApi.Middleware;
 
 // public class MyMiddleware
@@ -15,8 +17,8 @@
 //         if (context.User.Identity.IsAuthenticated)
 //         {
 //             // Acessa as claims do usuário
-//             // var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-//             // var userName = context.User.FindFirst(ClaimTypes.Name)?.Value;
+//             var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+//             var userName = context.User.FindFirst(ClaimTypes.Name)?.Value;
 
 //             // Faça algo com as claims...
 //         }

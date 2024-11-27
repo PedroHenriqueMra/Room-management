@@ -11,11 +11,13 @@ public class RoomManagerModel : PageModel
 {
     private readonly ILogger<RoomManagerModel> _logger;
     private readonly DbContextModel _context;
+    private readonly IExitRoomService _exitRoomService;
 
-    public RoomManagerModel(ILogger<RoomManagerModel> logger, DbContextModel context)
+    public RoomManagerModel(ILogger<RoomManagerModel> logger, DbContextModel context, IExitRoomService exitRoomService)
     {
         _logger = logger;
         _context = context;
+        _exitRoomService = exitRoomService;
     }
 
     public User currentUserManager;
@@ -50,37 +52,42 @@ public class RoomManagerModel : PageModel
         return Page();
     }
 
-    public async Task<IActionResult> OnGetEditAsync(int id)
+    public async Task<IActionResult> OnPostDeleteAsync(Guid roomId)
     {
-        var user = await AuthUserAsync(id);
+        if (roomId == Guid.Empty)
+        {
+            _logger.LogWarning("This room not exist");
+            return Page();
+        }
+
+        var idClaims = Int32.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        var user = await AuthUserAsync(idClaims);
         if (user == null)
         {
-            _logger.LogWarning($"An error ocurred while the authentication for {id} ocorred");
-            return Redirect("/home");
+            _logger.LogWarning("User not found");
+            return Redirect("/auth/login");
         }
 
-        if (RoomId == Guid.Empty)
-        {
-            _logger.LogWarning("The room id is empty!. probably an internal error");
-            return Redirect($"/user/manager/room/{id}");
-        }
-
-        var room = await _context.Room.FindAsync(RoomId);
-        if (room == null)
-        {
-            _logger.LogWarning($"The room searched {RoomId} wasn't found!");
-            return Redirect($"/home");
-        }
-
+        var room = await _context.Room.Include(r => r.Users).FirstOrDefaultAsync(r => r.Id == roomId);
         if (room.AdmId != user.Id)
         {
-            _logger.LogWarning($"The user {id} wasn't owner of the room {room.Name}!");
-            return Redirect($"/home");
+            _logger.LogWarning("You aren't the admin of this room");
+            return Page();
         }
 
-        var filePath = "~/Pages/Manager/Partials/_ManageRoomPartial.cshtml";
-        return Partial(filePath, this);
+        try
+        {
+            await _exitRoomService.DeleteRoom(user, room);
+            _logger.LogInformation("Room deleted");
+            return Page();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug($"An error ocurred while deleted the room {room.Name}. Message: {ex}");
+            return Page();
+        }
     }
+    
     private async Task<User> AuthUserAsync(int id)
     {
         var user = await _context.User.FindAsync(id);

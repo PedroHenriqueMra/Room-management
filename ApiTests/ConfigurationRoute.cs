@@ -70,6 +70,7 @@ namespace ApiTests.Endpoints
                     catch {}
                 }
                 context.SaveChanges();
+                return "Deleted successfully";
             });
 
             // generate a test account (for tests)

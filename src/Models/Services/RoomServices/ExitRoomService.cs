@@ -5,14 +5,27 @@ namespace Services.ServicesRoom.Delete;
 
 public class ExitRoomService : IExitRoomService
 {
-    public async Task DeleteRoom(DbContextModel context, User adm, Room room)
+    private readonly DbContextModel _context;
+    public ExitRoomService(DbContextModel context)
     {
-        await ExitAllRoomAsync(context, adm, room);
-
-        context.Remove(room);
+        _context = context;
     }
 
-    public async Task ExitAllRoomAsync(DbContextModel context, User adm, Room room)
+    public async Task DeleteRoom(User adm, Room room)
+    {
+        if (room.AdmId != adm.Id)
+        {
+            return;
+        }
+
+        await ExitAllOfRoomAsync(room);
+
+        _context.Attach(room);
+        _context.Remove(room);
+        await _context.SaveChangesAsync();
+    }
+
+    private async Task ExitAllOfRoomAsync(Room room)
     {
         var usersInRoom = room.Users.ToList();
         foreach(var user in usersInRoom)
@@ -20,19 +33,9 @@ public class ExitRoomService : IExitRoomService
             user.Rooms.Remove(room);
             user.RoomsNames.Remove(room.Name);
         }
-
-        await RemoveAdmAsync(context, adm, room);
     }
 
-    public async Task RemoveAdmAsync(DbContextModel context, User adm, Room room)
-    {
-        adm.Rooms.Remove(room);
-        adm.RoomsNames.Remove(room.Name);
-
-        await context.SaveChangesAsync();
-    }
-
-    public async Task<object> ExitUserRoomAsync(DbContextModel context, User user, Room room)
+    public async Task<object> ExitUserRoomAsync(User user, Room room)
     {
         if (user.Id == room.AdmId)
         {

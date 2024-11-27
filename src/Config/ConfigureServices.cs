@@ -17,7 +17,7 @@ public static class ConfigureDI
         // Rooms services:
         // Entrance and exit of rooms
         service.AddSingleton<IEnterRoomService, EnterRoomService>();
-        service.AddSingleton<IExitRoomService, ExitRoomService>();
+        service.AddScoped<IExitRoomService, ExitRoomService>();
         // Create room
         service.AddScoped<IRoomCreateService, RoomCreateService>();
 
