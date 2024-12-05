@@ -1,0 +1,71 @@
+@page "/manage/room/{roomId:Guid}"
+@model EditRoomModel
+@{
+    ViewData["Title"] = $"Edit room";
+}
+
+<div class="container">
+    <ul>
+        <li>
+            <span>Change name:</span>
+            <form method="post">
+                <input type="text" placeholder="Change name..." value="@Model.Room.Name">
+            </form>
+        </li>
+        <li>
+            <span>Change description:</span>
+            <form method="post">
+                <input type="text" placeholder="Change description..." value="@Model.Room.Description">
+            </form>
+        </li>
+        @if (Model.Room.IsPrivate)
+        {
+            <li>
+                <span>
+                    <a href="">Change password</a>
+                </span>
+            </li>
+        }
+        <li>
+            <div>
+                Users in your room <span onclick="openList()">+</span>
+            </div>
+            <ul id="list-users">
+                @foreach(var user in Model.Users)
+                {
+                    <li>
+                        <div>@user.Name</div>
+                        <div>
+                            <form method="post">
+                                <input type="submit" value="Ban">
+                                <input type="submit" value="Ban-Forever">
+                            </form>
+                        </div>
+                    </li>
+                }
+            </ul>
+            <li>
+                <ul>
+                    @* @foreach(var ban in Model.BannedUsers)
+                    {
+                        <li>
+
+                        </li>
+                    } *@
+                </ul>
+            </li>
+        </li>
+        <li class="actions">
+            <form method="post">
+                <button class="btn btn-danger">Delete</button>
+            </form>
+        </li>
+    </ul>
+</div>
+
+<script>
+    const list = $("#list-users");
+    function openList() {
+
+    }
+</script>

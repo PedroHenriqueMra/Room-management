@@ -23,9 +23,6 @@ public class RoomManagerModel : PageModel
     public User currentUserManager;
     public List<Room> userManagedRooms = new List<Room>();
     public List<Room> userIncludedRooms = new List<Room>();
-
-    [BindProperty]
-    public Guid RoomId { get; set; }
     public async Task<IActionResult> OnGetAsync(int id)
     {
         var user = await _context.User.FindAsync(id);
@@ -43,11 +40,8 @@ public class RoomManagerModel : PageModel
         }
         currentUserManager = user;
 
-        // rooms that the user is manager
-        userManagedRooms = await _context.Room.Where(r => r.AdmId == user.Id).ToListAsync();
-
-        // rooms that the user is included
-        userIncludedRooms = await _context.Room.Where(r => r.Users.Any(u => u.Id == user.Id)).ToListAsync();
+        // load all data:
+        await LoadDatas(user);
 
         return Page();
     }
@@ -60,6 +54,12 @@ public class RoomManagerModel : PageModel
             return Page();
         }
 
+        if (!User.Identity.IsAuthenticated)
+        {
+            _logger.LogWarning("User don't authenticated");
+            return Redirect("/auth/login");
+        } 
+
         var idClaims = Int32.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
         var user = await AuthUserAsync(idClaims);
         if (user == null)
@@ -67,9 +67,12 @@ public class RoomManagerModel : PageModel
             _logger.LogWarning("User not found");
             return Redirect("/auth/login");
         }
-
+        
+        // load all data:
+        await LoadDatas(user);
+        
         var room = await _context.Room.Include(r => r.Users).FirstOrDefaultAsync(r => r.Id == roomId);
-        if (room.AdmId != user.Id)
+        if (room.AdmId != idClaims)
         {
             _logger.LogWarning("You aren't the admin of this room");
             return Page();
@@ -104,5 +107,14 @@ public class RoomManagerModel : PageModel
         }
 
         return user;
+    }
+
+    private async Task LoadDatas(User user)
+    {
+        // rooms that the user is manager
+        userManagedRooms = await _context.Room.Where(r => r.AdmId == user.Id).ToListAsync();
+
+        // rooms that the user is included
+        userIncludedRooms = await _context.Room.Where(r => r.Users.Any(u => u.Id == user.Id)).ToListAsync();
     }
 }
