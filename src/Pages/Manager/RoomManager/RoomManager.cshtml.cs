@@ -23,21 +23,21 @@ public class RoomManagerModel : PageModel
     public User currentUserManager;
     public List<Room> userManagedRooms = new List<Room>();
     public List<Room> userIncludedRooms = new List<Room>();
-    public async Task<IActionResult> OnGetAsync(int id)
+    public async Task<IActionResult> OnGetAsync()
     {
-        var user = await _context.User.FindAsync(id);
+        var claimsId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (claimsId == null)
+        {
+            _logger.LogWarning($"claims id not found  {claimsId}");
+            return Redirect("/home");
+        }
+        var user = await _context.User.FindAsync(Int32.Parse(claimsId));
         if (user == null)
         {
-            _logger.LogWarning($"A user with id {id} not found!");
+            _logger.LogWarning($"A user with id {claimsId} not found!");
             return Redirect("/home");
         }
-
-        var userClaim = User.FindFirst(ClaimTypes.Email)?.Value;
-        if (user.Email != userClaim)
-        {
-            _logger.LogWarning($"This id {id} doesn't match the claims email {userClaim}");
-            return Redirect("/home");
-        }
+        
         currentUserManager = user;
 
         // load all data:
@@ -115,6 +115,6 @@ public class RoomManagerModel : PageModel
         userManagedRooms = await _context.Room.Where(r => r.AdmId == user.Id).ToListAsync();
 
         // rooms that the user is included
-        userIncludedRooms = await _context.Room.Where(r => r.Users.Any(u => u.Id == user.Id)).ToListAsync();
+        userIncludedRooms = await _context.Room.Where(r => r.Users.Any(u => u.Id == user.Id && r.AdmId != user.Id)).ToListAsync();
     }
 }

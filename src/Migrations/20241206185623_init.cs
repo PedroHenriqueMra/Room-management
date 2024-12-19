@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MinimalApi.Migrations
 {
     /// <inheritdoc />
-    public partial class test : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -64,20 +64,22 @@ namespace MinimalApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "RoomBan",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    BanId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 260, nullable: false),
-                    Password = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    RoomsNames = table.Column<string>(type: "TEXT", nullable: true)
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    RoomId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    BanType = table.Column<int>(type: "INTEGER", nullable: false),
+                    BanStart = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    BanEnd = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Reason = table.Column<string>(type: "TEXT", nullable: true),
+                    Status = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_RoomBan", x => x.BanId);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,6 +186,29 @@ namespace MinimalApi.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "User",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 260, nullable: false),
+                    Password = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    RoomsNames = table.Column<string>(type: "TEXT", nullable: true),
+                    RoomBanBanId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_User_RoomBan_RoomBanBanId",
+                        column: x => x.RoomBanBanId,
+                        principalTable: "RoomBan",
+                        principalColumn: "BanId");
                 });
 
             migrationBuilder.CreateTable(
@@ -317,6 +342,11 @@ namespace MinimalApi.Migrations
                 name: "IX_RoomUser_UsersId",
                 table: "RoomUser",
                 column: "UsersId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_RoomBanBanId",
+                table: "User",
+                column: "RoomBanBanId");
         }
 
         /// <inheritdoc />
@@ -357,6 +387,9 @@ namespace MinimalApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "RoomBan");
         }
     }
 }

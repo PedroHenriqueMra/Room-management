@@ -1,4 +1,4 @@
-@page "/manage/room/{roomId:Guid}"
+@page "/room/edit/{roomId:Guid}"
 @model EditRoomModel
 @{
     ViewData["Title"] = $"Edit room";
@@ -7,31 +7,33 @@
 <div class="container">
     <ul>
         <li>
-            <span>Change name:</span>
+            <label for="changeName">Change name:</label>
             <form method="post">
-                <input type="text" placeholder="Change name..." value="@Model.Room.Name">
+                <input type="text" placeholder="Change name..." value="@Model.RoomView.Room.Name" id="changeName">
+                <input type="submit" value="Change-name" class="btn btn-success">
             </form>
         </li>
         <li>
-            <span>Change description:</span>
+            <label for="changeDescription">Change description:</label>
             <form method="post">
-                <input type="text" placeholder="Change description..." value="@Model.Room.Description">
+                <input type="text" placeholder="Change description..." value="@Model.RoomView.Room.Description" id="changeDescription">
+                <input type="submit" value="Change-description" class="btn btn-success">
             </form>
         </li>
-        @if (Model.Room.IsPrivate)
+        @if (Model.RoomView.Room.IsPrivate)
         {
             <li>
                 <span>
-                    <a href="">Change password</a>
+                    <a href="#">Change password</a>
                 </span>
             </li>
         }
         <li>
-            <div>
-                Users in your room <span onclick="openList()">+</span>
+            <div onclick="displayList()">
+                Users in your room: <i id="arrow-icon" class="fa-solid fa-angle-down"></i>
             </div>
-            <ul id="list-users">
-                @foreach(var user in Model.Users)
+            <ul id="list-users" style="display: none;">
+                @foreach(var user in Model.RoomView.UsersInRoom)
                 {
                     <li>
                         <div>@user.Name</div>
@@ -44,20 +46,34 @@
                     </li>
                 }
             </ul>
-            <li>
-                <ul>
-                    @* @foreach(var ban in Model.BannedUsers)
-                    {
-                        <li>
-
-                        </li>
-                    } *@
-                </ul>
-            </li>
+            @if (Model.RoomView.BannedUsers.Count > 0)
+            {
+                <li>
+                    <ul>
+                        @foreach(var ban in Model.RoomView.BannedUsers)
+                        {
+                            <li>
+                                <div>
+                                    <span>@ban.BanType</span>
+                                    <p>@ban.UserName</p>
+                                    <p>@ban.BanReason</p>
+                                </div>
+                                <form method="post">
+                                    @Html.Hidden("banId", ban.BanId)
+                                    <button>
+                                        Unban
+                                    </button>
+                                </form>
+                                <p>The ban expire: @ban.BanEnd</p>
+                            </li>
+                        }
+                    </ul>
+                </li>
+            }
         </li>
         <li class="actions">
             <form method="post">
-                <button class="btn btn-danger">Delete</button>
+                <button class="btn btn-danger">Delete room</button>
             </form>
         </li>
     </ul>
@@ -65,7 +81,17 @@
 
 <script>
     const list = $("#list-users");
-    function openList() {
+    const icon = $("#arrow-icon");
+    function displayList() {
+        if (list.css("display") == "none") {
+            list.css("display", "block");
+            icon.removeClass("fa-solid fa-angle-down");
+            icon.addClass("fa-solid fa-angle-up");
+            return;
+        }
 
+        icon.removeClass("fa-solid fa-angle-up");
+        icon.addClass("fa-solid fa-angle-down");
+        list.css("display", "none");
     }
 </script>

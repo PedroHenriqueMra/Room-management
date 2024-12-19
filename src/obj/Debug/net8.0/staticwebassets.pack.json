@@ -1,51 +1,55 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\Static\\icons8-conectado-16.png",
+      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\Static\\icons8-conectado-16.png",
       "PackagePath": "staticwebassets\\Static\\icons8-conectado-16.png"
     },
     {
-      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\layout.css",
+      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\layout.css",
       "PackagePath": "staticwebassets\\css\\layout.css"
     },
     {
-      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\manager.css",
+      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\manager.css",
       "PackagePath": "staticwebassets\\css\\manager.css"
     },
     {
-      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\room.css",
-      "PackagePath": "staticwebassets\\css\\room.css"
+      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\roomstyle\\room.css",
+      "PackagePath": "staticwebassets\\css\\roomstyle\\room.css"
     },
     {
-      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\roommanage.css",
-      "PackagePath": "staticwebassets\\css\\roommanage.css"
+      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\roomstyle\\roommanage.css",
+      "PackagePath": "staticwebassets\\css\\roomstyle\\roommanage.css"
     },
     {
-      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\roomslist.css",
-      "PackagePath": "staticwebassets\\css\\roomslist.css"
+      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\roomstyle\\roomslist.css",
+      "PackagePath": "staticwebassets\\css\\roomstyle\\roomslist.css"
     },
     {
-      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\useredit.css",
+      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\stylepartials\\confirmpassword.css",
+      "PackagePath": "staticwebassets\\css\\stylepartials\\confirmpassword.css"
+    },
+    {
+      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\css\\useredit.css",
       "PackagePath": "staticwebassets\\css\\useredit.css"
     },
     {
-      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\SignalR.js",
+      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\SignalR.js",
       "PackagePath": "staticwebassets\\js\\SignalR.js"
     },
     {
-      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\api.js",
+      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\api.js",
       "PackagePath": "staticwebassets\\js\\api.js"
     },
     {
-      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\components\\message.js",
+      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\components\\message.js",
       "PackagePath": "staticwebassets\\js\\components\\message.js"
     },
     {
-      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\components\\messageError.js",
+      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\components\\messageError.js",
       "PackagePath": "staticwebassets\\js\\components\\messageError.js"
     },
     {
-      "Id": "C:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\functions\\downScreen.js",
+      "Id": "c:\\Users\\pedro\\OneDrive\\Documentos\\estudo_web-c#\\MinimalApi\\src\\wwwroot\\js\\functions\\downScreen.js",
       "PackagePath": "staticwebassets\\js\\functions\\downScreen.js"
     },
     {

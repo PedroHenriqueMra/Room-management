@@ -7,7 +7,7 @@
     var userClaim = User.FindFirst(ClaimTypes.Email)?.Value;
 }
 <head>
-    <link rel="stylesheet" href="~/css/room.css">
+    <link rel="stylesheet" href="~/css/roomstyle/room.css">
     <title>@Model.Room?.Adm?.Name room</title>
 </head>
 <header>
@@ -18,6 +18,13 @@
     <div class="count-online">
         <p>USUARIOS ONLINE: <span class="counter"></span></p>
     </div>
+    @if (Model.Room?.AdmId == userIdentifier)
+    {
+        <span>
+            <a href="/room/edit/@Model.Room.Id"><i class="fa-solid fa-gear"></i></a>
+        </span>
+    }
+    
 </header>
 
 <ul id="ul-messages">

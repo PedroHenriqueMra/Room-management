@@ -293,6 +293,38 @@ namespace MinimalApi.Migrations
                     b.ToTable("Room");
                 });
 
+            modelBuilder.Entity("MinimalApi.DbSet.Models.RoomBan", b =>
+                {
+                    b.Property<int>("BanId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("BanEnd")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("BanStart")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("BanType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("RoomId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("BanId");
+
+                    b.ToTable("RoomBan");
+                });
+
             modelBuilder.Entity("MinimalApi.DbSet.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -317,10 +349,15 @@ namespace MinimalApi.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("RoomBanBanId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("RoomsNames")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RoomBanBanId");
 
                     b.ToTable("User");
                 });
@@ -421,6 +458,13 @@ namespace MinimalApi.Migrations
                     b.Navigation("Adm");
                 });
 
+            modelBuilder.Entity("MinimalApi.DbSet.Models.User", b =>
+                {
+                    b.HasOne("MinimalApi.DbSet.Models.RoomBan", null)
+                        .WithMany("User")
+                        .HasForeignKey("RoomBanBanId");
+                });
+
             modelBuilder.Entity("RoomUser", b =>
                 {
                     b.HasOne("MinimalApi.DbSet.Models.Room", null)
@@ -439,6 +483,11 @@ namespace MinimalApi.Migrations
             modelBuilder.Entity("MinimalApi.DbSet.Models.Room", b =>
                 {
                     b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("MinimalApi.DbSet.Models.RoomBan", b =>
+                {
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MinimalApi.DbSet.Models.User", b =>
