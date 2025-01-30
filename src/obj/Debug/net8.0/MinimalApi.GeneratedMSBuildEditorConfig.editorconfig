@@ -17,83 +17,75 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = MinimalApi
 build_property.RootNamespace = MinimalApi
-build_property.ProjectDir = C:\Users\pedro\OneDrive\Documentos\estudo_web-c#\MinimalApi\src\
+build_property.ProjectDir = c:\Users\pedro\OneDrive\Documentos\estudo_web-c#\MinimalApi\src\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\pedro\OneDrive\Documentos\estudo_web-c#\MinimalApi\src
+build_property.MSBuildProjectDirectory = c:\Users\pedro\OneDrive\Documentos\estudo_web-c#\MinimalApi\src
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Forms/Login.cshtml]
+[c:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Forms/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcTG9naW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Forms/Logout.cshtml]
+[c:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Forms/Logout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcTG9nb3V0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Forms/Register.cshtml]
+[c:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Forms/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRm9ybXNcUmVnaXN0ZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Index.cshtml]
+[c:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Manager/Manager.cshtml]
+[c:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Manager/Manager.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFuYWdlclxNYW5hZ2VyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Manager/Partials/_ConfirmPasswordPartial.cshtml]
+[c:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Manager/Partials/_ConfirmPasswordPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFuYWdlclxQYXJ0aWFsc1xfQ29uZmlybVBhc3N3b3JkUGFydGlhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Manager/Partials/_FormChangeNameEmailPartial.cshtml]
+[c:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Manager/Partials/_FormChangeNameEmailPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFuYWdlclxQYXJ0aWFsc1xfRm9ybUNoYW5nZU5hbWVFbWFpbFBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Manager/RoomManager/EditRoom.cshtml]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFuYWdlclxSb29tTWFuYWdlclxFZGl0Um9vbS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Manager/RoomManager/RoomManager.cshtml]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFuYWdlclxSb29tTWFuYWdlclxSb29tTWFuYWdlci5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Manager/UserEditForm/EmailNameChange.cshtml]
+[c:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Manager/UserEditForm/EmailNameChange.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFuYWdlclxVc2VyRWRpdEZvcm1cRW1haWxOYW1lQ2hhbmdlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Manager/UserEditForm/PasswordChange.cshtml]
+[c:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Manager/UserEditForm/PasswordChange.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWFuYWdlclxVc2VyRWRpdEZvcm1cUGFzc3dvcmRDaGFuZ2UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Rooms/CreateRoom.cshtml]
+[c:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Rooms/CreateRoom.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUm9vbXNcQ3JlYXRlUm9vbS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Rooms/Room.cshtml]
+[c:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Rooms/Room.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUm9vbXNcUm9vbS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Rooms/RoomsList.cshtml]
+[c:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/Rooms/RoomsList.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUm9vbXNcUm9vbXNMaXN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/shared/_Layout.cshtml]
+[c:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcc2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/shared/_ValidationScriptsPartial.cshtml]
+[c:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcc2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/_ViewImports.cshtml]
+[c:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/_ViewStart.cshtml]
+[c:/Users/pedro/OneDrive/Documentos/estudo_web-c\#/MinimalApi/src/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

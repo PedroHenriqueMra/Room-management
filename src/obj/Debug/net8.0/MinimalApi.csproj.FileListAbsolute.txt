@@ -592,3 +592,4 @@ c:\Users\pedro\OneDrive\Documentos\estudo_web-c#\MinimalApi\src\obj\Debug\net8.0
 c:\Users\pedro\OneDrive\Documentos\estudo_web-c#\MinimalApi\src\obj\Debug\net8.0\MinimalApi.csproj.Up2Date
 c:\Users\pedro\OneDrive\Documentos\estudo_web-c#\MinimalApi\src\obj\Debug\net8.0\MinimalApi.genruntimeconfig.cache
 c:\Users\pedro\OneDrive\Documentos\estudo_web-c#\MinimalApi\src\obj\Debug\net8.0\ref\MinimalApi.dll
+C:\Users\pedro\OneDrive\Documentos\estudo_web-c#\MinimalApi\src\bin\Debug\net8.0\CSharpFunctionalExtensions.dll

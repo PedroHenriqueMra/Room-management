@@ -5,11 +5,6 @@ export async function sendMessage(userInfos, message, roomId) {
     // userInfos = {"UserId", "UserEmail", "UserName"}
     userInfos = JSON.parse(userInfos);
     
-    console.log("user id: " + userInfos.UserId);
-    console.log("user email: " + userInfos.UserEmail);
-    console.log("user name: " + userInfos.UserName);
-    console.log("message: " + message);
-    console.log("room id: " + roomId);
     var statusCode = await fetchCreateMessage(userInfos.UserId, message, roomId);
     console.log("StatusCode: " + statusCode);
     if (statusCode === 200) {

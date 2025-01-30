@@ -9,6 +9,7 @@
       "MinimalApi/1.0.0": {
         "dependencies": {
           "BCrypt.Net-Next": "4.0.3",
+          "CSharpFunctionalExtensions": "3.2.0",
           "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "8.0.8",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "8.0.8",
           "Microsoft.AspNetCore.Identity.UI": "8.0.8",
@@ -73,6 +74,14 @@
           "lib/net6.0/BouncyCastle.Cryptography.dll": {
             "assemblyVersion": "2.0.0.0",
             "fileVersion": "2.3.1.17862"
+          }
+        }
+      },
+      "CSharpFunctionalExtensions/3.2.0": {
+        "runtime": {
+          "lib/net8.0/CSharpFunctionalExtensions.dll": {
+            "assemblyVersion": "3.2.0.0",
+            "fileVersion": "3.2.0.0"
           }
         }
       },
@@ -2313,6 +2322,13 @@
       "sha512": "sha512-buwoISwecYke3CmgG1AQSg+sNZjJeIb93vTAtJiHZX35hP/teYMxsfg0NDXGUKjGx6BKBTNKc77O2M3vKvlXZQ==",
       "path": "bouncycastle.cryptography/2.3.1",
       "hashPath": "bouncycastle.cryptography.2.3.1.nupkg.sha512"
+    },
+    "CSharpFunctionalExtensions/3.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-fl+czRDrht65YvopYcUOLJPamhnREHQ1hXZgT8Pk4GwzR3ra6zYRiSxTZNZgGwewCMR6vSWYUuEeeLIsoKMIww==",
+      "path": "csharpfunctionalextensions/3.2.0",
+      "hashPath": "csharpfunctionalextensions.3.2.0.nupkg.sha512"
     },
     "Google.Protobuf/3.26.1": {
       "type": "package",

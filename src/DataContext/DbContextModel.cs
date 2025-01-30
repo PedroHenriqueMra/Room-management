@@ -10,7 +10,6 @@ public class DbContextModel : IdentityDbContext<IdentityUser>
     public DbSet<Message> Message { get; set; }
     public DbSet<Room> Room { get; set; }
     public DbSet<ChatGroup> ChatGroup { get; set; }
-    public DbSet<RoomBan> RoomBan { get; set; }
 
     public static bool _created = false;
     public DbContextModel(DbContextOptions<DbContextModel> options)
