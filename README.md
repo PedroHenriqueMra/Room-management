@@ -2,7 +2,7 @@
 
 ## *Qual a ideia?:*
 
-Apicativo web para criação de contas e salas publicas ou privadas de chat.
+Apicativo web para criação de contas e salas de chat publicas ou privadas.
 
 ## *Rode e modifique o codigo fonte:*
 
