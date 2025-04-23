@@ -2,7 +2,7 @@
 
 ## *Qual a ideia?:*
 
-Apicativo web para criação de contas e salas de chat publicas ou privadas.
+Meus estudos sobre fundamentos do ASP.Net, uma introdução. Criei um app com ASP.Net fornecendo um sistema de gerenciamento de salas de chat em tempo real. Com o ASP.Net também utilizei identificação com Identity, Razor Pages e SignalR.
 
 ## *Rode e modifique o codigo fonte:*
 
